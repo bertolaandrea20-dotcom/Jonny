@@ -1,189 +1,269 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/auth-context';
-import { api } from '@/lib/api';
-import { PageLoading } from '@/components/loading-spinner';
-import {
-  DollarSign, CheckCircle, Clock, XCircle, TrendingUp,
-  CreditCard, Shield, ArrowRight,
-} from 'lucide-react';
-import { clsx } from 'clsx';
+import { motion } from "framer-motion";
+import { Calendar, Clock, MapPin, Star, Menu, LogOut } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
-const TX_STATUS_STYLES: Record<string, string> = {
-  HELD: 'bg-blue-50 text-blue-600',
-  RELEASED: 'bg-green-50 text-green-600',
-  REFUNDED: 'bg-gray-100 text-gray-500',
-  PENDING: 'bg-yellow-50 text-yellow-600',
-};
+interface Booking {
+  id: string;
+  serviceTitle: string;
+  provider: string;
+  date: string;
+  time: string;
+  price: number;
+  status: "upcoming" | "completed" | "cancelled";
+}
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const [earnings, setEarnings] = useState<any>(null);
-  const [stripeStatus, setStripeStatus] = useState<any>(null);
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [connecting, setConnecting] = useState(false);
+  const [activeTab, setActiveTab] = useState<"upcoming" | "completed">("upcoming");
+  const [showMenu, setShowMenu] = useState(false);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login');
-      return;
-    }
-    if (!authLoading && user?.role !== 'PROFESSIONAL') {
-      router.push('/');
-      return;
-    }
-    if (user) {
-      Promise.all([
-        api.getProfessionalBookings().catch(() => []),
-        api.getEarnings().catch(() => null),
-        api.getStripeStatus().catch(() => ({ connected: false, ready: false })),
-      ]).then(([bk, earn, stripe]) => {
-        setBookings(bk);
-        setEarnings(earn);
-        setStripeStatus(stripe);
-      }).finally(() => setLoading(false));
-    }
-  }, [user, authLoading, router]);
+  const upcomingBookings: Booking[] = [
+    {
+      id: "1",
+      serviceTitle: "House Cleaning",
+      provider: "John's Cleaning Service",
+      date: "2026-04-15",
+      time: "10:00 AM",
+      price: 45,
+      status: "upcoming",
+    },
+    {
+      id: "2",
+      serviceTitle: "Plumbing Repairs",
+      provider: "Mike's Plumbing",
+      date: "2026-04-18",
+      time: "02:00 PM",
+      price: 60,
+      status: "upcoming",
+    },
+  ];
 
-  const handleConnectStripe = async () => {
-    setConnecting(true);
-    try {
-      const result = await api.connectStripe(window.location.href);
-      if (result.demo) {
-        setStripeStatus({ connected: true, ready: true, demo: true });
-      } else {
-        window.location.href = result.url;
-      }
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setConnecting(false);
+  const completedBookings: Booking[] = [
+    {
+      id: "3",
+      serviceTitle: "Personal Training",
+      provider: "Sarah's Fitness",
+      date: "2026-03-20",
+      time: "06:00 AM",
+      price: 55,
+      status: "completed",
+    },
+    {
+      id: "4",
+      serviceTitle: "Photography Services",
+      provider: "Alex Photography",
+      date: "2026-03-10",
+      time: "11:00 AM",
+      price: 120,
+      status: "completed",
+    },
+  ];
+
+  const bookings =
+    activeTab === "upcoming" ? upcomingBookings : completedBookings;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "upcoming":
+        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200";
+      case "completed":
+        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200";
+      case "cancelled":
+        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200";
+      default:
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200";
     }
   };
 
-  if (authLoading || loading) return <PageLoading />;
-  if (!user) return null;
-
-  const pending = bookings.filter((b) => b.status === 'PENDING').length;
-  const accepted = bookings.filter((b) => b.status === 'ACCEPTED').length;
-  const completed = bookings.filter((b) => b.status === 'COMPLETED').length;
+  const stats = [
+    { label: "Total Bookings", value: "8", icon: "📅" },
+    { label: "Completed", value: "6", icon: "✅" },
+    { label: "Spent", value: "$485", icon: "💰" },
+    { label: "Rating", value: "4.8", icon: "⭐" },
+  ];
 
   return (
-    <div className="page-container pt-8">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-
-      {/* Stripe Connect Banner */}
-      {!stripeStatus?.connected && (
-        <div className="card p-4 mb-4 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-          <div className="flex items-start gap-3">
-            <CreditCard className="text-purple-500 flex-shrink-0 mt-0.5" size={24} />
-            <div className="flex-1">
-              <h3 className="font-semibold text-sm">Connect your payment account</h3>
-              <p className="text-xs text-gray-600 mt-1">
-                Connect Stripe to receive payments from clients. Your earnings are held in escrow and released after each service.
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                Dashboard
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Welcome back, Andrea!
               </p>
-              <button
-                onClick={handleConnectStripe}
-                disabled={connecting}
-                className="btn-accent text-sm py-2 px-4 mt-3"
-              >
-                {connecting ? 'Connecting...' : 'Connect Stripe'}
+            </div>
+
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                New Booking
+              </button>
+              <button className="p-2 bg-gray-200 dark:bg-gray-800 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700">
+                <LogOut size={20} className="text-gray-700 dark:text-gray-300" />
               </button>
             </div>
+
+            <button
+              className="md:hidden p-2 bg-gray-200 dark:bg-gray-800 rounded-lg"
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              <Menu size={24} />
+            </button>
           </div>
-        </div>
-      )}
 
-      {stripeStatus?.connected && (
-        <div className="card p-3 mb-4 flex items-center gap-2 bg-green-50 border-green-200">
-          <CheckCircle size={16} className="text-green-500" />
-          <span className="text-sm font-medium text-green-700">
-            Stripe connected {stripeStatus.demo ? '(Demo mode)' : ''}
-          </span>
-        </div>
-      )}
+          {showMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="md:hidden mb-6 space-y-2"
+            >
+              <button className="w-full px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                New Booking
+              </button>
+              <button className="w-full px-6 py-2 bg-gray-200 dark:bg-gray-800 rounded-lg hover:bg-gray-300">
+                Logout
+              </button>
+            </motion.div>
+          )}
+        </motion.div>
 
-      {/* Earnings Stats */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="card p-4 text-center">
-          <TrendingUp className="mx-auto text-green-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{earnings?.totalEarned?.toFixed(0) || 0}</p>
-          <p className="text-xs text-gray-400">Total Earned (EUR)</p>
-        </div>
-        <div className="card p-4 text-center">
-          <Shield className="mx-auto text-blue-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{earnings?.pendingEarnings?.toFixed(0) || 0}</p>
-          <p className="text-xs text-gray-400">In Escrow (EUR)</p>
-        </div>
-        <div className="card p-4 text-center">
-          <CheckCircle className="mx-auto text-green-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{completed}</p>
-          <p className="text-xs text-gray-400">Completed</p>
-        </div>
-        <div className="card p-4 text-center">
-          <Clock className="mx-auto text-yellow-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{pending + accepted}</p>
-          <p className="text-xs text-gray-400">Active</p>
-        </div>
-      </div>
-
-      {/* Platform fee info */}
-      <div className="card p-3 mb-4 flex items-center justify-between">
-        <span className="text-xs text-gray-500">Platform commission</span>
-        <span className="text-xs font-semibold text-gray-700">{earnings?.platformFeeRate || '15%'}</span>
-      </div>
-
-      {/* Recent transactions */}
-      {earnings?.recentTransactions?.length > 0 && (
-        <div className="mb-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            Recent Transactions
-          </h2>
-          <div className="space-y-2">
-            {earnings.recentTransactions.map((tx: any) => (
-              <div key={tx.bookingId} className="card p-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">{tx.service}</p>
-                    <p className="text-[11px] text-gray-400">
-                      {new Date(tx.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-green-600">+{tx.netAmount} EUR</p>
-                    <p className="text-[10px] text-gray-400">Fee: {tx.fee} EUR</p>
-                    <span className={clsx(
-                      'text-[10px] font-semibold px-1.5 py-0.5 rounded-full',
-                      TX_STATUS_STYLES[tx.status] || 'bg-gray-100',
-                    )}>
-                      {tx.status}
-                    </span>
-                  </div>
+        {/* Stats Grid */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md"
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    {stat.label}
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                    {stat.value}
+                  </p>
                 </div>
+                <span className="text-2xl">{stat.icon}</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </motion.div>
+          ))}
+        </motion.div>
 
-      {/* Quick actions */}
-      <button
-        onClick={() => router.push('/bookings')}
-        className="btn-primary w-full mb-3 flex items-center justify-center gap-2"
-      >
-        View All Requests ({pending + accepted} active)
-        <ArrowRight size={16} />
-      </button>
-      <button
-        onClick={() => router.push('/profile')}
-        className="btn-secondary w-full"
-      >
-        Edit My Profile
-      </button>
+        {/* Bookings Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden"
+        >
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
+            <button
+              onClick={() => setActiveTab("upcoming")}
+              className={`flex-1 px-6 py-4 font-semibold transition-colors ${
+                activeTab === "upcoming"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}>
+              Upcoming Bookings ({upcomingBookings.length})
+            </button>
+            <button
+              onClick={() => setActiveTab("completed")}
+              className={`flex-1 px-6 py-4 font-semibold transition-colors ${
+                activeTab === "completed"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}>
+              Completed Bookings ({completedBookings.length})
+            </button>
+          </div>
+
+          {/* Bookings List */}
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+            {bookings.length > 0 ? (
+              bookings.map((booking, index) => (
+                <motion.div
+                  key={booking.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {booking.serviceTitle}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        by {booking.provider}
+                      </p>
+
+                      <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center space-x-2">
+                          <Calendar size={16} />
+                          <span>{booking.date}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Clock size={16} />
+                          <span>{booking.time}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                      <div>
+                        <p className="text-2xl font-bold text-blue-600">
+                          ${booking.price}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
+                          booking.status
+                        )}`}
+                      >
+                        {booking.status.charAt(0).toUpperCase() +
+                          booking.status.slice(1)}
+                      </span>
+
+                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                        {activeTab === "upcoming" ? "Reschedule" : "Rebook"}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="p-12 text-center">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  No {activeTab} bookings found
+                </p>
+                <Link
+                  href="/services"
+                  className="text-blue-600 hover:text-blue-700 font-semibold"
+                >
+                  Browse Services
+                </Link>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
