@@ -175,6 +175,44 @@ class ApiClient {
       body: JSON.stringify({ status }),
     });
   }
+
+  // Payments
+  async connectStripe(returnUrl: string) {
+    return this.request<{ url: string; accountId: string; demo?: boolean }>('/payments/connect', {
+      method: 'POST',
+      body: JSON.stringify({ returnUrl }),
+    });
+  }
+
+  async getStripeStatus() {
+    return this.request<{ connected: boolean; ready: boolean; demo?: boolean }>('/payments/connect/status');
+  }
+
+  async createBookingPayment(bookingId: string) {
+    return this.request<any>(`/payments/booking/${bookingId}`, {
+      method: 'POST',
+    });
+  }
+
+  async getBookingPayment(bookingId: string) {
+    return this.request<any>(`/payments/booking/${bookingId}`);
+  }
+
+  async releasePayment(bookingId: string) {
+    return this.request<any>(`/payments/release/${bookingId}`, {
+      method: 'POST',
+    });
+  }
+
+  async refundPayment(bookingId: string) {
+    return this.request<any>(`/payments/refund/${bookingId}`, {
+      method: 'POST',
+    });
+  }
+
+  async getEarnings() {
+    return this.request<any>('/payments/earnings');
+  }
 }
 
 export const api = new ApiClient();

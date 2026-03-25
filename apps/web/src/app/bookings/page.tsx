@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import { Avatar } from '@/components/avatar';
 import { PageLoading } from '@/components/loading-spinner';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, Shield, CreditCard, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const STATUS_STYLES: Record<string, string> = {
@@ -18,11 +18,19 @@ const STATUS_STYLES: Record<string, string> = {
   DISPUTED: 'bg-red-50 text-red-700',
 };
 
+const PAYMENT_STYLES: Record<string, { label: string; color: string; icon: any }> = {
+  PENDING: { label: 'Payment Pending', color: 'text-yellow-600', icon: Clock },
+  HELD: { label: 'In Escrow', color: 'text-blue-600', icon: Shield },
+  RELEASED: { label: 'Paid', color: 'text-green-600', icon: CheckCircle2 },
+  REFUNDED: { label: 'Refunded', color: 'text-gray-500', icon: XCircle },
+};
+
 export default function BookingsPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -47,6 +55,7 @@ export default function BookingsPage() {
   const isPro = user.role === 'PROFESSIONAL';
 
   const handleStatusUpdate = async (bookingId: string, status: string) => {
+    setActionLoading(bookingId);
     try {
       await api.updateBookingStatus(bookingId, status);
       setBookings((prev) =>
@@ -54,6 +63,36 @@ export default function BookingsPage() {
       );
     } catch (err: any) {
       alert(err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handlePayment = async (bookingId: string) => {
+    setActionLoading(bookingId);
+    try {
+      const result = await api.createBookingPayment(bookingId);
+      setBookings((prev) =>
+        prev.map((b) => (b.id === bookingId ? { ...b, payment: result.payment } : b)),
+      );
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleReleasePayment = async (bookingId: string) => {
+    setActionLoading(bookingId);
+    try {
+      const payment = await api.releasePayment(bookingId);
+      setBookings((prev) =>
+        prev.map((b) => (b.id === bookingId ? { ...b, payment } : b)),
+      );
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -84,6 +123,9 @@ export default function BookingsPage() {
               ? `${other.firstName} ${other.lastName}`
               : 'Unknown';
             const date = new Date(booking.scheduledAt);
+            const payment = booking.payment;
+            const paymentInfo = payment ? PAYMENT_STYLES[payment.status] : null;
+            const isLoading = actionLoading === booking.id;
 
             return (
               <div key={booking.id} className="card p-4">
@@ -114,56 +156,128 @@ export default function BookingsPage() {
                         {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    {booking.totalPrice != null && (
-                      <p className="text-sm font-bold text-primary-600 mt-2">
-                        {booking.totalPrice.toFixed(2)}
-                      </p>
+
+                    {/* Price & Payment status */}
+                    <div className="flex items-center justify-between mt-2">
+                      {booking.totalPrice != null && (
+                        <p className="text-sm font-bold text-primary-600">
+                          {booking.totalPrice.toFixed(2)} EUR
+                        </p>
+                      )}
+                      {paymentInfo && (
+                        <span className={`flex items-center gap-1 text-xs font-medium ${paymentInfo.color}`}>
+                          <paymentInfo.icon size={12} />
+                          {paymentInfo.label}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* ─── Client Actions ─── */}
+                    {!isPro && (
+                      <>
+                        {/* Pay button: show when ACCEPTED and no payment yet */}
+                        {booking.status === 'ACCEPTED' && !payment && (
+                          <button
+                            onClick={() => handlePayment(booking.id)}
+                            disabled={isLoading}
+                            className="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold py-2.5 rounded-lg mt-3 transition-colors flex items-center justify-center gap-2"
+                          >
+                            <CreditCard size={16} />
+                            {isLoading ? 'Processing...' : `Pay ${booking.totalPrice?.toFixed(2)} EUR (Escrow)`}
+                          </button>
+                        )}
+
+                        {/* Escrow info */}
+                        {payment?.status === 'HELD' && booking.status !== 'COMPLETED' && (
+                          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mt-3">
+                            <div className="flex items-start gap-2">
+                              <Shield size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <p className="text-xs font-semibold text-blue-700">Payment held in escrow</p>
+                                <p className="text-[11px] text-blue-600 mt-0.5">
+                                  Your money is safe. It will be released to the professional only after the service is completed.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Confirm & release payment after completion */}
+                        {booking.status === 'COMPLETED' && payment?.status === 'HELD' && (
+                          <button
+                            onClick={() => handleReleasePayment(booking.id)}
+                            disabled={isLoading}
+                            className="w-full bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2.5 rounded-lg mt-3 transition-colors flex items-center justify-center gap-2"
+                          >
+                            <CheckCircle2 size={16} />
+                            {isLoading ? 'Releasing...' : 'Confirm & Release Payment'}
+                          </button>
+                        )}
+
+                        {/* Cancel */}
+                        {['PENDING', 'ACCEPTED'].includes(booking.status) && (
+                          <button
+                            onClick={() => handleStatusUpdate(booking.id, 'CANCELLED')}
+                            disabled={isLoading}
+                            className="text-red-500 text-xs font-medium mt-3 hover:underline"
+                          >
+                            Cancel Booking
+                          </button>
+                        )}
+                      </>
                     )}
 
-                    {/* Action buttons for professionals */}
-                    {isPro && booking.status === 'PENDING' && (
-                      <div className="flex gap-2 mt-3">
-                        <button
-                          onClick={() => handleStatusUpdate(booking.id, 'ACCEPTED')}
-                          className="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          onClick={() => handleStatusUpdate(booking.id, 'CANCELLED')}
-                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold py-2 rounded-lg transition-colors"
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    )}
+                    {/* ─── Professional Actions ─── */}
+                    {isPro && (
+                      <>
+                        {booking.status === 'PENDING' && (
+                          <div className="flex gap-2 mt-3">
+                            <button
+                              onClick={() => handleStatusUpdate(booking.id, 'ACCEPTED')}
+                              disabled={isLoading}
+                              className="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
+                            >
+                              Accept
+                            </button>
+                            <button
+                              onClick={() => handleStatusUpdate(booking.id, 'CANCELLED')}
+                              disabled={isLoading}
+                              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold py-2 rounded-lg transition-colors"
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        )}
 
-                    {isPro && booking.status === 'ACCEPTED' && (
-                      <button
-                        onClick={() => handleStatusUpdate(booking.id, 'IN_PROGRESS')}
-                        className="w-full bg-purple-500 hover:bg-purple-600 text-white text-sm font-semibold py-2 rounded-lg mt-3 transition-colors"
-                      >
-                        Start Service
-                      </button>
-                    )}
+                        {booking.status === 'ACCEPTED' && !payment && (
+                          <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-2.5 mt-3">
+                            <p className="text-[11px] text-yellow-700 flex items-center gap-1">
+                              <AlertTriangle size={12} />
+                              Waiting for client to pay before starting
+                            </p>
+                          </div>
+                        )}
 
-                    {isPro && booking.status === 'IN_PROGRESS' && (
-                      <button
-                        onClick={() => handleStatusUpdate(booking.id, 'COMPLETED')}
-                        className="w-full bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg mt-3 transition-colors"
-                      >
-                        Mark Completed
-                      </button>
-                    )}
+                        {booking.status === 'ACCEPTED' && payment?.status === 'HELD' && (
+                          <button
+                            onClick={() => handleStatusUpdate(booking.id, 'IN_PROGRESS')}
+                            disabled={isLoading}
+                            className="w-full bg-purple-500 hover:bg-purple-600 text-white text-sm font-semibold py-2 rounded-lg mt-3 transition-colors"
+                          >
+                            Start Service
+                          </button>
+                        )}
 
-                    {/* Cancel button for clients */}
-                    {!isPro && ['PENDING', 'ACCEPTED'].includes(booking.status) && (
-                      <button
-                        onClick={() => handleStatusUpdate(booking.id, 'CANCELLED')}
-                        className="text-red-500 text-xs font-medium mt-3 hover:underline"
-                      >
-                        Cancel Booking
-                      </button>
+                        {booking.status === 'IN_PROGRESS' && (
+                          <button
+                            onClick={() => handleStatusUpdate(booking.id, 'COMPLETED')}
+                            disabled={isLoading}
+                            className="w-full bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg mt-3 transition-colors"
+                          >
+                            Mark Completed
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

@@ -66,6 +66,7 @@ export class BookingsService {
           include: { user: { select: { firstName: true, lastName: true, avatarUrl: true } } },
         },
         service: true,
+        payment: true,
       },
       orderBy: { scheduledAt: 'desc' },
     });
@@ -85,6 +86,7 @@ export class BookingsService {
       include: {
         client: { select: { firstName: true, lastName: true, avatarUrl: true, phone: true } },
         service: true,
+        payment: true,
       },
       orderBy: { scheduledAt: 'desc' },
     });
