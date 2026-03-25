@@ -1,0 +1,23 @@
+{
+  "name": "jonny",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Service matching platform connecting users with local professionals",
+  "scripts": {
+    "dev:api": "turbo run dev --filter=@jonny/api",
+    "dev:web": "turbo run dev --filter=@jonny/web",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "db:migrate": "cd apps/api && npx prisma migrate dev",
+    "db:seed": "cd apps/api && npx prisma db seed",
+    "db:studio": "cd apps/api && npx prisma studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

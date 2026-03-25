@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  PROFESSIONAL
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum PaymentStatus {
+  PENDING
+  HELD
+  RELEASED
+  REFUNDED
+}
+
+enum ServiceCategory {
+  TUTORING
+  CLEANING
+  PERSONAL_CARE
+  BABYSITTING
+  PET_SITTING
+}
+
+// ─── USERS ────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  role      UserRole @default(CLIENT)
+  phone     String?
+  avatarUrl String?  @map("avatar_url")
+  latitude  Float?
+  longitude Float?
+  address   String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  professionalProfile ProfessionalProfile?
+  bookingsAsClient    Booking[]            @relation("ClientBookings")
+  sentMessages        Message[]            @relation("SentMessages")
+  receivedMessages    Message[]            @relation("ReceivedMessages")
+  reviewsGiven        Review[]             @relation("ReviewsGiven")
+
+  @@map("users")
+}
+
+// ─── PROFESSIONAL PROFILES ────────────────────────────
+
+model ProfessionalProfile {
+  id            String  @id @default(uuid())
+  userId        String  @unique @map("user_id")
+  bio           String?
+  age           Int?
+  serviceRadius Float   @default(10) @map("service_radius") // in km
+  hourlyRate    Float?  @map("hourly_rate")
+  isVerified    Boolean @default(false) @map("is_verified")
+  stripeAccountId String? @map("stripe_account_id")
+
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  services      ProService[]
+  availability  Availability[]
+  bookings      Booking[]         @relation("ProBookings")
+  reviewsReceived Review[]        @relation("ReviewsReceived")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("professional_profiles")
+}
+
+// ─── SERVICES ─────────────────────────────────────────
+
+model Service {
+  id          String          @id @default(uuid())
+  name        String
+  category    ServiceCategory
+  description String?
+  icon        String?
+
+  proServices ProService[]
+  bookings    Booking[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("services")
+}
+
+model ProService {
+  id              String @id @default(uuid())
+  professionalId  String @map("professional_id")
+  serviceId       String @map("service_id")
+  customRate      Float? @map("custom_rate") // override hourly rate per service
+
+  professional ProfessionalProfile @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  service      Service             @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalId, serviceId])
+  @@map("pro_services")
+}
+
+// ─── AVAILABILITY ─────────────────────────────────────
+
+model Availability {
+  id             String @id @default(uuid())
+  professionalId String @map("professional_id")
+  dayOfWeek      Int    @map("day_of_week") // 0 = Sunday, 6 = Saturday
+  startTime      String @map("start_time")  // "09:00"
+  endTime        String @map("end_time")    // "17:00"
+
+  professional ProfessionalProfile @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalId, dayOfWeek, startTime])
+  @@map("availability")
+}
+
+// ─── BOOKINGS ─────────────────────────────────────────
+
+model Booking {
+  id             String        @id @default(uuid())
+  clientId       String        @map("client_id")
+  professionalId String        @map("professional_id")
+  serviceId      String        @map("service_id")
+  status         BookingStatus @default(PENDING)
+  scheduledAt    DateTime      @map("scheduled_at")
+  duration       Int           @default(60) // in minutes
+  totalPrice     Float?        @map("total_price")
+  notes          String?
+  address        String?
+
+  client       User                @relation("ClientBookings", fields: [clientId], references: [id])
+  professional ProfessionalProfile @relation("ProBookings", fields: [professionalId], references: [id])
+  service      Service             @relation(fields: [serviceId], references: [id])
+  payment      Payment?
+  review       Review?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("bookings")
+}
+
+// ─── PAYMENTS ─────────────────────────────────────────
+
+model Payment {
+  id              String        @id @default(uuid())
+  bookingId       String        @unique @map("booking_id")
+  amount          Float
+  currency        String        @default("EUR")
+  stripePaymentId String?       @map("stripe_payment_id")
+  status          PaymentStatus @default(PENDING)
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("payments")
+}
+
+// ─── REVIEWS ──────────────────────────────────────────
+
+model Review {
+  id             String @id @default(uuid())
+  bookingId      String @unique @map("booking_id")
+  reviewerId     String @map("reviewer_id")
+  professionalId String @map("professional_id")
+  rating         Int    // 1-5
+  comment        String?
+
+  booking      Booking             @relation(fields: [bookingId], references: [id])
+  reviewer     User                @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  professional ProfessionalProfile @relation("ReviewsReceived", fields: [professionalId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("reviews")
+}
+
+// ─── MESSAGES ─────────────────────────────────────────
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String   @map("sender_id")
+  receiverId String   @map("receiver_id")
+  content    String
+  isRead     Boolean  @default(false) @map("is_read")
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
+}
