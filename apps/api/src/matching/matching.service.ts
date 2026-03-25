@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SearchProfessionalsDto } from './dto/search.dto';
 
-interface RankedProfessional {
+export interface RankedProfessional {
   profileId: string;
   userId: string;
   firstName: string;
