@@ -8,6 +8,10 @@ dist/
 .turbo/
 coverage/
 .DS_Store
+*.tsbuildinfo
+apps/api/prisma/seed.js
+apps/api/prisma/seed.d.ts
+apps/api/prisma/seed.js.map
 preview/
 screenshots.mjs
 screenshots-payments.mjs
