@@ -10,3 +10,4 @@ coverage/
 .DS_Store
 preview/
 screenshots.mjs
+screenshots-payments.mjs
