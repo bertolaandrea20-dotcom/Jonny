@@ -17,8 +17,8 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production'
-      ? ['https://jonny.app']
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',')
       : ['http://localhost:3000'],
     credentials: true,
   });

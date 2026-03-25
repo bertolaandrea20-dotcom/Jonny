@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
@@ -14,6 +14,14 @@ import { clsx } from 'clsx';
 type ViewMode = 'list' | 'swipe';
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<PageLoading />}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
+
+function SearchPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { user, loading: authLoading } = useAuth();

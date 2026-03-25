@@ -9,6 +9,7 @@ interface User {
   firstName: string;
   lastName: string;
   role: 'CLIENT' | 'PROFESSIONAL' | 'ADMIN';
+  phone?: string;
   avatarUrl?: string;
   latitude?: number;
   longitude?: number;
