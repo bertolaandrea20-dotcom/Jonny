@@ -12,10 +12,10 @@ import {
 import { clsx } from 'clsx';
 
 const TX_STATUS_STYLES: Record<string, string> = {
-  HELD: 'bg-blue-50 text-blue-600',
-  RELEASED: 'bg-green-50 text-green-600',
-  REFUNDED: 'bg-gray-100 text-gray-500',
-  PENDING: 'bg-yellow-50 text-yellow-600',
+  HELD: 'bg-blue-50 text-blue-600 border border-blue-100',
+  RELEASED: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
+  REFUNDED: 'bg-gray-50 text-gray-500 border border-gray-100',
+  PENDING: 'bg-amber-50 text-amber-600 border border-amber-100',
 };
 
 export default function DashboardPage() {
@@ -73,117 +73,135 @@ export default function DashboardPage() {
   const completed = bookings.filter((b) => b.status === 'COMPLETED').length;
 
   return (
-    <div className="page-container pt-8">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+    <div className="animate-fade-up">
+      {/* Hero header */}
+      <div className="gradient-hero px-5 pt-14 pb-10 rounded-b-[2.5rem]">
+        <div className="max-w-lg mx-auto">
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <p className="text-white/70 text-sm mt-1">Your earnings & activity</p>
+        </div>
+      </div>
 
-      {/* Stripe Connect Banner */}
-      {!stripeStatus?.connected && (
-        <div className="card p-4 mb-4 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-          <div className="flex items-start gap-3">
-            <CreditCard className="text-purple-500 flex-shrink-0 mt-0.5" size={24} />
-            <div className="flex-1">
-              <h3 className="font-semibold text-sm">Connect your payment account</h3>
-              <p className="text-xs text-gray-600 mt-1">
-                Connect Stripe to receive payments from clients. Your earnings are held in escrow and released after each service.
-              </p>
-              <button
-                onClick={handleConnectStripe}
-                disabled={connecting}
-                className="btn-accent text-sm py-2 px-4 mt-3"
-              >
-                {connecting ? 'Connecting...' : 'Connect Stripe'}
-              </button>
+      <div className="page-container -mt-6">
+        {/* Stripe Connect Banner */}
+        {!stripeStatus?.connected && (
+          <div className="card-elevated p-5 mb-4 bg-gradient-to-r from-violet-50 to-blue-50">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-purple-400 flex items-center justify-center flex-shrink-0">
+                <CreditCard className="text-white" size={20} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-sm text-gray-900">Connect payments</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Set up Stripe to receive payments from clients securely.
+                </p>
+                <button
+                  onClick={handleConnectStripe}
+                  disabled={connecting}
+                  className="btn-accent text-sm py-2 px-4 mt-3"
+                >
+                  {connecting ? 'Connecting...' : 'Connect Stripe'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {stripeStatus?.connected && (
-        <div className="card p-3 mb-4 flex items-center gap-2 bg-green-50 border-green-200">
-          <CheckCircle size={16} className="text-green-500" />
-          <span className="text-sm font-medium text-green-700">
-            Stripe connected {stripeStatus.demo ? '(Demo mode)' : ''}
-          </span>
-        </div>
-      )}
+        {stripeStatus?.connected && (
+          <div className="card-elevated p-3 mb-4 flex items-center gap-2 bg-emerald-50">
+            <CheckCircle size={16} className="text-emerald-500" />
+            <span className="text-sm font-medium text-emerald-700">
+              Stripe connected {stripeStatus.demo ? '(Demo)' : ''}
+            </span>
+          </div>
+        )}
 
-      {/* Earnings Stats */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="card p-4 text-center">
-          <TrendingUp className="mx-auto text-green-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{earnings?.totalEarned?.toFixed(0) || 0}</p>
-          <p className="text-xs text-gray-400">Total Earned (EUR)</p>
-        </div>
-        <div className="card p-4 text-center">
-          <Shield className="mx-auto text-blue-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{earnings?.pendingEarnings?.toFixed(0) || 0}</p>
-          <p className="text-xs text-gray-400">In Escrow (EUR)</p>
-        </div>
-        <div className="card p-4 text-center">
-          <CheckCircle className="mx-auto text-green-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{completed}</p>
-          <p className="text-xs text-gray-400">Completed</p>
-        </div>
-        <div className="card p-4 text-center">
-          <Clock className="mx-auto text-yellow-500 mb-1" size={24} />
-          <p className="text-2xl font-bold">{pending + accepted}</p>
-          <p className="text-xs text-gray-400">Active</p>
-        </div>
-      </div>
-
-      {/* Platform fee info */}
-      <div className="card p-3 mb-4 flex items-center justify-between">
-        <span className="text-xs text-gray-500">Platform commission</span>
-        <span className="text-xs font-semibold text-gray-700">{earnings?.platformFeeRate || '15%'}</span>
-      </div>
-
-      {/* Recent transactions */}
-      {earnings?.recentTransactions?.length > 0 && (
-        <div className="mb-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            Recent Transactions
-          </h2>
-          <div className="space-y-2">
-            {earnings.recentTransactions.map((tx: any) => (
-              <div key={tx.bookingId} className="card p-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">{tx.service}</p>
-                    <p className="text-[11px] text-gray-400">
-                      {new Date(tx.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-green-600">+{tx.netAmount} EUR</p>
-                    <p className="text-[10px] text-gray-400">Fee: {tx.fee} EUR</p>
-                    <span className={clsx(
-                      'text-[10px] font-semibold px-1.5 py-0.5 rounded-full',
-                      TX_STATUS_STYLES[tx.status] || 'bg-gray-100',
-                    )}>
-                      {tx.status}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Earnings Stats */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="card-elevated p-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center mx-auto mb-2">
+              <TrendingUp className="text-white" size={20} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{earnings?.totalEarned?.toFixed(0) || 0}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Total Earned (EUR)</p>
+          </div>
+          <div className="card-elevated p-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-sky-400 flex items-center justify-center mx-auto mb-2">
+              <Shield className="text-white" size={20} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{earnings?.pendingEarnings?.toFixed(0) || 0}</p>
+            <p className="text-xs text-gray-400 mt-0.5">In Escrow (EUR)</p>
+          </div>
+          <div className="card-elevated p-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-400 flex items-center justify-center mx-auto mb-2">
+              <CheckCircle className="text-white" size={20} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{completed}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Completed</p>
+          </div>
+          <div className="card-elevated p-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-400 flex items-center justify-center mx-auto mb-2">
+              <Clock className="text-white" size={20} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{pending + accepted}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Active</p>
           </div>
         </div>
-      )}
 
-      {/* Quick actions */}
-      <button
-        onClick={() => router.push('/bookings')}
-        className="btn-primary w-full mb-3 flex items-center justify-center gap-2"
-      >
-        View All Requests ({pending + accepted} active)
-        <ArrowRight size={16} />
-      </button>
-      <button
-        onClick={() => router.push('/profile')}
-        className="btn-secondary w-full"
-      >
-        Edit My Profile
-      </button>
+        {/* Platform fee */}
+        <div className="card-elevated p-3 mb-4 flex items-center justify-between">
+          <span className="text-xs text-gray-500">Platform commission</span>
+          <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-0.5 rounded-full">
+            {earnings?.platformFeeRate || '15%'}
+          </span>
+        </div>
+
+        {/* Recent transactions */}
+        {earnings?.recentTransactions?.length > 0 && (
+          <div className="mb-4">
+            <h2 className="section-title mb-3">Recent Transactions</h2>
+            <div className="space-y-2">
+              {earnings.recentTransactions.map((tx: any) => (
+                <div key={tx.bookingId} className="card-elevated p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{tx.service}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5">
+                        {new Date(tx.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-emerald-600">+{tx.netAmount} EUR</p>
+                      <p className="text-[10px] text-gray-400">Fee: {tx.fee} EUR</p>
+                      <span className={clsx(
+                        'text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5',
+                        TX_STATUS_STYLES[tx.status] || 'bg-gray-100',
+                      )}>
+                        {tx.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quick actions */}
+        <button
+          onClick={() => router.push('/bookings')}
+          className="btn-primary w-full mb-3 flex items-center justify-center gap-2"
+        >
+          View All Requests ({pending + accepted} active)
+          <ArrowRight size={16} />
+        </button>
+        <button
+          onClick={() => router.push('/profile')}
+          className="btn-secondary w-full"
+        >
+          Edit My Profile
+        </button>
+      </div>
     </div>
   );
 }

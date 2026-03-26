@@ -53,177 +53,188 @@ export default function ProfessionalProfileView() {
   if (!profile) return null;
 
   return (
-    <div className="page-container pt-4">
-      <button onClick={() => router.back()} className="p-2 -ml-2 mb-2">
-        <ArrowLeft size={20} />
-      </button>
+    <div className="animate-fade-up">
+      {/* Hero header */}
+      <div className="gradient-hero-soft px-5 pt-6 pb-8">
+        <div className="max-w-lg mx-auto">
+          <button onClick={() => router.back()} className="p-2 -ml-2 mb-2 rounded-xl hover:bg-white/50 transition-colors">
+            <ArrowLeft size={20} />
+          </button>
 
-      <div className="card p-6 text-center mb-4">
-        <Avatar
-          src={profile.user.avatarUrl}
-          name={`${profile.user.firstName} ${profile.user.lastName}`}
-          size="xl"
-        />
-        <h1 className="text-xl font-bold mt-3">
-          {profile.user.firstName} {profile.user.lastName}
-        </h1>
-        {profile.age && (
-          <p className="text-sm text-gray-400">{profile.age} years old</p>
-        )}
+          <div className="text-center">
+            <Avatar
+              src={profile.user.avatarUrl}
+              name={`${profile.user.firstName} ${profile.user.lastName}`}
+              size="xl"
+            />
+            <h1 className="text-xl font-bold mt-4 text-gray-900">
+              {profile.user.firstName} {profile.user.lastName}
+            </h1>
+            {profile.age && (
+              <p className="text-sm text-gray-500">{profile.age} years old</p>
+            )}
 
-        <div className="flex items-center justify-center gap-2 mt-2">
-          <StarRating
-            rating={profile.averageRating}
-            count={profile.reviewsReceived?.length}
-            size={16}
-          />
-        </div>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <StarRating
+                rating={profile.averageRating}
+                count={profile.reviewsReceived?.length}
+                size={16}
+              />
+            </div>
 
-        {profile.isVerified && (
-          <div className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-3 py-1 rounded-full mt-2">
-            <Shield size={12} /> Verified
+            {profile.isVerified && (
+              <div className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-white shadow-sm px-3 py-1.5 rounded-full mt-3">
+                <Shield size={12} /> Verified Professional
+              </div>
+            )}
+
+            {profile.hourlyRate && (
+              <p className="text-2xl font-bold text-accent-600 mt-3">
+                {profile.hourlyRate.toFixed(0)}/h
+              </p>
+            )}
           </div>
-        )}
+        </div>
+      </div>
 
+      <div className="page-container -mt-2">
         {profile.bio && (
-          <p className="text-sm text-gray-600 mt-4">{profile.bio}</p>
-        )}
-
-        {profile.hourlyRate && (
-          <p className="text-2xl font-bold text-accent-600 mt-3">
-            {profile.hourlyRate.toFixed(0)}/h
-          </p>
-        )}
-      </div>
-
-      <div className="card p-4 mb-4">
-        <h2 className="font-semibold mb-3">Services</h2>
-        <div className="flex flex-wrap gap-2">
-          {profile.services.map((ps: any) => (
-            <span
-              key={ps.id}
-              className="bg-primary-50 text-primary-700 text-sm px-3 py-1.5 rounded-lg font-medium"
-            >
-              {ps.service.icon} {ps.service.name}
-              {ps.customRate && ` - ${ps.customRate}/h`}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="card p-4 mb-4">
-        <h2 className="font-semibold mb-3 flex items-center gap-2">
-          <Clock size={16} /> Availability
-        </h2>
-        {profile.availability.length === 0 ? (
-          <p className="text-sm text-gray-400">No availability set</p>
-        ) : (
-          <div className="space-y-1.5">
-            {profile.availability.map((slot: any, i: number) => (
-              <div key={i} className="flex items-center justify-between text-sm">
-                <span className="font-medium text-gray-700 w-12">
-                  {DAY_NAMES[slot.dayOfWeek]}
-                </span>
-                <span className="text-gray-500">
-                  {slot.startTime} - {slot.endTime}
-                </span>
-              </div>
-            ))}
+          <div className="card-elevated p-5 mb-3">
+            <p className="text-sm text-gray-600 leading-relaxed">{profile.bio}</p>
           </div>
         )}
-      </div>
 
-      {profile.reviewsReceived?.length > 0 && (
-        <div className="card p-4 mb-4">
-          <h2 className="font-semibold mb-3">Reviews</h2>
-          <div className="space-y-3">
-            {profile.reviewsReceived.map((r: any) => (
-              <div key={r.id} className="border-b border-gray-50 pb-3 last:border-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Avatar
-                    src={r.reviewer.avatarUrl}
-                    name={`${r.reviewer.firstName} ${r.reviewer.lastName}`}
-                    size="sm"
-                  />
-                  <span className="text-sm font-medium">
-                    {r.reviewer.firstName} {r.reviewer.lastName}
+        <div className="card-elevated p-5 mb-3">
+          <h2 className="font-semibold mb-3 text-gray-900">Services</h2>
+          <div className="flex flex-wrap gap-2">
+            {profile.services.map((ps: any) => (
+              <span
+                key={ps.id}
+                className="bg-primary-50 text-primary-700 text-sm px-3 py-1.5 rounded-xl font-medium"
+              >
+                {ps.service.icon} {ps.service.name}
+                {ps.customRate && ` - ${ps.customRate}/h`}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="card-elevated p-5 mb-3">
+          <h2 className="font-semibold mb-3 flex items-center gap-2 text-gray-900">
+            <Clock size={16} className="text-gray-400" /> Availability
+          </h2>
+          {profile.availability.length === 0 ? (
+            <p className="text-sm text-gray-400">No availability set</p>
+          ) : (
+            <div className="space-y-2">
+              {profile.availability.map((slot: any, i: number) => (
+                <div key={i} className="flex items-center justify-between text-sm bg-gray-50 rounded-xl px-3 py-2">
+                  <span className="font-medium text-gray-700 w-12">
+                    {DAY_NAMES[slot.dayOfWeek]}
                   </span>
-                  <StarRating rating={r.rating} size={12} />
+                  <span className="text-gray-500">
+                    {slot.startTime} - {slot.endTime}
+                  </span>
                 </div>
-                {r.comment && (
-                  <p className="text-sm text-gray-600 ml-10">{r.comment}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {user && user.role === 'CLIENT' && !booked && (
-        <div className="card p-4 mb-4">
-          <h2 className="font-semibold mb-3">Book this professional</h2>
-          <div className="space-y-3">
-            <select
-              value={bookingService}
-              onChange={(e) => setBookingService(e.target.value)}
-              className="input-field"
-            >
-              <option value="">Select a service</option>
-              {profile.services.map((ps: any) => (
-                <option key={ps.service.id} value={ps.service.id}>
-                  {ps.service.name}
-                </option>
               ))}
-            </select>
+            </div>
+          )}
+        </div>
 
-            <input
-              type="date"
-              value={bookingDate}
-              onChange={(e) => setBookingDate(e.target.value)}
-              className="input-field"
-            />
+        {profile.reviewsReceived?.length > 0 && (
+          <div className="card-elevated p-5 mb-3">
+            <h2 className="font-semibold mb-3 text-gray-900">Reviews</h2>
+            <div className="space-y-4">
+              {profile.reviewsReceived.map((r: any) => (
+                <div key={r.id} className="border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Avatar
+                      src={r.reviewer.avatarUrl}
+                      name={`${r.reviewer.firstName} ${r.reviewer.lastName}`}
+                      size="sm"
+                    />
+                    <span className="text-sm font-medium text-gray-900">
+                      {r.reviewer.firstName} {r.reviewer.lastName}
+                    </span>
+                    <StarRating rating={r.rating} size={12} />
+                  </div>
+                  {r.comment && (
+                    <p className="text-sm text-gray-500 ml-10">{r.comment}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-            <input
-              type="time"
-              value={bookingTime}
-              onChange={(e) => setBookingTime(e.target.value)}
-              className="input-field"
-            />
+        {user && user.role === 'CLIENT' && !booked && (
+          <div className="card-elevated p-5 mb-3">
+            <h2 className="font-semibold mb-4 text-gray-900">Book this professional</h2>
+            <div className="space-y-3">
+              <select
+                value={bookingService}
+                onChange={(e) => setBookingService(e.target.value)}
+                className="input-field"
+              >
+                <option value="">Select a service</option>
+                {profile.services.map((ps: any) => (
+                  <option key={ps.service.id} value={ps.service.id}>
+                    {ps.service.name}
+                  </option>
+                ))}
+              </select>
 
-            <textarea
-              value={bookingNotes}
-              onChange={(e) => setBookingNotes(e.target.value)}
-              className="input-field"
-              placeholder="Any special notes? (optional)"
-              rows={2}
-            />
+              <input
+                type="date"
+                value={bookingDate}
+                onChange={(e) => setBookingDate(e.target.value)}
+                className="input-field"
+              />
 
+              <input
+                type="time"
+                value={bookingTime}
+                onChange={(e) => setBookingTime(e.target.value)}
+                className="input-field"
+              />
+
+              <textarea
+                value={bookingNotes}
+                onChange={(e) => setBookingNotes(e.target.value)}
+                className="input-field"
+                placeholder="Any special notes? (optional)"
+                rows={2}
+              />
+
+              <button
+                onClick={handleBook}
+                disabled={!bookingService || !bookingDate || !bookingTime || submitting}
+                className="btn-primary w-full"
+              >
+                {submitting ? 'Booking...' : 'Request Booking'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {booked && (
+          <div className="card-elevated p-6 text-center mb-3 bg-emerald-50 border-emerald-200">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-3">
+              <span className="text-3xl">✅</span>
+            </div>
+            <p className="font-semibold text-emerald-700 text-lg">Booking request sent!</p>
+            <p className="text-sm text-emerald-600 mt-1">
+              {profile.user.firstName} will confirm your request shortly.
+            </p>
             <button
-              onClick={handleBook}
-              disabled={!bookingService || !bookingDate || !bookingTime || submitting}
-              className="btn-primary w-full"
+              onClick={() => router.push('/bookings')}
+              className="btn-primary mt-4"
             >
-              {submitting ? 'Booking...' : 'Request Booking'}
+              View My Bookings
             </button>
           </div>
-        </div>
-      )}
-
-      {booked && (
-        <div className="card p-6 text-center mb-4 bg-green-50 border-green-200">
-          <p className="text-2xl mb-2">✅</p>
-          <p className="font-semibold text-green-700">Booking request sent!</p>
-          <p className="text-sm text-green-600 mt-1">
-            {profile.user.firstName} will confirm your request shortly.
-          </p>
-          <button
-            onClick={() => router.push('/bookings')}
-            className="btn-primary mt-4"
-          >
-            View My Bookings
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

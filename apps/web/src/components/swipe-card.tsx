@@ -50,25 +50,25 @@ export function SwipeCard({ professional: p, onSwipeLeft, onSwipeRight, onTap }:
       whileTap={{ cursor: 'grabbing' }}
     >
       <div
-        className="card h-full flex flex-col relative overflow-hidden"
+        className="card-elevated h-full flex flex-col relative overflow-hidden"
         onClick={onTap}
       >
         {/* Like / Nope overlays */}
         <motion.div
-          className="absolute top-6 right-6 z-10 bg-green-500 text-white font-bold text-xl px-4 py-2 rounded-xl border-2 border-green-600 rotate-[-15deg]"
+          className="absolute top-6 right-6 z-10 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl px-5 py-2 rounded-2xl rotate-[-15deg] shadow-lg"
           style={{ opacity: likeOpacity }}
         >
           LIKE
         </motion.div>
         <motion.div
-          className="absolute top-6 left-6 z-10 bg-red-500 text-white font-bold text-xl px-4 py-2 rounded-xl border-2 border-red-600 rotate-[15deg]"
+          className="absolute top-6 left-6 z-10 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold text-xl px-5 py-2 rounded-2xl rotate-[15deg] shadow-lg"
           style={{ opacity: nopeOpacity }}
         >
           NOPE
         </motion.div>
 
         {/* Avatar section */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-primary-50 to-white pt-8">
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-primary-50/50 to-white pt-8">
           <Avatar
             src={p.avatarUrl}
             name={`${p.firstName} ${p.lastName}`}
@@ -77,20 +77,20 @@ export function SwipeCard({ professional: p, onSwipeLeft, onSwipeRight, onTap }:
         </div>
 
         {/* Info section */}
-        <div className="p-5">
+        <div className="p-6">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h2 className="text-xl font-bold">
+              <h2 className="text-xl font-bold text-gray-900">
                 {p.firstName} {p.lastName}
                 {p.age && <span className="text-gray-400 font-normal text-base ml-2">{p.age}</span>}
               </h2>
-              <div className="flex items-center gap-1 text-sm text-gray-400">
+              <div className="flex items-center gap-1 text-sm text-gray-400 mt-1">
                 <MapPin size={14} />
                 {formatDistance(p.distance)} away
               </div>
             </div>
             {p.hourlyRate && (
-              <span className="text-lg font-bold text-accent-600">
+              <span className="text-lg font-bold text-accent-600 bg-accent-50 px-3 py-1 rounded-xl">
                 {p.hourlyRate.toFixed(0)}/h
               </span>
             )}
@@ -99,7 +99,7 @@ export function SwipeCard({ professional: p, onSwipeLeft, onSwipeRight, onTap }:
           <StarRating rating={p.averageRating} count={p.reviewCount} />
 
           {p.bio && (
-            <p className="text-sm text-gray-600 mt-3 line-clamp-3">{p.bio}</p>
+            <p className="text-sm text-gray-500 mt-3 line-clamp-3">{p.bio}</p>
           )}
         </div>
 
@@ -107,13 +107,13 @@ export function SwipeCard({ professional: p, onSwipeLeft, onSwipeRight, onTap }:
         <div className="flex justify-center gap-6 pb-6">
           <button
             onClick={(e) => { e.stopPropagation(); onSwipeLeft(); }}
-            className="w-14 h-14 rounded-full border-2 border-red-200 flex items-center justify-center text-red-400 hover:bg-red-50 transition-colors"
+            className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-100 hover:text-red-500 transition-all shadow-sm"
           >
             <X size={28} />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); onSwipeRight(); }}
-            className="w-14 h-14 rounded-full border-2 border-green-200 flex items-center justify-center text-green-500 hover:bg-green-50 transition-colors"
+            className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center text-green-500 hover:bg-green-100 hover:text-green-600 transition-all shadow-sm"
           >
             <Heart size={28} />
           </button>

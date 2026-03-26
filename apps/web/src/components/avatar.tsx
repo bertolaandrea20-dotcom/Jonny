@@ -15,9 +15,13 @@ const sizeClasses = {
   xl: 'w-24 h-24 text-2xl',
 };
 
-const colors = [
-  'bg-primary-500', 'bg-amber-500', 'bg-orange-500',
-  'bg-rose-500', 'bg-red-400', 'bg-yellow-600',
+const gradients = [
+  'from-primary-400 to-orange-400',
+  'from-amber-400 to-yellow-400',
+  'from-rose-400 to-pink-400',
+  'from-violet-400 to-purple-400',
+  'from-emerald-400 to-teal-400',
+  'from-sky-400 to-cyan-400',
 ];
 
 export function Avatar({ src, name, size = 'md' }: AvatarProps) {
@@ -28,14 +32,14 @@ export function Avatar({ src, name, size = 'md' }: AvatarProps) {
     .toUpperCase()
     .slice(0, 2);
 
-  const colorIndex = name.charCodeAt(0) % colors.length;
+  const colorIndex = name.charCodeAt(0) % gradients.length;
 
   if (src) {
     return (
       <img
         src={src}
         alt={name}
-        className={clsx('rounded-full object-cover', sizeClasses[size])}
+        className={clsx('rounded-2xl object-cover', sizeClasses[size])}
       />
     );
   }
@@ -43,9 +47,9 @@ export function Avatar({ src, name, size = 'md' }: AvatarProps) {
   return (
     <div
       className={clsx(
-        'rounded-full flex items-center justify-center text-white font-semibold',
+        'rounded-2xl flex items-center justify-center text-white font-semibold bg-gradient-to-br shadow-sm',
         sizeClasses[size],
-        colors[colorIndex],
+        gradients[colorIndex],
       )}
     >
       {initials}

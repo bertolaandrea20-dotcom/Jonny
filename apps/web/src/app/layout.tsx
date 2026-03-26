@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <AuthProvider>
-          <main className="min-h-screen">
+          <main className="min-h-screen bg-gray-50/30">
             {children}
           </main>
           <BottomNav />
