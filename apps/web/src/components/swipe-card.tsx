@@ -90,7 +90,7 @@ export function SwipeCard({ professional: p, onSwipeLeft, onSwipeRight, onTap }:
               </div>
             </div>
             {p.hourlyRate && (
-              <span className="text-lg font-bold text-primary-600">
+              <span className="text-lg font-bold text-accent-600">
                 {p.hourlyRate.toFixed(0)}/h
               </span>
             )}

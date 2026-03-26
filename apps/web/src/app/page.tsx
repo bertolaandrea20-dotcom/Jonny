@@ -9,11 +9,11 @@ import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
 
 const CATEGORIES = [
-  { key: 'TUTORING', label: 'Private Tutoring', icon: '📚', color: 'bg-blue-50 border-blue-200' },
-  { key: 'CLEANING', label: 'Cleaning', icon: '🧹', color: 'bg-green-50 border-green-200' },
-  { key: 'PERSONAL_CARE', label: 'Personal Care', icon: '💆', color: 'bg-pink-50 border-pink-200' },
-  { key: 'BABYSITTING', label: 'Babysitting', icon: '👶', color: 'bg-yellow-50 border-yellow-200' },
-  { key: 'PET_SITTING', label: 'Pet Sitting', icon: '🐾', color: 'bg-purple-50 border-purple-200' },
+  { key: 'TUTORING', label: 'Private Tutoring', icon: '📚', bg: 'bg-orange-50', iconBg: 'bg-orange-100' },
+  { key: 'CLEANING', label: 'Cleaning', icon: '🧹', bg: 'bg-emerald-50', iconBg: 'bg-emerald-100' },
+  { key: 'PERSONAL_CARE', label: 'Personal Care', icon: '💆', bg: 'bg-rose-50', iconBg: 'bg-rose-100' },
+  { key: 'BABYSITTING', label: 'Babysitting', icon: '👶', bg: 'bg-amber-50', iconBg: 'bg-amber-100' },
+  { key: 'PET_SITTING', label: 'Pet Sitting', icon: '🐾', bg: 'bg-violet-50', iconBg: 'bg-violet-100' },
 ];
 
 export default function HomePage() {
@@ -93,19 +93,18 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="space-y-3">
+      {/* Categories - Glovo-style grid */}
+      <div className="grid grid-cols-2 gap-3">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.key}
             onClick={() => router.push(`/search?category=${cat.key}`)}
-            className={`card w-full p-4 flex items-center gap-4 text-left border ${cat.color} hover:shadow-md transition-shadow`}
+            className={`${cat.bg} rounded-2xl p-5 flex flex-col items-center gap-3 text-center hover:shadow-md active:scale-[0.97] transition-all duration-150`}
           >
-            <span className="text-3xl">{cat.icon}</span>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">{cat.label}</p>
+            <div className={`${cat.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center`}>
+              <span className="text-4xl">{cat.icon}</span>
             </div>
-            <ChevronRight className="text-gray-400" size={20} />
+            <p className="font-semibold text-gray-800 text-sm">{cat.label}</p>
           </button>
         ))}
       </div>

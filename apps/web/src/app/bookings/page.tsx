@@ -160,7 +160,7 @@ export default function BookingsPage() {
                     {/* Price & Payment status */}
                     <div className="flex items-center justify-between mt-2">
                       {booking.totalPrice != null && (
-                        <p className="text-sm font-bold text-primary-600">
+                        <p className="text-sm font-bold text-accent-600">
                           {booking.totalPrice.toFixed(2)} EUR
                         </p>
                       )}

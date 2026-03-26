@@ -39,7 +39,7 @@ export function ProfessionalCard({ professional: p, onClick }: ProfessionalCardP
               {p.age && <span className="text-xs text-gray-400">{p.age} years old</span>}
             </div>
             {p.hourlyRate && (
-              <span className="text-sm font-bold text-primary-600">
+              <span className="text-sm font-bold text-accent-600">
                 {p.hourlyRate.toFixed(0)}/h
               </span>
             )}

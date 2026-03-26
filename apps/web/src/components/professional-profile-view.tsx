@@ -90,7 +90,7 @@ export default function ProfessionalProfileView() {
         )}
 
         {profile.hourlyRate && (
-          <p className="text-2xl font-bold text-primary-600 mt-3">
+          <p className="text-2xl font-bold text-accent-600 mt-3">
             {profile.hourlyRate.toFixed(0)}/h
           </p>
         )}

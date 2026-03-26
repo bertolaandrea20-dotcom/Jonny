@@ -43,7 +43,7 @@ export function BottomNav() {
               href={link.href}
               className={clsx(
                 'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors',
-                isActive ? 'text-primary-600' : 'text-gray-400 hover:text-gray-600',
+                isActive ? 'text-primary-600 bg-primary-50 rounded-xl' : 'text-gray-400 hover:text-gray-600',
               )}
             >
               <link.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
