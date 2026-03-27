@@ -317,6 +317,39 @@ export const MOCK_PRO_BOOKINGS: any[] = [
   },
 ];
 
+// ─── Job Listings (Marketplace-style) ───
+
+const CATEGORY_ICONS: Record<string, string> = {
+  TUTORING: '📚', CLEANING: '✨', PERSONAL_CARE: '💆', BABYSITTING: '👶', PET_SITTING: '🐾',
+};
+
+export const MOCK_JOB_LISTINGS: any[] = [
+  { id: 'job-1', title: 'Cercasi babysitter per 2 bambini', description: 'Cerco una babysitter affidabile per due bambini (4 e 7 anni), dal lunedi al venerdi dalle 15 alle 19. Preferibilmente con esperienza e referenze.', category: 'BABYSITTING', location: 'Milano, Zona Navigli', budget: 15, budgetType: 'hourly', postedBy: 'Anna R.', postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), urgent: true },
+  { id: 'job-2', title: 'Pulizia appartamento 80mq', description: 'Appartamento bilocale in zona centro, necessita pulizia profonda settimanale. Inclusi bagno, cucina, pavimenti e polvere.', category: 'CLEANING', location: 'Roma, Trastevere', budget: 60, budgetType: 'fixed', postedBy: 'Marco B.', postedAt: new Date(now.getTime() - 5 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-3', title: 'Ripetizioni matematica liceo', description: 'Mio figlio frequenta il terzo anno di liceo scientifico e ha bisogno di supporto in matematica. 2 volte a settimana, disponibili anche online.', category: 'TUTORING', location: 'Torino, San Salvario', budget: 25, budgetType: 'hourly', postedBy: 'Giulia M.', postedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-4', title: 'Dog sitter per weekend', description: 'Cerco qualcuno che possa tenere il mio Labrador (3 anni, docile) durante i weekend. Incluse passeggiate e pasti.', category: 'PET_SITTING', location: 'Napoli, Vomero', budget: 30, budgetType: 'fixed', postedBy: 'Luca P.', postedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-5', title: 'Parrucchiere a domicilio', description: 'Cerco parrucchiere/a per taglio e piega a domicilio per signora anziana. Zona facilmente raggiungibile. Una volta al mese.', category: 'PERSONAL_CARE', location: 'Firenze, Campo di Marte', budget: 35, budgetType: 'fixed', postedBy: 'Sara L.', postedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-6', title: 'Pulizia ufficio 120mq', description: 'Ufficio open space con 4 postazioni, bagno e cucina. Pulizia giornaliera dal lunedi al venerdi, orario flessibile (sera o mattina presto).', category: 'CLEANING', location: 'Milano, Porta Nuova', budget: 18, budgetType: 'hourly', postedBy: 'Studio Legale Rossi', postedAt: new Date(now.getTime() - 1.5 * 24 * 60 * 60 * 1000).toISOString(), urgent: true },
+  { id: 'job-7', title: 'Lezioni di inglese per adulto', description: 'Livello intermedio (B1), vorrei arrivare a B2 per motivi lavorativi. Disponibile la sera dopo le 19 o nei weekend.', category: 'TUTORING', location: 'Bologna, Centro', budget: 30, budgetType: 'hourly', postedBy: 'Davide C.', postedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-8', title: 'Babysitter serale per neonato', description: 'Cerchiamo una babysitter per il nostro bimbo di 8 mesi, il venerdi e sabato sera dalle 20 alle 24. Esperienza con neonati richiesta.', category: 'BABYSITTING', location: 'Roma, Prati', budget: 12, budgetType: 'hourly', postedBy: 'Chiara & Matteo', postedAt: new Date(now.getTime() - 2.5 * 24 * 60 * 60 * 1000).toISOString(), urgent: true },
+  { id: 'job-9', title: 'Massaggio rilassante a domicilio', description: 'Cerco massaggiatore/trice professionista per massaggi rilassanti settimanali. Lettino disponibile a casa.', category: 'PERSONAL_CARE', location: 'Milano, Isola', budget: 50, budgetType: 'fixed', postedBy: 'Elena V.', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-10', title: 'Cat sitter per vacanze estive', description: '2 gatti (sterilizzati, indoor). Servono visite giornaliere per cibo, acqua e coccole. Periodo: 15-30 agosto.', category: 'PET_SITTING', location: 'Torino, Crocetta', budget: 15, budgetType: 'fixed', postedBy: 'Federica N.', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-11', title: 'Ripetizioni fisica e chimica', description: 'Studentessa universitaria cerca aiuto per preparare esami di Fisica 1 e Chimica Generale. Anche online.', category: 'TUTORING', location: 'Padova, Centro', budget: 20, budgetType: 'hourly', postedBy: 'Valentina S.', postedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-12', title: 'Pulizia post-ristrutturazione', description: 'Appartamento appena ristrutturato, 100mq. Serve pulizia completa (polvere, residui, vetri, pavimenti). Lavoro una tantum.', category: 'CLEANING', location: 'Roma, Testaccio', budget: 150, budgetType: 'fixed', postedBy: 'Giovanni T.', postedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000).toISOString(), urgent: true },
+  { id: 'job-13', title: 'Manicure e pedicure a domicilio', description: 'Cerco estetista per manicure con semipermanente e pedicure curativo. Ogni 3 settimane circa.', category: 'PERSONAL_CARE', location: 'Napoli, Chiaia', budget: 40, budgetType: 'fixed', postedBy: 'Alessia F.', postedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-14', title: 'Dog walker mattutino', description: 'Cerco persona affidabile per portare a passeggio il mio Border Collie ogni mattina (7-8) in zona parco. 5 giorni a settimana.', category: 'PET_SITTING', location: 'Milano, Lambrate', budget: 10, budgetType: 'fixed', postedBy: 'Simone G.', postedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-15', title: 'Aiuto compiti elementari', description: 'Bambina di 9 anni, terza elementare. Serve aiuto con compiti di italiano e matematica, 3 pomeriggi a settimana.', category: 'TUTORING', location: 'Firenze, Rifredi', budget: 15, budgetType: 'hourly', postedBy: 'Roberta D.', postedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-16', title: 'Babysitter bilingue (IT/EN)', description: 'Famiglia italo-americana cerca babysitter bilingue per bambino di 5 anni. Conversazione in inglese durante il gioco.', category: 'BABYSITTING', location: 'Roma, EUR', budget: 18, budgetType: 'hourly', postedBy: 'James & Francesca', postedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-17', title: 'Pulizia B&B tra check-out', description: 'Bed & Breakfast 3 camere, serve pulizia rapida e accurata tra un ospite e il successivo. Orario variabile, spesso 11-14.', category: 'CLEANING', location: 'Venezia, Dorsoduro', budget: 25, budgetType: 'fixed', postedBy: 'B&B Ca\' Bella', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+  { id: 'job-18', title: 'Pet sitter per coniglio nano', description: 'Cerco qualcuno che venga a casa mia a curare il mio coniglietto durante le vacanze di Pasqua (5 giorni). Solo cibo e acqua.', category: 'PET_SITTING', location: 'Bologna, Santo Stefano', budget: 10, budgetType: 'fixed', postedBy: 'Martina Z.', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(), urgent: false },
+];
+
+export function getJobListings(category?: string): any[] {
+  let listings = MOCK_JOB_LISTINGS.map((j) => ({ ...j, icon: CATEGORY_ICONS[j.category] || '📋' }));
+  if (category) listings = listings.filter((j) => j.category === category);
+  return listings.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
+}
+
 export const MOCK_EARNINGS = {
   totalEarned: 595.00,
   pendingEarnings: 30.00,

@@ -213,6 +213,12 @@ class ApiClient {
   async getEarnings() {
     return this.request<any>('/payments/earnings');
   }
+
+  // Jobs
+  async getJobListings(category?: string) {
+    const query = category ? `?category=${category}` : '';
+    return this.request<any[]>(`/jobs${query}`);
+  }
 }
 
 export const api = new ApiClient();

@@ -40,7 +40,7 @@ export default function RegisterPage() {
       <div className="gradient-hero h-36 rounded-b-[3rem] flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent)]" />
         <div className="text-center relative">
-          <h1 className="text-4xl font-extrabold text-white tracking-tight">Jonny</h1>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Service to U</h1>
           <p className="text-white/80 text-sm mt-1 font-medium">Create your account</p>
         </div>
       </div>

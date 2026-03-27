@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MapPin, ChevronRight, Search, Star, ArrowRight } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock } from 'lucide-react';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
+import { MOCK_JOB_LISTINGS } from '@/lib/mock-data';
 
 const CATEGORIES = [
   { key: 'TUTORING', label: 'Tutoring', icon: '📚', gradient: 'from-orange-400 to-amber-300' },
@@ -123,6 +124,7 @@ export default function HomePage() {
       {/* Hero section with gradient */}
       <div className="gradient-hero px-5 pt-14 pb-12 rounded-b-[2.5rem]">
         <div className="max-w-lg mx-auto">
+          <p className="text-white/60 text-xs font-bold tracking-widest uppercase mb-4">Service to U</p>
           <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-white/80 text-sm font-medium">Good {getGreeting()}</p>
@@ -196,6 +198,53 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Latest Job Offers */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-gray-900">Latest Offers</h2>
+            <button
+              onClick={() => router.push('/jobs')}
+              className="text-primary-600 text-sm font-semibold flex items-center gap-1 hover:underline"
+            >
+              See all <ArrowRight size={14} />
+            </button>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5 scrollbar-hide">
+            {MOCK_JOB_LISTINGS.slice(0, 6).map((job) => {
+              const ICONS: Record<string, string> = { TUTORING: '📚', CLEANING: '✨', PERSONAL_CARE: '💆', BABYSITTING: '👶', PET_SITTING: '🐾' };
+              const timeAgo = getTimeAgo(job.postedAt);
+              return (
+                <button
+                  key={job.id}
+                  onClick={() => router.push('/jobs')}
+                  className="min-w-[220px] max-w-[220px] card-elevated p-4 text-left flex-shrink-0 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-2xl">{ICONS[job.category] || '📋'}</span>
+                    {job.urgent && (
+                      <span className="flex items-center gap-0.5 text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                        <Flame size={10} /> Urgente
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-semibold text-sm text-gray-900 line-clamp-2 leading-tight">{job.title}</p>
+                  <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+                    <MapPin size={10} /> {job.location}
+                  </p>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-sm font-bold text-accent-600">
+                      {job.budget}{job.budgetType === 'hourly' ? '/h' : ''}
+                    </span>
+                    <span className="text-[10px] text-gray-400 flex items-center gap-0.5">
+                      <Clock size={9} /> {timeAgo}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* How it works */}
         <div className="mb-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">How it works</h2>
@@ -227,4 +276,13 @@ function getGreeting(): string {
   if (hour < 12) return 'morning';
   if (hour < 18) return 'afternoon';
   return 'evening';
+}
+
+function getTimeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  if (hours < 1) return 'Now';
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
