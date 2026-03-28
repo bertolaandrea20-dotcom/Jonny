@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet, Map } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet, Map, Copy, Tag } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
-import { MOCK_JOB_LISTINGS } from '@/lib/mock-data';
+import { MOCK_JOB_LISTINGS, MOCK_PROMOTIONS } from '@/lib/mock-data';
 
 const CATEGORIES = [
   { key: 'TUTORING', label: 'Tutoring', icon: '📚', gradient: 'from-orange-400 to-amber-300' },
@@ -28,6 +29,7 @@ export default function HomePage() {
   const router = useRouter();
   const { user, loading } = useAuth();
   const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -227,6 +229,73 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+
+        {/* Promotions Carousel */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-lg font-bold text-gray-900">Offerte speciali</h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500 text-white animate-pulse">
+              Novità
+            </span>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-3 -mx-5 px-5 scrollbar-hide snap-x snap-mandatory">
+            {MOCK_PROMOTIONS.map((promo, i) => (
+              <motion.div
+                key={promo.id}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="min-w-[280px] max-w-[280px] flex-shrink-0 snap-center"
+              >
+                <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${promo.gradient} p-5 text-white shadow-lg h-full`}>
+                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/10 rounded-full" />
+                  <div className="absolute bottom-2 left-8 w-16 h-16 bg-white/10 rounded-full" />
+                  <div className="relative">
+                    <span className="text-3xl">{promo.emoji}</span>
+                    <h3 className="font-bold text-base mt-2 leading-tight">{promo.title}</h3>
+                    <p className="text-white/80 text-xs mt-1 leading-relaxed">{promo.subtitle}</p>
+                    {promo.code && (
+                      <button
+                        onClick={() => {
+                          navigator.clipboard?.writeText(promo.code!).catch(() => {});
+                          setCopiedCode(promo.code);
+                          setTimeout(() => setCopiedCode(null), 2000);
+                        }}
+                        className="mt-3 flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-mono font-bold hover:bg-white/30 transition-colors active:scale-95"
+                      >
+                        <Copy size={11} />
+                        {promo.code}
+                      </button>
+                    )}
+                    <p className="text-white/50 text-[10px] mt-2 flex items-center gap-1">
+                      <Clock size={9} /> Valida fino al {promo.validUntil}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          {/* Dots */}
+          <div className="flex justify-center gap-1.5 mt-2">
+            {MOCK_PROMOTIONS.map((p) => (
+              <div key={p.id} className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+            ))}
+          </div>
+        </div>
+
+        {/* Copied Toast */}
+        <AnimatePresence>
+          {copiedCode && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-5 py-2.5 rounded-full shadow-lg z-50 flex items-center gap-2"
+            >
+              <Tag size={14} /> Codice <span className="font-mono font-bold">{copiedCode}</span> copiato!
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Categories */}
         <div className="mb-8">

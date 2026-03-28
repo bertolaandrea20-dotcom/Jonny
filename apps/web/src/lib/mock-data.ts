@@ -689,3 +689,44 @@ export const MOCK_VERIFICATION = {
   phone: { status: 'verified' as const, label: 'Telefono', detail: '+33 6 12 34 **', icon: '📱' },
   document: { status: 'pending' as const, label: 'Documento', detail: 'In attesa di verifica', icon: '🪪' },
 };
+
+// ─── Promotions ───
+
+export const MOCK_PROMOTIONS = [
+  {
+    id: 'promo-1',
+    title: 'Sconto 20% prima prenotazione',
+    subtitle: 'Usa il codice e risparmia sul tuo primo servizio!',
+    code: 'BENVENUTO20',
+    gradient: 'from-rose-500 via-pink-500 to-fuchsia-500',
+    emoji: '🎉',
+    validUntil: '30 Apr 2026',
+  },
+  {
+    id: 'promo-2',
+    title: 'Pulizia casa da €25',
+    subtitle: 'Offerta flash: prenota entro questa settimana',
+    code: null,
+    gradient: 'from-emerald-500 via-green-500 to-teal-500',
+    emoji: '✨',
+    validUntil: '15 Apr 2026',
+  },
+  {
+    id: 'promo-3',
+    title: 'Ripetizioni: 1h gratis',
+    subtitle: 'Prenota 3 lezioni e la prima è offerta da noi',
+    code: 'STUDIO3X1',
+    gradient: 'from-blue-500 via-indigo-500 to-violet-500',
+    emoji: '📚',
+    validUntil: '31 Mag 2026',
+  },
+  {
+    id: 'promo-4',
+    title: 'Pet Sitting weekend -15%',
+    subtitle: 'Sconto su tutti i servizi per animali nel weekend',
+    code: 'PET15',
+    gradient: 'from-amber-500 via-orange-500 to-yellow-500',
+    emoji: '🐾',
+    validUntil: '20 Apr 2026',
+  },
+];
