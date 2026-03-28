@@ -640,3 +640,52 @@ export const MOCK_CALENDAR_BOOKINGS: any[] = [
     payment: { status: 'RELEASED', amount: 66.00 },
   },
 ];
+
+// ─── Profile: Avatar options ───
+
+export const MOCK_AVATAR_OPTIONS = [
+  'https://i.pravatar.cc/150?img=1',
+  'https://i.pravatar.cc/150?img=3',
+  'https://i.pravatar.cc/150?img=5',
+  'https://i.pravatar.cc/150?img=7',
+  'https://i.pravatar.cc/150?img=8',
+  'https://i.pravatar.cc/150?img=11',
+  'https://i.pravatar.cc/150?img=12',
+  'https://i.pravatar.cc/150?img=16',
+];
+
+// ─── Profile: Saved Addresses ───
+
+export const MOCK_ADDRESSES = [
+  { id: 'addr-1', label: 'Casa', icon: '🏠', address: 'Via Roma 15', city: 'Milano', cap: '20121', isDefault: true },
+  { id: 'addr-2', label: 'Ufficio', icon: '🏢', address: 'Corso Magenta 42', city: 'Milano', cap: '20123', isDefault: false },
+];
+
+// ─── Profile: User Stats & Gamification ───
+
+export const MOCK_USER_STATS = {
+  totalBookings: 12,
+  totalSpent: 890,
+  favouritePro: { name: 'Marie D.', bookings: 5 },
+  memberSince: '2025-06-15',
+  level: 3,
+  levelName: 'Gold',
+  xp: 720,
+  xpToNext: 1000,
+  badges: [
+    { id: 'b1', icon: '🌟', name: 'Prima prenotazione', description: 'Hai completato la tua prima prenotazione', earned: true },
+    { id: 'b2', icon: '🔥', name: '5 prenotazioni', description: 'Hai completato 5 prenotazioni', earned: true },
+    { id: 'b3', icon: '💎', name: '10 prenotazioni', description: 'Hai completato 10 prenotazioni', earned: true },
+    { id: 'b4', icon: '👑', name: '25 prenotazioni', description: 'Hai completato 25 prenotazioni', earned: false },
+    { id: 'b5', icon: '⭐', name: 'Prima recensione', description: 'Hai lasciato la tua prima recensione', earned: true },
+    { id: 'b6', icon: '🎯', name: 'Cliente fedele', description: '3+ prenotazioni con lo stesso professionista', earned: true },
+  ],
+};
+
+// ─── Profile: Identity Verification ───
+
+export const MOCK_VERIFICATION = {
+  email: { status: 'verified' as const, label: 'Email', detail: 'client@test.com', icon: '📧' },
+  phone: { status: 'verified' as const, label: 'Telefono', detail: '+33 6 12 34 **', icon: '📱' },
+  document: { status: 'pending' as const, label: 'Documento', detail: 'In attesa di verifica', icon: '🪪' },
+};
