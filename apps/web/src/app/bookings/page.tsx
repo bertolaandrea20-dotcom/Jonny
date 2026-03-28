@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import { Avatar } from '@/components/avatar';
 import { PageLoading } from '@/components/loading-spinner';
-import { Calendar, Clock, Shield, CreditCard, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
+import { Calendar, Clock, Shield, CreditCard, CheckCircle2, XCircle, AlertTriangle, CalendarDays } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const STATUS_STYLES: Record<string, string> = {
@@ -101,12 +101,25 @@ export default function BookingsPage() {
       {/* Header */}
       <div className="gradient-hero-soft px-5 pt-10 pb-6">
         <div className="max-w-lg mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {isPro ? 'Incoming Requests' : 'My Bookings'}
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {isPro ? 'Manage your service requests' : 'Track your booked services'}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {isPro ? 'Incoming Requests' : 'My Bookings'}
+              </h1>
+              <p className="text-sm text-gray-500 mt-1">
+                {isPro ? 'Manage your service requests' : 'Track your booked services'}
+              </p>
+            </div>
+            {!isPro && (
+              <button
+                onClick={() => router.push('/calendar')}
+                className="p-2.5 rounded-xl bg-white shadow-sm border border-gray-100 hover:shadow-md transition-all"
+                title="Vista calendario"
+              >
+                <CalendarDays size={20} className="text-primary-600" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -188,12 +201,11 @@ export default function BookingsPage() {
                         <>
                           {booking.status === 'ACCEPTED' && !payment && (
                             <button
-                              onClick={() => handlePayment(booking.id)}
-                              disabled={isLoading}
+                              onClick={() => router.push(`/checkout/${booking.id}`)}
                               className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold py-2.5 rounded-2xl mt-3 transition-all shadow-md shadow-primary-500/20 flex items-center justify-center gap-2 active:scale-[0.97]"
                             >
                               <CreditCard size={16} />
-                              {isLoading ? 'Processing...' : `Pay ${booking.totalPrice?.toFixed(2)} EUR`}
+                              {`Paga €${booking.totalPrice?.toFixed(2)}`}
                             </button>
                           )}
 

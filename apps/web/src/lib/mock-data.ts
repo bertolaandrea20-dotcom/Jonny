@@ -544,3 +544,99 @@ export const MOCK_EARNINGS = {
     },
   ],
 };
+
+// ─── Payment Methods (mock) ───
+
+export const MOCK_PAYMENT_METHODS = [
+  { id: 'card-1', type: 'visa', last4: '4242', expiry: '12/27', holder: 'Alex Demo', isDefault: true },
+  { id: 'card-2', type: 'mastercard', last4: '8888', expiry: '06/28', holder: 'Alex Demo', isDefault: false },
+];
+
+export const MOCK_PROMO_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'; label: string }> = {
+  'WELCOME10': { discount: 10, type: 'percent', label: '10% di sconto benvenuto' },
+  'SCONTO5': { discount: 5, type: 'fixed', label: '€5 di sconto' },
+};
+
+// ─── Calendar Bookings (extra mock per popolare il calendario) ───
+
+export const MOCK_CALENDAR_BOOKINGS: any[] = [
+  ...MOCK_CLIENT_BOOKINGS,
+  {
+    id: 'booking-cal-1',
+    clientId: 'user-client-1',
+    professionalId: 'pro-elena',
+    serviceId: 'manicure-&-pedicure',
+    status: 'ACCEPTED',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), 5, 14, 0).toISOString(),
+    duration: 90,
+    totalPrice: 40.00,
+    service: { name: 'Manicure & Pedicure' },
+    professional: { user: { firstName: 'Elena', lastName: 'Rossi', avatarUrl: undefined } },
+    payment: null,
+  },
+  {
+    id: 'booking-cal-2',
+    clientId: 'user-client-1',
+    professionalId: 'pro-sara',
+    serviceId: 'english-tutoring',
+    status: 'COMPLETED',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), 10, 17, 0).toISOString(),
+    duration: 60,
+    totalPrice: 35.00,
+    service: { name: 'English Tutoring' },
+    professional: { user: { firstName: 'Sara', lastName: 'Colombo', avatarUrl: undefined } },
+    payment: { status: 'RELEASED', amount: 35.00 },
+  },
+  {
+    id: 'booking-cal-3',
+    clientId: 'user-client-1',
+    professionalId: 'pro-giulia',
+    serviceId: 'dog-walking',
+    status: 'PENDING',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), 18, 8, 0).toISOString(),
+    duration: 60,
+    totalPrice: 15.00,
+    service: { name: 'Dog Walking' },
+    professional: { user: { firstName: 'Giulia', lastName: 'Conti', avatarUrl: undefined } },
+    payment: null,
+  },
+  {
+    id: 'booking-cal-4',
+    clientId: 'user-client-1',
+    professionalId: 'pro-alessia',
+    serviceId: 'massage',
+    status: 'ACCEPTED',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), 22, 11, 0).toISOString(),
+    duration: 60,
+    totalPrice: 50.00,
+    service: { name: 'Massage' },
+    professional: { user: { firstName: 'Alessia', lastName: 'Gallo', avatarUrl: undefined } },
+    payment: { status: 'HELD', amount: 50.00 },
+  },
+  {
+    id: 'booking-cal-5',
+    clientId: 'user-client-1',
+    professionalId: 'pro-davide',
+    serviceId: 'haircut',
+    status: 'IN_PROGRESS',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0).toISOString(),
+    duration: 45,
+    totalPrice: 30.00,
+    service: { name: 'Haircut' },
+    professional: { user: { firstName: 'Davide', lastName: 'Romano', avatarUrl: undefined } },
+    payment: { status: 'HELD', amount: 30.00 },
+  },
+  {
+    id: 'booking-cal-6',
+    clientId: 'user-client-1',
+    professionalId: 'pro-andrea',
+    serviceId: 'office-cleaning',
+    status: 'COMPLETED',
+    scheduledAt: new Date(now.getFullYear(), now.getMonth(), 25, 9, 0).toISOString(),
+    duration: 180,
+    totalPrice: 66.00,
+    service: { name: 'Office Cleaning' },
+    professional: { user: { firstName: 'Andrea', lastName: 'Moretti', avatarUrl: undefined } },
+    payment: { status: 'RELEASED', amount: 66.00 },
+  },
+];

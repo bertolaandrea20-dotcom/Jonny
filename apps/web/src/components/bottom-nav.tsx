@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, Calendar, User, Briefcase, Heart, MessageCircle } from 'lucide-react';
+import { Home, Search, Calendar, CalendarDays, User, Briefcase, Heart, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { clsx } from 'clsx';
 
@@ -10,7 +10,7 @@ const clientLinks = [
   { href: '/', icon: Home, label: 'Home' },
   { href: '/swipe', icon: Heart, label: 'Discover' },
   { href: '/messages', icon: MessageCircle, label: 'Messaggi' },
-  { href: '/bookings', icon: Calendar, label: 'Bookings' },
+  { href: '/calendar', icon: CalendarDays, label: 'Calendario' },
   { href: '/profile', icon: User, label: 'Profile' },
 ];
 
@@ -24,7 +24,7 @@ export function BottomNav() {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
+  if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/checkout')) {
     return null;
   }
 
