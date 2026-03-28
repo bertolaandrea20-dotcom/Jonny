@@ -8,16 +8,16 @@ import { clsx } from 'clsx';
 
 const clientLinks = [
   { href: '/', icon: Home, label: 'Home' },
-  { href: '/swipe', icon: Heart, label: 'Discover' },
+  { href: '/swipe', icon: Heart, label: 'Scopri' },
   { href: '/messages', icon: MessageCircle, label: 'Messaggi' },
   { href: '/calendar', icon: CalendarDays, label: 'Calendario' },
-  { href: '/profile', icon: User, label: 'Profile' },
+  { href: '/profile', icon: User, label: 'Profilo' },
 ];
 
 const proLinks = [
   { href: '/', icon: Home, label: 'Home' },
-  { href: '/dashboard', icon: Calendar, label: 'Requests' },
-  { href: '/profile', icon: User, label: 'Profile' },
+  { href: '/dashboard', icon: Calendar, label: 'Richieste' },
+  { href: '/profile', icon: User, label: 'Profilo' },
 ];
 
 export function BottomNav() {

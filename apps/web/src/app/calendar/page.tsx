@@ -4,8 +4,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MOCK_CALENDAR_BOOKINGS } from '@/lib/mock-data';
-import { ArrowLeft, ChevronLeft, ChevronRight, Clock, CreditCard } from 'lucide-react';
+import { MOCK_CALENDAR_BOOKINGS, MOCK_SWIPE_PROFESSIONALS } from '@/lib/mock-data';
+import { ArrowLeft, ChevronLeft, ChevronRight, Clock, CreditCard, Plus, X, Check } from 'lucide-react';
 import { Avatar } from '@/components/avatar';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,21 +41,29 @@ const STATUS_STYLES: Record<string, string> = {
   CANCELLED: 'bg-gray-50 text-gray-500 border border-gray-100',
 };
 
+const SERVICE_OPTIONS = [
+  { id: 'home-cleaning', name: 'Pulizia casa', category: 'CLEANING' },
+  { id: 'deep-cleaning', name: 'Pulizia profonda', category: 'CLEANING' },
+  { id: 'math-tutoring', name: 'Ripetizioni matematica', category: 'TUTORING' },
+  { id: 'english-tutoring', name: 'Ripetizioni inglese', category: 'TUTORING' },
+  { id: 'babysitting', name: 'Babysitting', category: 'BABYSITTING' },
+  { id: 'dog-walking', name: 'Dog Walking', category: 'PET_SITTING' },
+  { id: 'haircut', name: 'Taglio capelli', category: 'PERSONAL_CARE' },
+  { id: 'massage', name: 'Massaggio', category: 'PERSONAL_CARE' },
+  { id: 'manicure-&-pedicure', name: 'Manicure & Pedicure', category: 'PERSONAL_CARE' },
+];
+
 function getCalendarDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
   const daysInMonth = lastDay.getDate();
 
-  // Monday = 0, Sunday = 6
   let startDow = firstDay.getDay() - 1;
   if (startDow < 0) startDow = 6;
 
   const days: (number | null)[] = [];
-  // Padding before
   for (let i = 0; i < startDow; i++) days.push(null);
-  // Actual days
   for (let d = 1; d <= daysInMonth; d++) days.push(d);
-  // Padding after to fill last row
   while (days.length % 7 !== 0) days.push(null);
 
   return days;
@@ -68,15 +76,23 @@ export default function CalendarPage() {
   const [currentYear, setCurrentYear] = useState(now.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(now.getMonth());
   const [selectedDay, setSelectedDay] = useState<number | null>(now.getDate());
+  const [localBookings, setLocalBookings] = useState<any[]>([...MOCK_CALENDAR_BOOKINGS]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addSuccess, setAddSuccess] = useState(false);
+
+  // Add booking form state
+  const [newService, setNewService] = useState('');
+  const [newTime, setNewTime] = useState('10:00');
+  const [newDuration, setNewDuration] = useState('60');
+  const [newPro, setNewPro] = useState('');
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
   }, [user, loading, router]);
 
-  // Map bookings by day
   const bookingsByDay = useMemo(() => {
     const map: Record<number, any[]> = {};
-    MOCK_CALENDAR_BOOKINGS.forEach((b) => {
+    localBookings.forEach((b) => {
       const d = new Date(b.scheduledAt);
       if (d.getFullYear() === currentYear && d.getMonth() === currentMonth) {
         const day = d.getDate();
@@ -85,36 +101,68 @@ export default function CalendarPage() {
       }
     });
     return map;
-  }, [currentYear, currentMonth]);
+  }, [currentYear, currentMonth, localBookings]);
 
   const days = useMemo(() => getCalendarDays(currentYear, currentMonth), [currentYear, currentMonth]);
 
   const selectedBookings = selectedDay ? (bookingsByDay[selectedDay] || []) : [];
 
   const goToPrevMonth = () => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
+    if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear(currentYear - 1); }
+    else setCurrentMonth(currentMonth - 1);
     setSelectedDay(null);
   };
 
   const goToNextMonth = () => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
+    if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear(currentYear + 1); }
+    else setCurrentMonth(currentMonth + 1);
     setSelectedDay(null);
+  };
+
+  const handleAddBooking = () => {
+    if (!newService || !newTime || !selectedDay || !newPro) return;
+
+    const pro = MOCK_SWIPE_PROFESSIONALS.find((p) => p.profileId === newPro);
+    const svc = SERVICE_OPTIONS.find((s) => s.id === newService);
+
+    const newBooking = {
+      id: `booking-new-${Date.now()}`,
+      clientId: 'user-client-1',
+      professionalId: newPro,
+      serviceId: newService,
+      status: 'PENDING',
+      scheduledAt: new Date(currentYear, currentMonth, selectedDay, parseInt(newTime.split(':')[0]), parseInt(newTime.split(':')[1])).toISOString(),
+      duration: parseInt(newDuration),
+      totalPrice: (pro?.hourlyRate || 30) * (parseInt(newDuration) / 60),
+      service: { name: svc?.name || newService },
+      professional: { user: { firstName: pro?.firstName || 'Pro', lastName: pro?.lastName || '', avatarUrl: undefined } },
+      payment: null,
+    };
+
+    setLocalBookings((prev) => [...prev, newBooking]);
+    setShowAddForm(false);
+    setAddSuccess(true);
+    setTimeout(() => setAddSuccess(false), 2000);
+
+    // Reset form
+    setNewService('');
+    setNewTime('10:00');
+    setNewDuration('60');
+    setNewPro('');
   };
 
   if (loading || !user) return <PageLoading />;
 
   const isToday = (day: number) =>
     day === now.getDate() && currentMonth === now.getMonth() && currentYear === now.getFullYear();
+
+  // Professionals for the selected service
+  const availablePros = newService
+    ? MOCK_SWIPE_PROFESSIONALS.filter((p) => {
+        const svc = SERVICE_OPTIONS.find((s) => s.id === newService);
+        return svc && p.services.some((s: string) => s.toLowerCase().includes(svc.name.toLowerCase().split(' ')[0]));
+      })
+    : MOCK_SWIPE_PROFESSIONALS;
 
   return (
     <div className="animate-fade-up">
@@ -176,10 +224,7 @@ export default function CalendarPage() {
                         : 'text-gray-700 hover:bg-gray-50'
                   )}
                 >
-                  <span className={clsx(
-                    'text-sm font-medium',
-                    isSelected && 'font-bold'
-                  )}>
+                  <span className={clsx('text-sm font-medium', isSelected && 'font-bold')}>
                     {day}
                   </span>
                   {hasBookings && (
@@ -211,25 +256,155 @@ export default function CalendarPage() {
           ))}
         </div>
 
+        {/* Success toast */}
+        <AnimatePresence>
+          {addSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mb-4 bg-emerald-50 border border-emerald-200 rounded-2xl p-3 flex items-center gap-2"
+            >
+              <Check size={16} className="text-emerald-500" />
+              <span className="text-sm font-medium text-emerald-700">Prenotazione aggiunta!</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Selected day bookings */}
         <AnimatePresence mode="wait">
           {selectedDay && (
             <motion.div
-              key={selectedDay}
+              key={`day-${selectedDay}-${currentMonth}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                {selectedDay} {MONTH_NAMES[currentMonth]}
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-gray-700">
+                  {selectedDay} {MONTH_NAMES[currentMonth]}
+                </h3>
+                <button
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  className={clsx(
+                    'flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition-all',
+                    showAddForm
+                      ? 'bg-gray-200 text-gray-600'
+                      : 'bg-primary-500 text-white shadow-sm shadow-primary-500/25 hover:bg-primary-600'
+                  )}
+                >
+                  {showAddForm ? <X size={14} /> : <Plus size={14} />}
+                  {showAddForm ? 'Annulla' : 'Prenota'}
+                </button>
+              </div>
 
-              {selectedBookings.length === 0 ? (
+              {/* Add booking form */}
+              <AnimatePresence>
+                {showAddForm && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="card-elevated p-5 mb-4 border-2 border-primary-100">
+                      <h4 className="text-sm font-bold text-gray-900 mb-4">
+                        Nuova prenotazione — {selectedDay} {MONTH_NAMES[currentMonth]}
+                      </h4>
+
+                      {/* Service */}
+                      <div className="mb-3">
+                        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Servizio</label>
+                        <select
+                          value={newService}
+                          onChange={(e) => { setNewService(e.target.value); setNewPro(''); }}
+                          className="w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm border border-gray-200 focus:outline-none focus:border-primary-300"
+                        >
+                          <option value="">Seleziona un servizio</option>
+                          {SERVICE_OPTIONS.map((s) => (
+                            <option key={s.id} value={s.id}>{s.name}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Professional */}
+                      <div className="mb-3">
+                        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Professionista</label>
+                        <select
+                          value={newPro}
+                          onChange={(e) => setNewPro(e.target.value)}
+                          className="w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm border border-gray-200 focus:outline-none focus:border-primary-300"
+                        >
+                          <option value="">Seleziona un professionista</option>
+                          {availablePros.map((p) => (
+                            <option key={p.profileId} value={p.profileId}>
+                              {p.firstName} {p.lastName} — €{p.hourlyRate}/h ({p.averageRating} ★)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Time + Duration row */}
+                      <div className="flex gap-3 mb-4">
+                        <div className="flex-1">
+                          <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Orario</label>
+                          <input
+                            type="time"
+                            value={newTime}
+                            onChange={(e) => setNewTime(e.target.value)}
+                            className="w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm border border-gray-200 focus:outline-none focus:border-primary-300"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Durata</label>
+                          <select
+                            value={newDuration}
+                            onChange={(e) => setNewDuration(e.target.value)}
+                            className="w-full bg-gray-50 rounded-xl px-3 py-2.5 text-sm border border-gray-200 focus:outline-none focus:border-primary-300"
+                          >
+                            <option value="30">30 min</option>
+                            <option value="60">1 ora</option>
+                            <option value="90">1.5 ore</option>
+                            <option value="120">2 ore</option>
+                            <option value="180">3 ore</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Price preview */}
+                      {newPro && newDuration && (
+                        <div className="bg-gray-50 rounded-xl p-3 mb-4 flex items-center justify-between">
+                          <span className="text-xs text-gray-500">Prezzo stimato</span>
+                          <span className="text-sm font-bold text-accent-600">
+                            €{((MOCK_SWIPE_PROFESSIONALS.find((p) => p.profileId === newPro)?.hourlyRate || 30) * (parseInt(newDuration) / 60)).toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+
+                      <button
+                        onClick={handleAddBooking}
+                        disabled={!newService || !newPro || !newTime}
+                        className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        <Check size={16} /> Conferma prenotazione
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {selectedBookings.length === 0 && !showAddForm ? (
                 <div className="card-elevated p-8 text-center">
                   <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
                     <span className="text-2xl">📅</span>
                   </div>
                   <p className="text-gray-400 text-sm">Nessuna prenotazione per questo giorno</p>
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    className="mt-3 text-xs font-semibold text-primary-600 bg-primary-50 px-4 py-2 rounded-xl hover:bg-primary-100 transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Plus size={14} /> Aggiungi prenotazione
+                  </button>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -269,7 +444,6 @@ export default function CalendarPage() {
                               )}
                             </div>
 
-                            {/* Pay action for accepted without payment */}
                             {booking.status === 'ACCEPTED' && !booking.payment && (
                               <button
                                 onClick={() => router.push(`/checkout/${booking.id}`)}
