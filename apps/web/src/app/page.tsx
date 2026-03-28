@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles } from 'lucide-react';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
 import { MOCK_JOB_LISTINGS } from '@/lib/mock-data';
@@ -150,6 +150,28 @@ export default function HomePage() {
       </div>
 
       <div className="page-container -mt-4">
+        {/* Discover Swipe Banner */}
+        <button
+          onClick={() => router.push('/swipe')}
+          className="w-full mb-6 relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-500 via-pink-500 to-violet-500 p-5 text-left shadow-lg shadow-pink-500/20 hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
+        >
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8" />
+          <div className="absolute bottom-0 left-20 w-20 h-20 bg-white/10 rounded-full translate-y-6" />
+          <div className="relative flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+              <Heart size={28} className="text-white" fill="white" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-white font-bold text-lg">Discover</p>
+                <Sparkles size={16} className="text-yellow-200" />
+              </div>
+              <p className="text-white/80 text-sm mt-0.5">Swipe e trova il professionista perfetto per te</p>
+            </div>
+            <ArrowRight size={20} className="text-white/60" />
+          </div>
+        </button>
+
         {/* Quick services - horizontal scroll */}
         <div className="mb-8">
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-5 px-5">

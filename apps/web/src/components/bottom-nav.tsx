@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, Calendar, User, Briefcase } from 'lucide-react';
+import { Home, Search, Calendar, User, Briefcase, Heart } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { clsx } from 'clsx';
 
 const clientLinks = [
   { href: '/', icon: Home, label: 'Home' },
-  { href: '/search', icon: Search, label: 'Search' },
+  { href: '/swipe', icon: Heart, label: 'Discover' },
   { href: '/jobs', icon: Briefcase, label: 'Jobs' },
   { href: '/bookings', icon: Calendar, label: 'Bookings' },
   { href: '/profile', icon: User, label: 'Profile' },

@@ -195,6 +195,22 @@ export const MOCK_PROFILES: Record<string, any> = {
   },
 };
 
+// Extra professionals for the swipe discovery feed
+export const MOCK_SWIPE_PROFESSIONALS: any[] = [
+  { profileId: 'pro-marie', firstName: 'Marie', lastName: 'Dupont', avatarUrl: null, bio: 'Professional cleaner with 5 years of experience. I love making homes sparkle!', age: 32, hourlyRate: 35, distance: 1.2, averageRating: 4.8, reviewCount: 3, category: 'CLEANING', services: ['Home Cleaning', 'Deep Cleaning', 'Haircut'], verified: true },
+  { profileId: 'pro-lucas', firstName: 'Lucas', lastName: 'Martin', avatarUrl: null, bio: 'Mathematics teacher with a passion for making complex concepts simple.', age: 28, hourlyRate: 45, distance: 0.8, averageRating: 4.9, reviewCount: 2, category: 'TUTORING', services: ['Math Tutoring', 'Science Tutoring'], verified: true },
+  { profileId: 'pro-sophie', firstName: 'Sophie', lastName: 'Bernard', avatarUrl: null, bio: 'Certified childcare professional. I adore kids and animals!', age: 25, hourlyRate: 25, distance: 2.5, averageRating: 4.7, reviewCount: 2, category: 'BABYSITTING', services: ['Babysitting', 'After-School Care', 'Dog Walking', 'Pet Sitting'], verified: true },
+  { profileId: 'pro-elena', firstName: 'Elena', lastName: 'Rossi', avatarUrl: null, bio: 'Estetista certificata, specializzata in trattamenti viso e corpo a domicilio.', age: 29, hourlyRate: 40, distance: 1.8, averageRating: 4.9, reviewCount: 7, category: 'PERSONAL_CARE', services: ['Manicure & Pedicure', 'Massage'], verified: true },
+  { profileId: 'pro-marco', firstName: 'Marco', lastName: 'Bianchi', avatarUrl: null, bio: 'Laureato in ingegneria, offro ripetizioni di matematica e fisica per superiori e università.', age: 31, hourlyRate: 30, distance: 3.1, averageRating: 4.6, reviewCount: 4, category: 'TUTORING', services: ['Math Tutoring', 'Science Tutoring'], verified: false },
+  { profileId: 'pro-giulia', firstName: 'Giulia', lastName: 'Conti', avatarUrl: null, bio: 'Amante degli animali, mi prendo cura dei vostri amici a 4 zampe con tanto amore.', age: 23, hourlyRate: 15, distance: 0.5, averageRating: 5.0, reviewCount: 3, category: 'PET_SITTING', services: ['Dog Walking', 'Pet Sitting', 'Cat Sitting'], verified: true },
+  { profileId: 'pro-andrea', firstName: 'Andrea', lastName: 'Moretti', avatarUrl: null, bio: 'Impresa di pulizie professionale. Puliamo case, uffici e post-ristrutturazione.', age: 38, hourlyRate: 22, distance: 4.2, averageRating: 4.5, reviewCount: 8, category: 'CLEANING', services: ['Home Cleaning', 'Deep Cleaning', 'Office Cleaning'], verified: true },
+  { profileId: 'pro-chiara', firstName: 'Chiara', lastName: 'Ferrari', avatarUrl: null, bio: 'Babysitter con esperienza pluriennale, parlo inglese e francese. Amo giocare e insegnare.', age: 26, hourlyRate: 18, distance: 1.6, averageRating: 4.8, reviewCount: 5, category: 'BABYSITTING', services: ['Babysitting', 'After-School Care'], verified: true },
+  { profileId: 'pro-davide', firstName: 'Davide', lastName: 'Romano', avatarUrl: null, bio: 'Parrucchiere professionista con 10 anni di esperienza. Taglio uomo, donna e bambino.', age: 35, hourlyRate: 30, distance: 2.0, averageRating: 4.7, reviewCount: 6, category: 'PERSONAL_CARE', services: ['Haircut'], verified: true },
+  { profileId: 'pro-sara', firstName: 'Sara', lastName: 'Colombo', avatarUrl: null, bio: 'Insegnante di inglese madrelingua britannica. Lezioni dinamiche e personalizzate.', age: 30, hourlyRate: 35, distance: 1.4, averageRating: 4.9, reviewCount: 9, category: 'TUTORING', services: ['English Tutoring'], verified: true },
+  { profileId: 'pro-luca', firstName: 'Luca', lastName: 'Mancini', avatarUrl: null, bio: 'Dog walker appassionato. Percorsi personalizzati per cani di tutte le taglie.', age: 24, hourlyRate: 12, distance: 0.9, averageRating: 4.8, reviewCount: 4, category: 'PET_SITTING', services: ['Dog Walking'], verified: false },
+  { profileId: 'pro-alessia', firstName: 'Alessia', lastName: 'Gallo', avatarUrl: null, bio: 'Massaggiatrice olistica certificata. Trattamenti rilassanti e decontratturanti.', age: 33, hourlyRate: 50, distance: 2.8, averageRating: 5.0, reviewCount: 11, category: 'PERSONAL_CARE', services: ['Massage'], verified: true },
+];
+
 // Which professional offers which services (for search matching)
 const PRO_SERVICE_MAP: Record<string, string[]> = {
   'pro-marie': ['home-cleaning', 'deep-cleaning', 'haircut'],
@@ -222,6 +238,19 @@ export function getSearchResults(serviceId: string): any[] {
     }
   }
   return results;
+}
+
+export function getSwipeProfessionals(category?: string): any[] {
+  let pros = [...MOCK_SWIPE_PROFESSIONALS];
+  if (category) {
+    pros = pros.filter((p) => p.category === category);
+  }
+  // Shuffle for a fresh feel each time
+  for (let i = pros.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pros[i], pros[j]] = [pros[j], pros[i]];
+  }
+  return pros;
 }
 
 const now = new Date();
