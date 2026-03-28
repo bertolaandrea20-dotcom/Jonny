@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet, Map } from 'lucide-react';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
 import { MOCK_JOB_LISTINGS } from '@/lib/mock-data';
@@ -167,6 +167,25 @@ export default function HomePage() {
                 <Sparkles size={16} className="text-yellow-200" />
               </div>
               <p className="text-white/80 text-sm mt-0.5">Swipe e trova il professionista perfetto per te</p>
+            </div>
+            <ArrowRight size={20} className="text-white/60" />
+          </div>
+        </button>
+
+        {/* Map Banner */}
+        <button
+          onClick={() => router.push('/map')}
+          className="w-full mb-6 relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-5 text-left shadow-lg shadow-teal-500/20 hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
+        >
+          <div className="absolute top-0 left-12 w-28 h-28 bg-white/10 rounded-full -translate-y-12" />
+          <div className="absolute bottom-0 right-6 w-20 h-20 bg-white/10 rounded-full translate-y-8" />
+          <div className="relative flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+              <Map size={28} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-white font-bold text-lg">Mappa</p>
+              <p className="text-white/80 text-sm mt-0.5">Trova professionisti vicino a te sulla mappa</p>
             </div>
             <ArrowRight size={20} className="text-white/60" />
           </div>

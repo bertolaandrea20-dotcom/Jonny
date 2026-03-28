@@ -7,9 +7,11 @@ import { api } from '@/lib/api';
 import { PageLoading } from '@/components/loading-spinner';
 import {
   DollarSign, CheckCircle, Clock, XCircle, TrendingUp,
-  CreditCard, Shield, ArrowRight,
+  CreditCard, Shield, ArrowRight, Users, Star, BarChart3, PieChart,
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { MOCK_PRO_STATS } from '@/lib/mock-data';
+import { motion } from 'framer-motion';
 
 const TX_STATUS_STYLES: Record<string, string> = {
   HELD: 'bg-blue-50 text-blue-600 border border-blue-100',
@@ -116,36 +118,120 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Earnings Stats */}
+        {/* KPI Stats */}
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="card-elevated p-4 text-center">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center mx-auto mb-2">
               <TrendingUp className="text-white" size={20} />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{earnings?.totalEarned?.toFixed(0) || 0}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Total Earned (EUR)</p>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_PRO_STATS.totalEarnings.toLocaleString()}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Guadagno totale (EUR)</p>
           </div>
           <div className="card-elevated p-4 text-center">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-sky-400 flex items-center justify-center mx-auto mb-2">
-              <Shield className="text-white" size={20} />
+              <BarChart3 className="text-white" size={20} />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{earnings?.pendingEarnings?.toFixed(0) || 0}</p>
-            <p className="text-xs text-gray-400 mt-0.5">In Escrow (EUR)</p>
-          </div>
-          <div className="card-elevated p-4 text-center">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-400 flex items-center justify-center mx-auto mb-2">
-              <CheckCircle className="text-white" size={20} />
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{completed}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Completed</p>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_PRO_STATS.totalBookings}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Prenotazioni totali</p>
           </div>
           <div className="card-elevated p-4 text-center">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-400 flex items-center justify-center mx-auto mb-2">
-              <Clock className="text-white" size={20} />
+              <Star className="text-white" size={20} />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{pending + accepted}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Active</p>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_PRO_STATS.avgRating}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Valutazione media</p>
           </div>
+          <div className="card-elevated p-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-purple-400 flex items-center justify-center mx-auto mb-2">
+              <Users className="text-white" size={20} />
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{MOCK_PRO_STATS.totalClients}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Clienti serviti</p>
+          </div>
+        </div>
+
+        {/* Monthly Earnings Bar Chart */}
+        <div className="card-elevated p-5 mb-4">
+          <h3 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
+            <BarChart3 size={16} className="text-emerald-500" /> Guadagni mensili (EUR)
+          </h3>
+          <div className="flex items-end justify-between gap-2 h-40">
+            {MOCK_PRO_STATS.monthlyEarnings.map((item, i) => {
+              const maxAmount = Math.max(...MOCK_PRO_STATS.monthlyEarnings.map(e => e.amount));
+              const heightPct = (item.amount / maxAmount) * 100;
+              return (
+                <div key={item.month} className="flex-1 flex flex-col items-center gap-1">
+                  <span className="text-[10px] font-medium text-gray-500">{item.amount}</span>
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: `${heightPct}%` }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    className="w-full rounded-t-lg bg-gradient-to-t from-emerald-500 to-emerald-300 min-h-[4px]"
+                  />
+                  <span className="text-[10px] text-gray-400">{item.month}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Monthly Bookings Line Chart (simplified as bars) */}
+        <div className="card-elevated p-5 mb-4">
+          <h3 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
+            <TrendingUp size={16} className="text-blue-500" /> Prenotazioni mensili
+          </h3>
+          <div className="flex items-end justify-between gap-2 h-32">
+            {MOCK_PRO_STATS.monthlyBookings.map((item, i) => {
+              const maxCount = Math.max(...MOCK_PRO_STATS.monthlyBookings.map(e => e.count));
+              const heightPct = (item.count / maxCount) * 100;
+              return (
+                <div key={item.month} className="flex-1 flex flex-col items-center gap-1">
+                  <span className="text-[10px] font-medium text-gray-500">{item.count}</span>
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: `${heightPct}%` }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    className="w-full rounded-t-lg bg-gradient-to-t from-blue-500 to-blue-300 min-h-[4px]"
+                  />
+                  <span className="text-[10px] text-gray-400">{item.month}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Service Distribution */}
+        <div className="card-elevated p-5 mb-4">
+          <h3 className="font-semibold text-sm text-gray-900 mb-4 flex items-center gap-2">
+            <PieChart size={16} className="text-violet-500" /> Distribuzione servizi
+          </h3>
+          {(() => {
+            const total = MOCK_PRO_STATS.serviceDistribution.reduce((sum, s) => sum + s.count, 0);
+            return (
+              <div className="space-y-3">
+                {MOCK_PRO_STATS.serviceDistribution.map((svc, i) => {
+                  const pct = Math.round((svc.count / total) * 100);
+                  return (
+                    <div key={svc.category}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-700">{svc.category}</span>
+                        <span className="text-xs text-gray-400">{svc.count} ({pct}%)</span>
+                      </div>
+                      <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ delay: i * 0.15, duration: 0.6 }}
+                          className="h-full rounded-full"
+                          style={{ backgroundColor: svc.color }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Platform fee */}

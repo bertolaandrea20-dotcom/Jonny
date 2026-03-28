@@ -379,6 +379,128 @@ export function getJobListings(category?: string): any[] {
   return listings.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
 }
 
+// ─── Chat / Messaggistica ───
+
+export const MOCK_CONVERSATIONS = [
+  {
+    id: 'conv-1',
+    recipientId: 'pro-marie',
+    recipientName: 'Marie Dupont',
+    recipientAvatar: null,
+    recipientRole: 'Pulizie domestiche',
+    lastMessage: 'Perfetto, allora ci vediamo giovedì alle 10!',
+    timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+    unreadCount: 2,
+  },
+  {
+    id: 'conv-2',
+    recipientId: 'pro-lucas',
+    recipientName: 'Lucas Martin',
+    recipientAvatar: null,
+    recipientRole: 'Ripetizioni matematica',
+    lastMessage: 'Ho preparato degli esercizi per la prossima lezione',
+    timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+    unreadCount: 0,
+  },
+  {
+    id: 'conv-3',
+    recipientId: 'pro-sophie',
+    recipientName: 'Sophie Bernard',
+    recipientAvatar: null,
+    recipientRole: 'Babysitting',
+    lastMessage: 'I bambini si sono divertiti tantissimo oggi! 😊',
+    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    unreadCount: 1,
+  },
+  {
+    id: 'conv-4',
+    recipientId: 'pro-giulia',
+    recipientName: 'Giulia Conti',
+    recipientAvatar: null,
+    recipientRole: 'Dog Walking',
+    lastMessage: 'Posso iniziare da lunedì prossimo!',
+    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    unreadCount: 0,
+  },
+];
+
+export const MOCK_MESSAGES: Record<string, { id: string; text: string; sent: boolean; timestamp: string }[]> = {
+  'conv-1': [
+    { id: 'm1-1', text: 'Buongiorno! Ho visto il suo profilo per il servizio di pulizie.', sent: true, timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() },
+    { id: 'm1-2', text: 'Buongiorno! Grazie per avermi contattata. Come posso aiutarla?', sent: false, timestamp: new Date(Date.now() - 1.9 * 60 * 60 * 1000).toISOString() },
+    { id: 'm1-3', text: 'Avrei bisogno di una pulizia profonda del mio appartamento, circa 80mq. Sarebbe disponibile questa settimana?', sent: true, timestamp: new Date(Date.now() - 1.8 * 60 * 60 * 1000).toISOString() },
+    { id: 'm1-4', text: 'Certo! Per 80mq consiglio almeno 3 ore. Potrei venire giovedì mattina alle 10, va bene?', sent: false, timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString() },
+    { id: 'm1-5', text: 'Giovedì alle 10 è perfetto! Quanto verrebbe a costare?', sent: true, timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString() },
+    { id: 'm1-6', text: 'Per una pulizia profonda il costo è di €45/ora, quindi €135 in totale. Porto io tutti i prodotti!', sent: false, timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString() },
+    { id: 'm1-7', text: 'Perfetto, allora ci vediamo giovedì alle 10!', sent: false, timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
+  ],
+  'conv-2': [
+    { id: 'm2-1', text: 'Ciao Lucas! Mio figlio ha un esame di algebra la prossima settimana, potresti aiutarlo?', sent: true, timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-2', text: 'Ciao! Certo, nessun problema. Su quali argomenti deve concentrarsi?', sent: false, timestamp: new Date(Date.now() - 23 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-3', text: 'Equazioni di secondo grado e disequazioni. Ha un po\' di difficoltà con la parte grafica.', sent: true, timestamp: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-4', text: 'Capisco, sono argomenti importanti. Facciamo 2 lezioni da 1.5h?', sent: false, timestamp: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-5', text: 'Sì, perfetto. Quando saresti disponibile?', sent: true, timestamp: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-6', text: 'Martedì e giovedì pomeriggio alle 16, ti va?', sent: false, timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-7', text: 'Perfetto, confermo!', sent: true, timestamp: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString() },
+    { id: 'm2-8', text: 'Ho preparato degli esercizi per la prossima lezione', sent: false, timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString() },
+  ],
+  'conv-3': [
+    { id: 'm3-1', text: 'Ciao Sophie! Avremmo bisogno di una babysitter per sabato sera, dalle 19 alle 23.', sent: true, timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm3-2', text: 'Ciao! Sabato sera sono libera, nessun problema! Quanti bambini?', sent: false, timestamp: new Date(Date.now() - 2.8 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm3-3', text: 'Due, 4 e 7 anni. Il piccolo va a letto alle 20:30.', sent: true, timestamp: new Date(Date.now() - 2.5 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm3-4', text: 'Perfetto! Porterò dei giochi e delle attività. A sabato! 🎨', sent: false, timestamp: new Date(Date.now() - 2.3 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm3-5', text: 'Come è andato tutto ieri sera?', sent: true, timestamp: new Date(Date.now() - 1.2 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm3-6', text: 'I bambini si sono divertiti tantissimo oggi! 😊', sent: false, timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
+  ],
+  'conv-4': [
+    { id: 'm4-1', text: 'Ciao Giulia! Cerco qualcuno per portare a passeggio il mio cane al mattino.', sent: true, timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm4-2', text: 'Ciao! Che tipo di cane è? E a che ora di solito?', sent: false, timestamp: new Date(Date.now() - 3.8 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm4-3', text: 'Un Golden Retriever di 2 anni, molto socievole. Verso le 7:30-8:00.', sent: true, timestamp: new Date(Date.now() - 3.5 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm4-4', text: 'Adoro i Golden! L\'orario è perfetto, faccio già il giro del parco ogni mattina.', sent: false, timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm4-5', text: 'Quando potresti iniziare?', sent: true, timestamp: new Date(Date.now() - 2.5 * 24 * 60 * 60 * 1000).toISOString() },
+    { id: 'm4-6', text: 'Posso iniziare da lunedì prossimo!', sent: false, timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() },
+  ],
+};
+
+// ─── Map Coordinates (Milano area) ───
+
+export const MOCK_MAP_PROFESSIONALS = MOCK_SWIPE_PROFESSIONALS.map((p, i) => ({
+  ...p,
+  lat: [45.4642, 45.4732, 45.4580, 45.4810, 45.4520, 45.4695, 45.4780, 45.4550, 45.4670, 45.4850, 45.4600, 45.4710][i],
+  lng: [9.1900, 9.1750, 9.2100, 9.1650, 9.2000, 9.1580, 9.2050, 9.1800, 9.2150, 9.1700, 9.1950, 9.1850][i],
+}));
+
+// ─── Pro Statistics ───
+
+export const MOCK_PRO_STATS = {
+  totalEarnings: 4850,
+  totalBookings: 87,
+  avgRating: 4.8,
+  totalClients: 34,
+  monthlyEarnings: [
+    { month: 'Ott', amount: 620 },
+    { month: 'Nov', amount: 780 },
+    { month: 'Dic', amount: 950 },
+    { month: 'Gen', amount: 720 },
+    { month: 'Feb', amount: 880 },
+    { month: 'Mar', amount: 900 },
+  ],
+  monthlyBookings: [
+    { month: 'Ott', count: 12 },
+    { month: 'Nov', count: 15 },
+    { month: 'Dic', count: 18 },
+    { month: 'Gen', count: 13 },
+    { month: 'Feb', count: 16 },
+    { month: 'Mar', count: 13 },
+  ],
+  serviceDistribution: [
+    { category: 'Pulizie casa', count: 35, color: '#10b981' },
+    { category: 'Pulizia profonda', count: 22, color: '#3b82f6' },
+    { category: 'Taglio capelli', count: 18, color: '#f59e0b' },
+    { category: 'Pulizia ufficio', count: 12, color: '#8b5cf6' },
+  ],
+};
+
 export const MOCK_EARNINGS = {
   totalEarned: 595.00,
   pendingEarnings: 30.00,

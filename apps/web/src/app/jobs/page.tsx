@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { ArrowLeft, MapPin, Clock, Flame, SlidersHorizontal, X, Euro, AlertCircle, Check } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Flame, SlidersHorizontal, X, Euro, AlertCircle, Check, Plus } from 'lucide-react';
 import { MOCK_JOB_LISTINGS } from '@/lib/mock-data';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -175,6 +175,21 @@ export default function JobsPage() {
       </div>
 
       <div className="page-container -mt-4">
+        {/* Publish Job Banner */}
+        <button
+          onClick={() => router.push('/jobs/create')}
+          className="w-full mb-4 card-elevated p-4 flex items-center gap-3 bg-gradient-to-r from-primary-50 to-orange-50 border border-primary-100 hover:shadow-lg transition-all"
+        >
+          <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center flex-shrink-0">
+            <Plus size={20} className="text-white" />
+          </div>
+          <div className="text-left flex-1">
+            <p className="font-semibold text-sm text-gray-900">Pubblica un annuncio</p>
+            <p className="text-xs text-gray-400">Descrivi il servizio di cui hai bisogno</p>
+          </div>
+          <ArrowLeft size={16} className="text-gray-300 rotate-180" />
+        </button>
+
         {/* Filter Panel */}
         <AnimatePresence>
           {showFilters && (
