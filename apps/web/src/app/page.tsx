@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet, Map, Copy, Tag } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Star, ArrowRight, Flame, Clock, Heart, Sparkles, Wallet, Map, Copy, Tag, Building2, Users, TrendingUp, Shield, CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCurrentPosition } from '@/lib/geolocation';
 import { api } from '@/lib/api';
@@ -30,6 +30,7 @@ export default function HomePage() {
   const { user, loading } = useAuth();
   const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [showBusinessModal, setShowBusinessModal] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -115,7 +116,181 @@ export default function HomePage() {
               <ChevronRight className="text-gray-300 group-hover:text-primary-500 transition-colors" />
             </button>
           </div>
+
+          {/* Business / Aziende Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-6"
+          >
+            <button
+              onClick={() => setShowBusinessModal(true)}
+              className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 p-6 text-left shadow-xl shadow-slate-900/30 hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
+            >
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-amber-500/20 to-transparent rounded-full -translate-y-16 translate-x-16" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/15 to-transparent rounded-full translate-y-8 -translate-x-8" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                    <Building2 size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-base">Per le Aziende</p>
+                    <p className="text-amber-400/80 text-[11px] font-semibold tracking-wide">BUSINESS PARTNER</p>
+                  </div>
+                </div>
+                <p className="text-white/90 text-sm font-medium leading-relaxed mb-1">
+                  Hai un&apos;impresa di pulizie? Un salone? Un team di professionisti?
+                </p>
+                <p className="text-white/60 text-xs leading-relaxed">
+                  Registra i tuoi dipendenti sulla piattaforma e lascia che i clienti li trovino. Non godi di passaparola? <span className="text-amber-400 font-semibold">Ci pensiamo noi.</span>
+                </p>
+                <div className="flex items-center gap-4 mt-4">
+                  <div className="flex items-center gap-1.5 text-emerald-400 text-[11px] font-medium">
+                    <TrendingUp size={12} /> +65% clienti
+                  </div>
+                  <div className="flex items-center gap-1.5 text-blue-400 text-[11px] font-medium">
+                    <Users size={12} /> Multi-dipendente
+                  </div>
+                  <div className="flex items-center gap-1.5 text-amber-400 text-[11px] font-medium">
+                    <Shield size={12} /> Dashboard dedicata
+                  </div>
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 text-white text-sm font-semibold">
+                  Scopri il piano Business <ArrowRight size={14} />
+                </div>
+              </div>
+            </button>
+          </motion.div>
         </div>
+
+        {/* Business Modal */}
+        <AnimatePresence>
+          {showBusinessModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 z-50 flex items-end justify-center"
+              onClick={() => setShowBusinessModal(false)}
+            >
+              <motion.div
+                initial={{ y: 500 }}
+                animate={{ y: 0 }}
+                exit={{ y: 500 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="bg-white rounded-t-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Hero */}
+                <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 px-6 pt-6 pb-8 rounded-t-3xl">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full -translate-y-12 translate-x-12" />
+                  <button
+                    onClick={() => setShowBusinessModal(false)}
+                    className="absolute top-4 right-4 p-2 text-white/60 hover:text-white transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                  <div className="relative">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30 mb-4">
+                      <Building2 size={24} className="text-white" />
+                    </div>
+                    <h2 className="text-white text-xl font-bold">Service to U Business</h2>
+                    <p className="text-white/60 text-sm mt-1">La tua azienda, i nostri clienti</p>
+                  </div>
+                </div>
+
+                <div className="px-6 py-6">
+                  {/* Value proposition */}
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5 mb-6">
+                    <p className="text-gray-800 text-sm leading-relaxed">
+                      <span className="font-bold">Non hai bisogno di un sito web, di pubblicità o di passaparola.</span> Registra la tua attività e i tuoi dipendenti su Service to U: pensiamo noi a portarti i clienti.
+                    </p>
+                  </div>
+
+                  {/* How it works for business */}
+                  <h3 className="font-bold text-gray-900 text-sm mb-3">Come funziona</h3>
+                  <div className="space-y-3 mb-6">
+                    {[
+                      { step: '1', title: 'Registra la tua azienda', desc: 'Crea il profilo aziendale con P.IVA, servizi offerti e zona di copertura', icon: '🏢' },
+                      { step: '2', title: 'Aggiungi i tuoi dipendenti', desc: 'Ogni membro del team avrà un profilo verificato con badge aziendale', icon: '👥' },
+                      { step: '3', title: 'I clienti vi trovano', desc: 'Comparirete in cima ai risultati con il badge "Azienda Verificata"', icon: '🔍' },
+                      { step: '4', title: 'Gestisci tutto dalla dashboard', desc: 'Calendario condiviso, assegnazione lavori e analytics centralizzati', icon: '📊' },
+                    ].map((item) => (
+                      <div key={item.step} className="flex items-start gap-3">
+                        <span className="text-2xl">{item.icon}</span>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-2 mb-6">
+                    <div className="text-center p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                      <p className="text-lg font-bold text-emerald-600">+65%</p>
+                      <p className="text-[10px] text-emerald-500">Nuovi clienti</p>
+                    </div>
+                    <div className="text-center p-3 rounded-xl bg-blue-50 border border-blue-100">
+                      <p className="text-lg font-bold text-blue-600">€0</p>
+                      <p className="text-[10px] text-blue-500">Costo pubblicità</p>
+                    </div>
+                    <div className="text-center p-3 rounded-xl bg-violet-50 border border-violet-100">
+                      <p className="text-lg font-bold text-violet-600">1 ora</p>
+                      <p className="text-[10px] text-violet-500">Setup completo</p>
+                    </div>
+                  </div>
+
+                  {/* Features list */}
+                  <h3 className="font-bold text-gray-900 text-sm mb-3">Cosa include il piano Business</h3>
+                  <div className="space-y-2.5 mb-6">
+                    {[
+                      'Profilo aziendale verificato con badge',
+                      'Fino a 20 dipendenti registrati',
+                      'Dashboard centralizzata con analytics',
+                      'Calendario condiviso e assegnazione automatica',
+                      'Priorità nei risultati di ricerca',
+                      'Pagina pubblica personalizzata dell\'azienda',
+                      'Report mensili su performance e ricavi',
+                      'Account manager dedicato',
+                    ].map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2.5">
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle2 size={11} className="text-white" />
+                        </div>
+                        <p className="text-sm text-gray-700">{feature}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pricing */}
+                  <div className="bg-gradient-to-br from-slate-800 to-gray-900 rounded-2xl p-5 mb-4 text-center">
+                    <p className="text-white/60 text-xs mb-1">Piano Business a partire da</p>
+                    <p className="text-white text-3xl font-bold">€49<span className="text-base font-normal text-white/50">/mese</span></p>
+                    <p className="text-white/40 text-xs mt-1">Per azienda · Fino a 10 dipendenti · +€3/dipendente extra</p>
+                  </div>
+
+                  {/* CTA */}
+                  <button
+                    onClick={() => {
+                      setShowBusinessModal(false);
+                      alert('Demo: richiesta piano Business inviata! Ti contatteremo entro 24h.');
+                    }}
+                    className="w-full p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-white font-bold text-base shadow-lg shadow-orange-200/50 active:scale-[0.98] transition-transform"
+                  >
+                    Richiedi una demo gratuita
+                  </button>
+                  <p className="text-center text-[11px] text-gray-400 mt-2 mb-2">
+                    Nessun impegno · Ti ricontattiamo entro 24h
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
