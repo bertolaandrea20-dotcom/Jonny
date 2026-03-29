@@ -10,12 +10,14 @@ import {
   LogOut, ChevronRight, User, Briefcase, Calendar,
   MapPin, CreditCard, Camera, X, Award,
   BookOpen, Euro, Heart, CheckCircle2, Clock, AlertCircle,
+  TrendingUp, Crown, Lock, Zap, Star,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MOCK_AVATAR_OPTIONS,
   MOCK_USER_STATS,
   MOCK_VERIFICATION,
+  MOCK_PREMIUM_INSIGHTS,
 } from '@/lib/mock-data';
 
 export default function ProfilePage() {
@@ -24,6 +26,7 @@ export default function ProfilePage() {
   const [proProfile, setProProfile] = useState<any>(null);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | undefined>(undefined);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
@@ -204,11 +207,80 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
+        {/* Premium Insights (pro only) */}
+        {isPro && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-4"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                  <Crown size={14} className="text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-800">Insights Premium</h3>
+              </div>
+              <span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                {MOCK_PREMIUM_INSIGHTS.city} · {MOCK_PREMIUM_INSIGHTS.categoryLabel}
+              </span>
+            </div>
+
+            {/* Insight cards - horizontal scroll */}
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+              {MOCK_PREMIUM_INSIGHTS.insights.map((insight, idx) => {
+                const colorMap: Record<string, { bg: string; text: string; highlight: string; border: string }> = {
+                  emerald: { bg: 'from-emerald-50 to-teal-50', text: 'text-emerald-700', highlight: 'text-emerald-600', border: 'border-emerald-200' },
+                  orange: { bg: 'from-orange-50 to-amber-50', text: 'text-orange-700', highlight: 'text-orange-600', border: 'border-orange-200' },
+                  blue: { bg: 'from-blue-50 to-indigo-50', text: 'text-blue-700', highlight: 'text-blue-600', border: 'border-blue-200' },
+                  violet: { bg: 'from-violet-50 to-purple-50', text: 'text-violet-700', highlight: 'text-violet-600', border: 'border-violet-200' },
+                  rose: { bg: 'from-rose-50 to-pink-50', text: 'text-rose-700', highlight: 'text-rose-600', border: 'border-rose-200' },
+                };
+                const c = colorMap[insight.color] || colorMap.blue;
+                return (
+                  <motion.div
+                    key={insight.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + idx * 0.08 }}
+                    className={`flex-shrink-0 w-[260px] snap-start rounded-2xl bg-gradient-to-br ${c.bg} border ${c.border} p-4`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl">{insight.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-lg font-bold ${c.highlight}`}>{insight.highlight}</span>
+                        </div>
+                        <p className={`text-xs font-semibold ${c.text} mb-1.5`}>{insight.title}</p>
+                        <p className="text-[11px] text-gray-500 leading-relaxed">{insight.description}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* CTA Premium */}
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              onClick={() => setShowPremiumModal(true)}
+              className="w-full mt-3 p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white font-semibold text-sm shadow-lg shadow-amber-200/50 flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+            >
+              <Crown size={16} />
+              Passa a Premium — €{MOCK_PREMIUM_INSIGHTS.premiumPrice}/mese
+            </motion.button>
+          </motion.div>
+        )}
+
         {/* Menu items */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: isPro ? 0.7 : 0.4 }}
           className="space-y-2"
         >
           <button
@@ -299,6 +371,97 @@ export default function ProfilePage() {
           Esci
         </button>
       </div>
+
+      {/* Premium Modal */}
+      <AnimatePresence>
+        {showPremiumModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center"
+            onClick={() => setShowPremiumModal(false)}
+          >
+            <motion.div
+              initial={{ y: 400 }}
+              animate={{ y: 0 }}
+              exit={{ y: 400 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-10 max-h-[85vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                    <Crown size={18} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">Service to U Premium</h3>
+                    <p className="text-xs text-gray-400">Fai crescere la tua attività</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowPremiumModal(false)} className="p-2">
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Price */}
+              <div className="text-center mb-6 p-5 rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200">
+                <p className="text-4xl font-bold text-gray-900">€{MOCK_PREMIUM_INSIGHTS.premiumPrice}<span className="text-base font-normal text-gray-400">/mese</span></p>
+                <p className="text-xs text-gray-500 mt-1">Annulla quando vuoi · Prova gratis 14 giorni</p>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 mb-6">
+                {MOCK_PREMIUM_INSIGHTS.premiumFeatures.map((feature, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.06 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle2 size={13} className="text-white" />
+                    </div>
+                    <p className="text-sm text-gray-700">{feature}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Key stats recap */}
+              <div className="grid grid-cols-3 gap-2 mb-6">
+                <div className="text-center p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                  <p className="text-lg font-bold text-emerald-600">+42%</p>
+                  <p className="text-[10px] text-emerald-500">Prenotazioni</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-blue-50 border border-blue-100">
+                  <p className="text-lg font-bold text-blue-600">3.2x</p>
+                  <p className="text-[10px] text-blue-500">Visibilità</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-violet-50 border border-violet-100">
+                  <p className="text-lg font-bold text-violet-600">+37%</p>
+                  <p className="text-[10px] text-violet-500">Guadagno</p>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={() => {
+                  setShowPremiumModal(false);
+                  alert('Demo: abbonamento Premium attivato!');
+                }}
+                className="w-full p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white font-bold text-base shadow-lg shadow-amber-200/50 active:scale-[0.98] transition-transform"
+              >
+                Inizia la prova gratuita
+              </button>
+              <p className="text-center text-[11px] text-gray-400 mt-2">
+                Nessun addebito per 14 giorni · Cancella in qualsiasi momento
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Avatar Picker Modal */}
       <AnimatePresence>

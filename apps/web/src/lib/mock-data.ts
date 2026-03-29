@@ -713,6 +713,69 @@ export const MOCK_VERIFICATION = {
   document: { status: 'pending' as const, label: 'Documento', detail: 'In attesa di verifica', icon: '🪪' },
 };
 
+// ─── Premium Insights (for professionals) ───
+
+export const MOCK_PREMIUM_INSIGHTS = {
+  category: 'CLEANING',
+  categoryLabel: 'Pulizie',
+  city: 'Milano',
+  insights: [
+    {
+      id: 'ins-1',
+      type: 'booking-boost' as const,
+      icon: '📈',
+      title: '+42% prenotazioni',
+      description: 'I professionisti Premium nel settore Pulizie a Milano ricevono in media il 42% in più di prenotazioni rispetto ai non-Premium.',
+      highlight: '+42%',
+      color: 'emerald',
+    },
+    {
+      id: 'ins-2',
+      type: 'market-demand' as const,
+      icon: '🔥',
+      title: 'Domanda alta nella tua zona',
+      description: 'Le richieste di Pulizie a Milano sono +28% sopra la media nazionale. È il momento ideale per investire sulla visibilità.',
+      highlight: '+28%',
+      color: 'orange',
+    },
+    {
+      id: 'ins-3',
+      type: 'rate-comparison' as const,
+      icon: '💰',
+      title: 'Tariffa sotto la media',
+      description: 'La tua tariffa è €35/h. I professionisti Premium nella tua zona guadagnano in media €48/h (+37%).',
+      highlight: '€48/h',
+      color: 'blue',
+    },
+    {
+      id: 'ins-4',
+      type: 'visibility' as const,
+      icon: '👁️',
+      title: '3.2x più visibilità',
+      description: 'Il tuo profilo è stato visto 89 volte questo mese. I profili Premium appaiono in cima ai risultati e ricevono 3.2x più visite.',
+      highlight: '3.2x',
+      color: 'violet',
+    },
+    {
+      id: 'ins-5',
+      type: 'competitor' as const,
+      icon: '⚡',
+      title: '6 competitor Premium',
+      description: 'Nella tua zona ci sono 6 professionisti Premium nel settore Pulizie e 18 non-Premium. Distinguiti dalla concorrenza.',
+      highlight: '6 vs 18',
+      color: 'rose',
+    },
+  ],
+  premiumPrice: 14.99,
+  premiumFeatures: [
+    'Profilo in evidenza nei risultati',
+    'Badge "Premium" verificato',
+    'Statistiche avanzate e analytics',
+    'Risposte prioritarie ai clienti',
+    'Nessuna commissione sulle prime 5 prenotazioni/mese',
+  ],
+};
+
 // ─── Promotions ───
 
 export const MOCK_PROMOTIONS = [
