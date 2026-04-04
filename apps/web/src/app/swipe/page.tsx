@@ -9,7 +9,7 @@ import { StarRating } from '@/components/star-rating';
 import { formatDistance } from '@/lib/geolocation';
 import { MOCK_SWIPE_PROFESSIONALS, MOCK_SERVICES } from '@/lib/mock-data';
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from 'framer-motion';
-import { MapPin, X, Heart, Shield, RotateCcw, Sparkles, SlidersHorizontal, Briefcase, Calendar, Clock, ChevronDown, Check } from 'lucide-react';
+import { MapPin, X, Heart, Shield, RotateCcw, Sparkles, SlidersHorizontal, Briefcase, Calendar, Clock, ChevronDown, Check, MessageCircle, User } from 'lucide-react';
 import { clsx } from 'clsx';
 
 // ─── Filter constants ───
@@ -422,7 +422,28 @@ export default function SwipePage() {
   // Swipe state
   const [professionals, setProfessionals] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [liked, setLiked] = useState<string[]>([]);
+  const [liked, setLiked] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      try { return JSON.parse(localStorage.getItem('stu_liked_pros') || '[]'); } catch { return []; }
+    }
+    return [];
+  });
+  const [lastLikedPro, setLastLikedPro] = useState<any>(null);
+
+  // Persist likes to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('stu_liked_pros', JSON.stringify(liked));
+    }
+  }, [liked]);
+
+  // Auto-dismiss toast after 3.5s
+  useEffect(() => {
+    if (lastLikedPro) {
+      const timer = setTimeout(() => setLastLikedPro(null), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [lastLikedPro]);
 
   useEffect(() => {
     if (!authLoading && !user) router.push('/login');
@@ -499,7 +520,10 @@ export default function SwipePage() {
 
   const handleSwipeRight = useCallback(() => {
     const pro = professionals[currentIndex];
-    if (pro) setLiked((prev) => [...prev, pro.profileId]);
+    if (pro) {
+      setLiked((prev) => prev.includes(pro.profileId) ? prev : [...prev, pro.profileId]);
+      setLastLikedPro(pro);
+    }
     setCurrentIndex((i) => i + 1);
   }, [currentIndex, professionals]);
 
@@ -510,7 +534,6 @@ export default function SwipePage() {
 
   const handleRestart = () => {
     applyFilters();
-    setLiked([]);
   };
 
   if (authLoading || !user) return <PageLoading />;
@@ -544,9 +567,12 @@ export default function SwipePage() {
             </div>
             <div className="flex items-center gap-2">
               {liked.length > 0 && (
-                <div className="flex items-center gap-1.5 bg-rose-50 text-rose-500 px-3 py-2 rounded-xl text-sm font-semibold">
+                <button
+                  onClick={() => router.push('/favorites')}
+                  className="flex items-center gap-1.5 bg-rose-50 text-rose-500 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-rose-100 active:scale-95 transition-all"
+                >
                   <Heart size={14} fill="currentColor" /> {liked.length}
-                </div>
+                </button>
               )}
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -636,13 +662,23 @@ export default function SwipePage() {
                     ? `Hai messo like a ${liked.length} professionista${liked.length > 1 ? 'i' : ''}!`
                     : 'Nessun like per ora. Prova altri filtri!'}
                 </p>
-                <div className="flex gap-3 mt-6">
-                  <button onClick={handleRestart} className="btn-secondary flex items-center gap-2">
-                    <RotateCcw size={16} /> Ricomincia
-                  </button>
-                  <button onClick={() => setShowFilters(true)} className="btn-primary flex items-center gap-2">
-                    <SlidersHorizontal size={16} /> Filtri
-                  </button>
+                <div className="flex flex-col items-center gap-3 mt-6 w-full max-w-xs">
+                  {liked.length > 0 && (
+                    <button
+                      onClick={() => router.push('/favorites')}
+                      className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold py-3 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-rose-200 active:scale-[0.98] transition-transform"
+                    >
+                      <Heart size={18} fill="white" /> Vedi i tuoi preferiti ({liked.length})
+                    </button>
+                  )}
+                  <div className="flex gap-3">
+                    <button onClick={handleRestart} className="btn-secondary flex items-center gap-2">
+                      <RotateCcw size={16} /> Ricomincia
+                    </button>
+                    <button onClick={() => setShowFilters(true)} className="btn-primary flex items-center gap-2">
+                      <SlidersHorizontal size={16} /> Filtri
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ) : (
@@ -699,6 +735,53 @@ export default function SwipePage() {
           </>
         )}
       </div>
+
+      {/* Like Toast */}
+      <AnimatePresence>
+        {lastLikedPro && (
+          <motion.div
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 80 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            className="fixed bottom-28 left-4 right-4 z-50 max-w-lg mx-auto"
+          >
+            <div className="bg-white rounded-2xl shadow-xl shadow-gray-300/40 border border-gray-100 p-4 flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-emerald-200">
+                <Avatar src={lastLikedPro.avatarUrl} name={`${lastLikedPro.firstName} ${lastLikedPro.lastName}`} size="md" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 truncate">
+                  <span className="text-emerald-500">✓</span> Like a {lastLikedPro.firstName}!
+                </p>
+                <p className="text-[11px] text-gray-400 truncate">{lastLikedPro.services?.[0]} · €{lastLikedPro.hourlyRate}/h</p>
+              </div>
+              <div className="flex gap-2 flex-shrink-0">
+                <button
+                  onClick={() => {
+                    setLastLikedPro(null);
+                    router.push(`/messages/new-${lastLikedPro.profileId}`);
+                  }}
+                  className="w-9 h-9 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center hover:bg-primary-100 active:scale-95 transition-all"
+                  title="Contatta"
+                >
+                  <MessageCircle size={16} />
+                </button>
+                <button
+                  onClick={() => {
+                    setLastLikedPro(null);
+                    router.push(`/professional/${lastLikedPro.profileId}`);
+                  }}
+                  className="w-9 h-9 rounded-xl bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 active:scale-95 transition-all"
+                  title="Vedi profilo"
+                >
+                  <User size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MOCK_CONVERSATIONS, MOCK_MESSAGES } from '@/lib/mock-data';
+import { MOCK_CONVERSATIONS, MOCK_MESSAGES, MOCK_SWIPE_PROFESSIONALS } from '@/lib/mock-data';
 import { ArrowLeft, Send, Phone, MoreVertical } from 'lucide-react';
 import { Avatar } from '@/components/avatar';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,7 +30,29 @@ export default function ChatClient({ conversationId }: { conversationId: string 
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const conv = MOCK_CONVERSATIONS.find((c) => c.id === conversationId);
+  // Support both existing conversations and new ones from liked professionals
+  const conv = (() => {
+    const existing = MOCK_CONVERSATIONS.find((c) => c.id === conversationId);
+    if (existing) return existing;
+    // Handle new-pro-xxx from favorites/swipe
+    if (conversationId.startsWith('new-')) {
+      const proId = conversationId.replace('new-', '');
+      const pro = MOCK_SWIPE_PROFESSIONALS.find((p) => p.profileId === proId);
+      if (pro) {
+        return {
+          id: conversationId,
+          recipientId: pro.profileId,
+          recipientName: `${pro.firstName} ${pro.lastName}`,
+          recipientAvatar: pro.avatarUrl,
+          recipientRole: pro.services?.[0] || '',
+          lastMessage: '',
+          timestamp: new Date().toISOString(),
+          unreadCount: 0,
+        };
+      }
+    }
+    return null;
+  })();
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
@@ -39,6 +61,9 @@ export default function ChatClient({ conversationId }: { conversationId: string 
   useEffect(() => {
     if (conversationId && MOCK_MESSAGES[conversationId]) {
       setMessages([...MOCK_MESSAGES[conversationId]]);
+    } else if (conversationId.startsWith('new-')) {
+      // New conversation - start with a greeting
+      setMessages([]);
     }
   }, [conversationId]);
 
