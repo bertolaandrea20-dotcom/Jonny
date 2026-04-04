@@ -6,8 +6,9 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import { Avatar } from '@/components/avatar';
 import { PageLoading } from '@/components/loading-spinner';
-import { Calendar, Clock, Shield, CreditCard, CheckCircle2, XCircle, AlertTriangle, CalendarDays } from 'lucide-react';
+import { Calendar, Clock, Shield, CreditCard, CheckCircle2, XCircle, AlertTriangle, CalendarDays, Star, X, MessageCircle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const STATUS_STYLES: Record<string, string> = {
   PENDING: 'bg-amber-50 text-amber-700 border border-amber-100',
@@ -31,6 +32,15 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [reviewModal, setReviewModal] = useState<{ bookingId: string; name: string; avatarUrl: string; serviceName: string } | null>(null);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewedBookings, setReviewedBookings] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      try { return JSON.parse(localStorage.getItem('stu_reviewed_bookings') || '[]'); } catch { return []; }
+    }
+    return [];
+  });
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -94,6 +104,27 @@ export default function BookingsPage() {
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const handleSubmitReview = (bookingId: string) => {
+    const updated = [...reviewedBookings, bookingId];
+    setReviewedBookings(updated);
+    localStorage.setItem('stu_reviewed_bookings', JSON.stringify(updated));
+    setReviewModal(null);
+    setReviewRating(5);
+    setReviewComment('');
+  };
+
+  const openReviewModal = (booking: any) => {
+    const other = isPro ? booking.client : booking.professional?.user;
+    setReviewModal({
+      bookingId: booking.id,
+      name: other ? `${other.firstName} ${other.lastName}` : 'Unknown',
+      avatarUrl: other?.avatarUrl,
+      serviceName: booking.service?.name || '',
+    });
+    setReviewRating(5);
+    setReviewComment('');
   };
 
   return (
@@ -234,6 +265,23 @@ export default function BookingsPage() {
                             </button>
                           )}
 
+                          {booking.status === 'COMPLETED' && !reviewedBookings.includes(booking.id) && (
+                            <button
+                              onClick={() => openReviewModal(booking)}
+                              className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-semibold py-2.5 rounded-2xl mt-3 transition-all shadow-md shadow-amber-200/30 flex items-center justify-center gap-2 active:scale-[0.97]"
+                            >
+                              <Star size={16} />
+                              Lascia una recensione
+                            </button>
+                          )}
+
+                          {booking.status === 'COMPLETED' && reviewedBookings.includes(booking.id) && (
+                            <div className="flex items-center gap-2 mt-3 text-xs text-emerald-600 font-medium">
+                              <CheckCircle2 size={14} />
+                              Recensione inviata
+                            </div>
+                          )}
+
                           {['PENDING', 'ACCEPTED'].includes(booking.status) && (
                             <button
                               onClick={() => handleStatusUpdate(booking.id, 'CANCELLED')}
@@ -296,6 +344,23 @@ export default function BookingsPage() {
                               Mark Completed
                             </button>
                           )}
+
+                          {booking.status === 'COMPLETED' && !reviewedBookings.includes(booking.id) && (
+                            <button
+                              onClick={() => openReviewModal(booking)}
+                              className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-semibold py-2.5 rounded-2xl mt-3 transition-all shadow-md shadow-amber-200/30 flex items-center justify-center gap-2 active:scale-[0.97]"
+                            >
+                              <Star size={16} />
+                              Recensisci il cliente
+                            </button>
+                          )}
+
+                          {booking.status === 'COMPLETED' && reviewedBookings.includes(booking.id) && (
+                            <div className="flex items-center gap-2 mt-3 text-xs text-emerald-600 font-medium">
+                              <CheckCircle2 size={14} />
+                              Recensione inviata
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -306,6 +371,103 @@ export default function BookingsPage() {
           </div>
         )}
       </div>
+
+      {/* Review Modal */}
+      <AnimatePresence>
+        {reviewModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center"
+            onClick={() => setReviewModal(null)}
+          >
+            <motion.div
+              initial={{ y: 400 }}
+              animate={{ y: 0 }}
+              exit={{ y: 400 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-lg font-bold text-gray-900">
+                  {isPro ? 'Recensisci il cliente' : 'Lascia una recensione'}
+                </h3>
+                <button onClick={() => setReviewModal(null)} className="p-2">
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Who you're reviewing */}
+              <div className="flex items-center gap-3 mb-5 p-3 bg-gray-50 rounded-2xl">
+                <Avatar src={reviewModal.avatarUrl} name={reviewModal.name} size="md" />
+                <div>
+                  <p className="font-semibold text-sm text-gray-900">{reviewModal.name}</p>
+                  <p className="text-xs text-gray-400">{reviewModal.serviceName}</p>
+                </div>
+              </div>
+
+              {/* Star rating */}
+              <div className="text-center mb-5">
+                <p className="text-sm font-medium text-gray-600 mb-3">Come valuti l'esperienza?</p>
+                <div className="flex justify-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setReviewRating(star)}
+                      className="transition-transform active:scale-90"
+                    >
+                      <Star
+                        size={36}
+                        className={star <= reviewRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}
+                      />
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  {reviewRating === 5 ? 'Eccellente!' : reviewRating === 4 ? 'Molto bene' : reviewRating === 3 ? 'Nella media' : reviewRating === 2 ? 'Sotto le aspettative' : 'Scarso'}
+                </p>
+              </div>
+
+              {/* Comment */}
+              <textarea
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                placeholder={isPro ? 'Racconta la tua esperienza con questo cliente...' : 'Racconta la tua esperienza con questo professionista...'}
+                className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-300"
+                rows={3}
+              />
+
+              {/* Quick tags */}
+              <div className="flex flex-wrap gap-2 mt-3 mb-5">
+                {(isPro
+                  ? ['Puntuale', 'Gentile', 'Casa ordinata', 'Pagamento rapido', 'Chiaro nelle richieste']
+                  : ['Puntuale', 'Professionale', 'Consigliato', 'Ottimo lavoro', 'Molto gentile']
+                ).map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setReviewComment((prev) => prev ? `${prev} ${tag}.` : `${tag}.`)}
+                    className="text-xs bg-primary-50 text-primary-600 px-3 py-1.5 rounded-full font-medium hover:bg-primary-100 transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+
+              {/* Submit */}
+              <button
+                onClick={() => handleSubmitReview(reviewModal.bookingId)}
+                disabled={reviewRating === 0}
+                className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold py-3.5 rounded-2xl shadow-md shadow-primary-200/50 active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+              >
+                <Star size={16} fill="white" />
+                Invia recensione
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
   LogOut, ChevronRight, User, Briefcase, Calendar,
   MapPin, CreditCard, Camera, X, Award,
   BookOpen, Euro, Heart, CheckCircle2, Clock, AlertCircle,
-  TrendingUp, Crown, Lock, Zap, Star,
+  TrendingUp, Crown, Lock, Zap, Star, Upload, ShieldCheck, ChevronDown, ChevronUp, MessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -18,6 +18,8 @@ import {
   MOCK_USER_STATS,
   MOCK_VERIFICATION,
   MOCK_PREMIUM_INSIGHTS,
+  MOCK_VERIFICATION_STEPS,
+  MOCK_REVIEWS_RECEIVED_CLIENT,
 } from '@/lib/mock-data';
 
 export default function ProfilePage() {
@@ -27,6 +29,10 @@ export default function ProfilePage() {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | undefined>(undefined);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [showVerificationDetail, setShowVerificationDetail] = useState(false);
+  const [verificationSteps, setVerificationSteps] = useState(MOCK_VERIFICATION_STEPS);
+  const [uploadingStep, setUploadingStep] = useState<string | null>(null);
+  const [showClientReviews, setShowClientReviews] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
@@ -49,6 +55,17 @@ export default function ProfilePage() {
       await api.updateProfile({ avatarUrl: url });
       await refreshUser();
     } catch {}
+  };
+
+  const handleVerificationUpload = (stepId: string) => {
+    setUploadingStep(stepId);
+    // Simulate upload + verification
+    setTimeout(() => {
+      setVerificationSteps((prev) =>
+        prev.map((s) => s.id === stepId ? { ...s, status: 'pending' as const, detail: 'In verifica... (1-2 giorni lavorativi)' } : s)
+      );
+      setUploadingStep(null);
+    }, 2000);
   };
 
   if (loading || !user) return <PageLoading />;
@@ -186,26 +203,174 @@ export default function ProfilePage() {
           transition={{ delay: 0.3 }}
           className="card-elevated p-4 mb-4"
         >
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Verifica identità</h3>
-          <div className="space-y-2.5">
-            {Object.values(verification).map((v) => (
-              <div key={v.label} className="flex items-center gap-3">
-                <span className="text-lg">{v.icon}</span>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{v.label}</p>
-                  <p className="text-xs text-gray-400">{v.detail}</p>
-                </div>
-                {v.status === 'verified' ? (
-                  <CheckCircle2 size={18} className="text-green-500" />
-                ) : v.status === 'pending' ? (
-                  <Clock size={18} className="text-amber-500" />
-                ) : (
-                  <AlertCircle size={18} className="text-gray-300" />
-                )}
-              </div>
-            ))}
+          <button
+            onClick={() => setShowVerificationDetail(!showVerificationDetail)}
+            className="w-full flex items-center justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={18} className="text-primary-500" />
+              <h3 className="text-sm font-semibold text-gray-700">Verifica identità</h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
+                {verificationSteps.filter((s) => s.status === 'completed').length}/{verificationSteps.length}
+              </span>
+              {showVerificationDetail ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
+            </div>
+          </button>
+
+          {/* Progress bar */}
+          <div className="w-full bg-gray-100 rounded-full h-1.5 mt-3">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${(verificationSteps.filter((s) => s.status === 'completed').length / verificationSteps.length) * 100}%` }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="h-1.5 rounded-full bg-gradient-to-r from-emerald-400 to-green-500"
+            />
           </div>
+
+          <AnimatePresence>
+            {showVerificationDetail && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="space-y-3 mt-4">
+                  {verificationSteps.map((step, idx) => (
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.08 }}
+                      className={`flex items-start gap-3 p-3 rounded-xl border ${
+                        step.status === 'completed' ? 'bg-emerald-50/50 border-emerald-100' :
+                        step.status === 'pending' ? 'bg-amber-50/50 border-amber-100' :
+                        'bg-gray-50/50 border-gray-100'
+                      }`}
+                    >
+                      <span className="text-lg mt-0.5">{step.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-800">{step.label}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{step.detail}</p>
+
+                        {/* Action button for not_started steps */}
+                        {step.status === 'not_started' && (
+                          <button
+                            onClick={() => handleVerificationUpload(step.id)}
+                            disabled={uploadingStep === step.id}
+                            className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-primary-600 bg-primary-50 px-3 py-1.5 rounded-lg hover:bg-primary-100 transition-colors"
+                          >
+                            {uploadingStep === step.id ? (
+                              <>
+                                <div className="w-3 h-3 border-2 border-primary-400 border-t-transparent rounded-full animate-spin" />
+                                Caricamento...
+                              </>
+                            ) : (
+                              <>
+                                <Upload size={12} />
+                                {step.id === 'step-selfie' ? 'Scatta selfie' : 'Carica documento'}
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex-shrink-0 mt-1">
+                        {step.status === 'completed' ? (
+                          <CheckCircle2 size={18} className="text-emerald-500" />
+                        ) : step.status === 'pending' ? (
+                          <Clock size={18} className="text-amber-500" />
+                        ) : step.status === 'rejected' ? (
+                          <AlertCircle size={18} className="text-red-500" />
+                        ) : (
+                          <div className="w-[18px] h-[18px] rounded-full border-2 border-gray-200" />
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Trust badge info */}
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-xl">
+                  <p className="text-xs text-blue-700 font-medium flex items-center gap-1.5">
+                    <ShieldCheck size={13} />
+                    Completa la verifica per ottenere il badge "Verificato" sul tuo profilo
+                  </p>
+                  <p className="text-[11px] text-blue-500 mt-1">
+                    I profili verificati ricevono il 35% in più di prenotazioni
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
+
+        {/* Client Reviews Received (bidirectional) */}
+        {!isPro && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="card-elevated p-4 mb-4"
+          >
+            <button
+              onClick={() => setShowClientReviews(!showClientReviews)}
+              className="w-full flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <MessageSquare size={16} className="text-amber-500" />
+                <h3 className="text-sm font-semibold text-gray-700">Le tue recensioni</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                  {MOCK_REVIEWS_RECEIVED_CLIENT.length} ricevute
+                </span>
+                {showClientReviews ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
+              </div>
+            </button>
+
+            <AnimatePresence>
+              {showClientReviews && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <p className="text-xs text-gray-400 mt-3 mb-2">
+                    I professionisti possono recensirti dopo ogni servizio completato
+                  </p>
+                  <div className="space-y-3 mt-2">
+                    {MOCK_REVIEWS_RECEIVED_CLIENT.map((review, idx) => (
+                      <motion.div
+                        key={review.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="p-3 bg-gray-50 rounded-xl"
+                      >
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <Avatar src={review.reviewer.avatarUrl} name={`${review.reviewer.firstName} ${review.reviewer.lastName}`} size="sm" />
+                          <div className="flex-1">
+                            <p className="text-xs font-semibold text-gray-800">{review.reviewer.firstName} {review.reviewer.lastName}</p>
+                            <p className="text-[10px] text-gray-400">{review.serviceName}</p>
+                          </div>
+                          <div className="flex gap-0.5">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star key={s} size={10} className={s <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'} />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-600 leading-relaxed">{review.comment}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
 
         {/* Premium Insights (pro only) */}
         {isPro && (

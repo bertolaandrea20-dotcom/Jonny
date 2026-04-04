@@ -8,7 +8,7 @@ import { getCurrentPosition } from '@/lib/geolocation';
 import { ProfessionalCard } from '@/components/professional-card';
 import { SwipeCard } from '@/components/swipe-card';
 import { PageLoading } from '@/components/loading-spinner';
-import { List, Layers, ArrowLeft, SlidersHorizontal, Calendar, Clock, MapPin, X, Check, Star } from 'lucide-react';
+import { List, Layers, ArrowLeft, SlidersHorizontal, Calendar, Clock, MapPin, X, Check, Star, Shield, Zap, Globe, Euro } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -51,6 +51,23 @@ const RATING_OPTIONS = [
   { value: 4.9, label: '4.9+' },
 ];
 
+const PRICE_RANGE_OPTIONS = [
+  { value: [0, 999], label: 'Qualsiasi' },
+  { value: [0, 20], label: '< €20/h' },
+  { value: [20, 35], label: '€20-35/h' },
+  { value: [35, 50], label: '€35-50/h' },
+  { value: [50, 999], label: '> €50/h' },
+];
+
+const LANGUAGE_OPTIONS = [
+  { value: '', label: 'Qualsiasi' },
+  { value: 'Italiano', label: '🇮🇹 Italiano' },
+  { value: 'Inglese', label: '🇬🇧 Inglese' },
+  { value: 'Francese', label: '🇫🇷 Francese' },
+  { value: 'Spagnolo', label: '🇪🇸 Spagnolo' },
+  { value: 'Tedesco', label: '🇩🇪 Tedesco' },
+];
+
 const SORT_OPTIONS = [
   { key: 'distance', label: 'Distanza' },
   { key: 'rating', label: 'Valutazione' },
@@ -85,6 +102,10 @@ function SearchPageContent() {
   const [filterTime, setFilterTime] = useState('');
   const [filterDistance, setFilterDistance] = useState(0);
   const [filterRating, setFilterRating] = useState(0);
+  const [filterPriceRange, setFilterPriceRange] = useState<number[]>([0, 999]);
+  const [filterLanguage, setFilterLanguage] = useState('');
+  const [filterVerified, setFilterVerified] = useState(false);
+  const [filterImmediate, setFilterImmediate] = useState(false);
   const [sortBy, setSortBy] = useState('distance');
 
   const category = params.get('category');
@@ -146,6 +167,29 @@ function SearchPageContent() {
       pros = pros.filter((p) => (p.averageRating || 0) >= filterRating);
     }
 
+    // Price range filter
+    if (filterPriceRange[0] > 0 || filterPriceRange[1] < 999) {
+      pros = pros.filter((p) => {
+        const rate = p.hourlyRate || 0;
+        return rate >= filterPriceRange[0] && rate <= filterPriceRange[1];
+      });
+    }
+
+    // Language filter
+    if (filterLanguage) {
+      pros = pros.filter((p) => p.languages?.includes(filterLanguage));
+    }
+
+    // Verified filter
+    if (filterVerified) {
+      pros = pros.filter((p) => p.verified);
+    }
+
+    // Immediately available filter
+    if (filterImmediate) {
+      pros = pros.filter((p) => p.immediatelyAvailable);
+    }
+
     // Sort
     if (sortBy === 'distance') {
       pros.sort((a, b) => a.distance - b.distance);
@@ -158,15 +202,19 @@ function SearchPageContent() {
     }
 
     return pros;
-  }, [professionals, filterDistance, filterRating, sortBy]);
+  }, [professionals, filterDistance, filterRating, filterPriceRange, filterLanguage, filterVerified, filterImmediate, sortBy]);
 
-  const hasActiveFilters = filterDay >= 0 || !!filterTime || filterDistance > 0 || filterRating > 0;
+  const hasActiveFilters = filterDay >= 0 || !!filterTime || filterDistance > 0 || filterRating > 0 || filterPriceRange[0] > 0 || filterPriceRange[1] < 999 || !!filterLanguage || filterVerified || filterImmediate;
 
   const resetFilters = () => {
     setFilterDay(-1);
     setFilterTime('');
     setFilterDistance(0);
     setFilterRating(0);
+    setFilterPriceRange([0, 999]);
+    setFilterLanguage('');
+    setFilterVerified(false);
+    setFilterImmediate(false);
     setSortBy('distance');
   };
 
@@ -328,6 +376,80 @@ function SearchPageContent() {
                 </div>
               </div>
 
+              {/* Price Range */}
+              <div className="mb-4">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                  <Euro size={11} /> Fascia di prezzo
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {PRICE_RANGE_OPTIONS.map((pr) => (
+                    <button
+                      key={pr.label}
+                      onClick={() => setFilterPriceRange(pr.value)}
+                      className={clsx(
+                        'px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
+                        filterPriceRange[0] === pr.value[0] && filterPriceRange[1] === pr.value[1]
+                          ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-sm'
+                          : 'bg-gray-50 text-gray-600 border border-gray-100',
+                      )}
+                    >
+                      {pr.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Language */}
+              <div className="mb-4">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                  <Globe size={11} /> Lingua
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {LANGUAGE_OPTIONS.map((l) => (
+                    <button
+                      key={l.value}
+                      onClick={() => setFilterLanguage(l.value)}
+                      className={clsx(
+                        'px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
+                        filterLanguage === l.value
+                          ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-sm'
+                          : 'bg-gray-50 text-gray-600 border border-gray-100',
+                      )}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Toggle filters: Verified + Immediate */}
+              <div className="mb-4 flex gap-3">
+                <button
+                  onClick={() => setFilterVerified(!filterVerified)}
+                  className={clsx(
+                    'flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border',
+                    filterVerified
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'bg-gray-50 text-gray-500 border-gray-100',
+                  )}
+                >
+                  <Shield size={14} />
+                  Solo verificati
+                </button>
+                <button
+                  onClick={() => setFilterImmediate(!filterImmediate)}
+                  className={clsx(
+                    'flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border',
+                    filterImmediate
+                      ? 'bg-orange-50 text-orange-700 border-orange-200'
+                      : 'bg-gray-50 text-gray-500 border-gray-100',
+                  )}
+                >
+                  <Zap size={14} />
+                  Disponibili ora
+                </button>
+              </div>
+
               {/* Sort */}
               <div className="mb-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Ordina per</label>
@@ -385,6 +507,30 @@ function SearchPageContent() {
             <span className="text-xs bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
               <Star size={10} fill="currentColor" /> {filterRating}+
               <button onClick={() => setFilterRating(0)}><X size={10} /></button>
+            </span>
+          )}
+          {(filterPriceRange[0] > 0 || filterPriceRange[1] < 999) && (
+            <span className="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+              <Euro size={10} /> {PRICE_RANGE_OPTIONS.find((pr) => pr.value[0] === filterPriceRange[0] && pr.value[1] === filterPriceRange[1])?.label}
+              <button onClick={() => setFilterPriceRange([0, 999])}><X size={10} /></button>
+            </span>
+          )}
+          {filterLanguage && (
+            <span className="text-xs bg-pink-50 text-pink-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+              <Globe size={10} /> {filterLanguage}
+              <button onClick={() => setFilterLanguage('')}><X size={10} /></button>
+            </span>
+          )}
+          {filterVerified && (
+            <span className="text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+              <Shield size={10} /> Verificati
+              <button onClick={() => setFilterVerified(false)}><X size={10} /></button>
+            </span>
+          )}
+          {filterImmediate && (
+            <span className="text-xs bg-orange-50 text-orange-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+              <Zap size={10} /> Disponibili ora
+              <button onClick={() => setFilterImmediate(false)}><X size={10} /></button>
             </span>
           )}
         </div>
