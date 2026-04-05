@@ -24,7 +24,7 @@ export function BottomNav() {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/checkout')) {
+  if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/checkout') || pathname.startsWith('/landing')) {
     return null;
   }
 
