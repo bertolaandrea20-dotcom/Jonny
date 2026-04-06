@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  basePath: '/Jonny',
+  assetPrefix: '/Jonny/',
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     domains: ['localhost', 'via.placeholder.com'],
     remotePatterns: [
       {
@@ -9,8 +14,6 @@ const nextConfig = {
       },
     ],
   },
-  // Standalone output for optimized production builds
-  output: 'standalone',
 };
 
 module.exports = nextConfig;
