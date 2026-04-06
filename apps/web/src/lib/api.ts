@@ -214,6 +214,32 @@ class ApiClient {
     return this.request<any>('/payments/earnings');
   }
 
+  // Messages
+  async getConversations() {
+    return this.request<any[]>('/messages/conversations');
+  }
+
+  async getMessages(userId: string, take?: number, skip?: number) {
+    const query = new URLSearchParams();
+    if (take) query.set('take', String(take));
+    if (skip) query.set('skip', String(skip));
+    const qs = query.toString();
+    return this.request<any[]>(`/messages/conversation/${userId}${qs ? `?${qs}` : ''}`);
+  }
+
+  async sendMessage(receiverId: string, content: string) {
+    return this.request<any>('/messages', {
+      method: 'POST',
+      body: JSON.stringify({ receiverId, content }),
+    });
+  }
+
+  async markAsRead(userId: string) {
+    return this.request<any>(`/messages/read/${userId}`, {
+      method: 'PATCH',
+    });
+  }
+
   // Jobs
   async getJobListings(category?: string) {
     const query = category ? `?category=${category}` : '';
