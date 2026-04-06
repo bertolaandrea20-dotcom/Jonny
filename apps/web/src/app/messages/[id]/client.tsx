@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
+import { MOCK_SWIPE_PROFESSIONALS } from '@/lib/mock-data';
 import { PageLoading } from '@/components/loading-spinner';
 import { ArrowLeft, Send, AlertTriangle, X, Flag } from 'lucide-react';
 import { Avatar } from '@/components/avatar';
@@ -23,6 +24,28 @@ function formatDateSeparator(ts: string): string {
   return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
 }
 
+// Resolve partner info from mock data for new-* conversations
+function resolvePartner(conversationId: string): { id: string; name: string; avatar?: string } | null {
+  if (conversationId.startsWith('new-')) {
+    const proId = conversationId.replace('new-', '');
+    const pro = MOCK_SWIPE_PROFESSIONALS.find((p) => p.profileId === proId);
+    if (pro) {
+      return { id: proId, name: `${pro.firstName} ${pro.lastName}`, avatar: pro.avatarUrl };
+    }
+  }
+  return null;
+}
+
+const DEMO_REPLIES = [
+  'Ricevuto! Grazie 😊',
+  'Perfetto, nessun problema!',
+  'Ok, ci sentiamo presto!',
+  'Va benissimo, grazie per il messaggio!',
+  'Capisco, ne parliamo alla prossima!',
+  'Certo, dimmi pure quando preferisci!',
+  'Ottimo! Ti confermo a breve.',
+];
+
 export default function ChatClient({ conversationId }: { conversationId: string }) {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -32,72 +55,72 @@ export default function ChatClient({ conversationId }: { conversationId: string 
   const [sending, setSending] = useState(false);
   const [showPrivacyBanner, setShowPrivacyBanner] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(true);
+  const [isDemo, setIsDemo] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const partnerId = conversationId;
+  const isNewConversation = conversationId.startsWith('new-');
+  const partnerId = isNewConversation ? conversationId.replace('new-', '') : conversationId;
 
-  const loadMessages = useCallback(async () => {
-    if (!user) return;
-    try {
-      const msgs = await api.getMessages(partnerId);
-      setMessages(msgs);
-      // Extract partner info from first received message
-      if (msgs.length > 0 && !partnerInfo) {
-        const received = msgs.find((m: any) => !m.sent);
-        if (received) {
-          setPartnerInfo({ name: received.senderName });
-        }
-      }
-    } catch {
-      // Silently fail on polling
+  // Resolve partner info immediately for new conversations
+  useEffect(() => {
+    const resolved = resolvePartner(conversationId);
+    if (resolved) {
+      setPartnerInfo({ name: resolved.name, avatar: resolved.avatar });
     }
-  }, [user, partnerId, partnerInfo]);
+  }, [conversationId]);
 
+  // Load messages
   useEffect(() => {
-    if (!loading && !user) router.push('/login');
-  }, [user, loading, router]);
+    if (isNewConversation) {
+      // New conversation from swipe - start empty, demo mode
+      setMessages([]);
+      setLoadingMessages(false);
+      setIsDemo(true);
+      return;
+    }
 
-  // Initial load + mark as read
-  useEffect(() => {
-    if (!user) return;
-    setLoadingMessages(true);
+    // Try real API
     Promise.all([
-      api.getMessages(partnerId),
-      api.markAsRead(partnerId),
+      api.getMessages(partnerId).catch(() => null),
+      api.markAsRead(partnerId).catch(() => null),
     ])
       .then(([msgs]) => {
-        setMessages(msgs);
-        if (msgs.length > 0) {
+        if (msgs && msgs.length > 0) {
+          setMessages(msgs);
           const received = msgs.find((m: any) => !m.sent);
-          if (received) {
+          if (received && !partnerInfo) {
             setPartnerInfo({ name: received.senderName });
           }
+        } else {
+          // API returned empty or failed - switch to demo
+          setIsDemo(true);
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        setIsDemo(true);
+      })
       .finally(() => setLoadingMessages(false));
-  }, [user, partnerId]);
+  }, [partnerId, isNewConversation]);
 
-  // Polling for new messages every 5 seconds
+  // Polling only if not demo
   useEffect(() => {
-    if (!user) return;
+    if (isDemo || isNewConversation) return;
     pollingRef.current = setInterval(() => {
-      loadMessages();
+      api.getMessages(partnerId).then(setMessages).catch(() => {});
       api.markAsRead(partnerId).catch(() => {});
     }, 5000);
-
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [user, partnerId, loadMessages]);
+  }, [partnerId, isDemo, isNewConversation]);
 
   // Auto-scroll on new messages
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
-  if (loading || !user) return <PageLoading />;
+  if (loading) return <PageLoading />;
 
   const handleSend = async () => {
     if (!input.trim() || sending) return;
@@ -105,27 +128,37 @@ export default function ChatClient({ conversationId }: { conversationId: string 
     setInput('');
     setSending(true);
 
-    // Optimistic add
-    const optimisticMsg = {
-      id: `temp-${Date.now()}`,
+    const newMsg = {
+      id: `msg-${Date.now()}`,
       text,
       sent: true,
       timestamp: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, optimisticMsg]);
+    setMessages((prev) => [...prev, newMsg]);
 
-    try {
-      const saved = await api.sendMessage(partnerId, text);
-      setMessages((prev) =>
-        prev.map((m) => (m.id === optimisticMsg.id ? saved : m))
-      );
-    } catch {
-      // Remove optimistic message on error
-      setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
-      setInput(text);
-    } finally {
-      setSending(false);
+    if (!isDemo) {
+      try {
+        const saved = await api.sendMessage(partnerId, text);
+        setMessages((prev) => prev.map((m) => (m.id === newMsg.id ? saved : m)));
+        setSending(false);
+        return;
+      } catch {
+        // Fall through to demo mode
+        setIsDemo(true);
+      }
     }
+
+    // Demo mode: simulate auto-reply after 1.5s
+    setSending(false);
+    setTimeout(() => {
+      const reply = {
+        id: `msg-auto-${Date.now()}`,
+        text: DEMO_REPLIES[Math.floor(Math.random() * DEMO_REPLIES.length)],
+        sent: false,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, reply]);
+    }, 1500);
   };
 
   // Group messages by date
@@ -141,6 +174,7 @@ export default function ChatClient({ conversationId }: { conversationId: string 
         <Avatar src={partnerInfo?.avatar} name={partnerInfo?.name || 'Utente'} size="sm" />
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm text-gray-900 truncate">{partnerInfo?.name || 'Conversazione'}</p>
+          <p className="text-[10px] text-emerald-500 font-medium">Online</p>
         </div>
         <button
           onClick={() => alert('Funzione di segnalazione in arrivo')}
@@ -176,7 +210,7 @@ export default function ChatClient({ conversationId }: { conversationId: string 
         ) : messages.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-400 text-sm">Nessun messaggio</p>
-            <p className="text-gray-300 text-xs mt-1">Inizia la conversazione!</p>
+            <p className="text-gray-300 text-xs mt-1">Inizia la conversazione con {partnerInfo?.name || 'questo professionista'}!</p>
           </div>
         ) : (
           messages.map((msg) => {

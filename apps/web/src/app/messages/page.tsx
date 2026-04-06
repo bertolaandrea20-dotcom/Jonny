@@ -28,18 +28,20 @@ export default function MessagesPage() {
   const [loadingConvs, setLoadingConvs] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/login');
-  }, [user, loading, router]);
+    if (loading) return;
+    if (user) {
+      api.getConversations()
+        .then(setConversations)
+        .catch(() => setConversations([]))
+        .finally(() => setLoadingConvs(false));
+    } else {
+      // Demo mode: no conversations yet
+      setConversations([]);
+      setLoadingConvs(false);
+    }
+  }, [user, loading]);
 
-  useEffect(() => {
-    if (!user) return;
-    api.getConversations()
-      .then(setConversations)
-      .catch(() => setConversations([]))
-      .finally(() => setLoadingConvs(false));
-  }, [user]);
-
-  if (loading || !user) return <PageLoading />;
+  if (loading) return <PageLoading />;
 
   return (
     <div className="animate-fade-up">

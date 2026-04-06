@@ -252,7 +252,7 @@ export default function ProfessionalProfilePage() {
       )}
 
       {/* Booking flow - Step by step */}
-      {user && user.role === 'CLIENT' && !booked && (
+      {(!user || user.role === 'CLIENT') && !booked && (
         <div className="card p-4 mb-4">
           <h2 className="font-semibold mb-4 flex items-center gap-2">
             <Calendar size={16} /> Prenota
