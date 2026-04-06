@@ -263,6 +263,55 @@ export function getSearchResults(serviceId: string): any[] {
   return results;
 }
 
+// Build a full profile from any swipe professional (for pages without backend)
+export function getMockProfile(profileId: string): any | null {
+  // Check detailed profiles first
+  if (MOCK_PROFILES[profileId]) return MOCK_PROFILES[profileId];
+
+  // Build from swipe data
+  const swipePro = MOCK_SWIPE_PROFESSIONALS.find((p) => p.profileId === profileId);
+  if (!swipePro) return null;
+
+  // Map service names to mock service objects
+  const services = (swipePro.services || []).map((name: string, i: number) => {
+    const found = MOCK_SERVICES.find((s) => s.name.toLowerCase() === name.toLowerCase());
+    return {
+      id: `ps-gen-${i}`,
+      service: found || { id: `svc-${i}`, name, category: swipePro.category, icon: '🔧' },
+      customRate: null,
+    };
+  });
+
+  // Map availability from swipe format ({day, start, end}) to profile format ({dayOfWeek, startTime, endTime})
+  const availability = (swipePro.availability || []).map((a: any) => ({
+    dayOfWeek: a.day,
+    startTime: a.start,
+    endTime: a.end,
+  }));
+
+  return {
+    id: profileId,
+    userId: `user-${profileId}`,
+    user: {
+      id: `user-${profileId}`,
+      firstName: swipePro.firstName,
+      lastName: swipePro.lastName,
+      avatarUrl: swipePro.avatarUrl,
+      role: 'PROFESSIONAL',
+    },
+    bio: swipePro.bio,
+    age: swipePro.age,
+    serviceRadius: 10,
+    hourlyRate: swipePro.hourlyRate,
+    isVerified: swipePro.verified || false,
+    stripeAccountId: null,
+    averageRating: swipePro.averageRating,
+    services,
+    availability,
+    reviewsReceived: [],
+  };
+}
+
 export function getSwipeProfessionals(category?: string): any[] {
   let pros = [...MOCK_SWIPE_PROFESSIONALS];
   if (category) {
