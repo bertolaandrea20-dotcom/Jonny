@@ -9,7 +9,7 @@ import { StarRating } from '@/components/star-rating';
 import { formatDistance } from '@/lib/geolocation';
 import { MOCK_SWIPE_PROFESSIONALS, MOCK_SERVICES } from '@/lib/mock-data';
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from 'framer-motion';
-import { MapPin, X, Heart, Shield, RotateCcw, Sparkles, SlidersHorizontal, Briefcase, Calendar, Clock, ChevronDown, Check, MessageCircle, User } from 'lucide-react';
+import { MapPin, X, Heart, Shield, RotateCcw, Sparkles, SlidersHorizontal, Briefcase, Calendar, Clock, ChevronDown, Check, MessageCircle, User, Zap, Star, Globe } from 'lucide-react';
 import { clsx } from 'clsx';
 
 // ─── Filter constants ───
@@ -23,26 +23,51 @@ const CATEGORY_FILTERS = [
   { key: 'PET_SITTING', label: 'Pet Sitting', icon: '🐾' },
 ];
 
-const DAY_OPTIONS = [
-  { value: -1, label: 'Qualsiasi giorno' },
-  { value: 0, label: 'Domenica', short: 'Dom' },
-  { value: 1, label: 'Lunedì', short: 'Lun' },
-  { value: 2, label: 'Martedì', short: 'Mar' },
-  { value: 3, label: 'Mercoledì', short: 'Mer' },
-  { value: 4, label: 'Giovedì', short: 'Gio' },
-  { value: 5, label: 'Venerdì', short: 'Ven' },
-  { value: 6, label: 'Sabato', short: 'Sab' },
+const DAY_BUTTONS = [
+  { value: 0, label: 'Dom' },
+  { value: 1, label: 'Lun' },
+  { value: 2, label: 'Mar' },
+  { value: 3, label: 'Mer' },
+  { value: 4, label: 'Gio' },
+  { value: 5, label: 'Ven' },
+  { value: 6, label: 'Sab' },
 ];
 
-const TIME_SLOTS = [
-  { value: '', label: 'Qualsiasi orario' },
-  { value: '07:00', label: 'Mattina presto (7:00)' },
-  { value: '09:00', label: 'Mattina (9:00)' },
-  { value: '12:00', label: 'Mezzogiorno (12:00)' },
-  { value: '14:00', label: 'Primo pomeriggio (14:00)' },
-  { value: '16:00', label: 'Tardo pomeriggio (16:00)' },
-  { value: '18:00', label: 'Sera (18:00)' },
-  { value: '20:00', label: 'Sera tardi (20:00)' },
+const TIME_OPTIONS = [
+  '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
+  '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
+];
+
+const PRICE_OPTIONS = [
+  { label: 'Qualsiasi', min: 0, max: 999 },
+  { label: '€0-15', min: 0, max: 15 },
+  { label: '€15-25', min: 15, max: 25 },
+  { label: '€25-40', min: 25, max: 40 },
+  { label: '€40+', min: 40, max: 999 },
+];
+
+const DISTANCE_OPTIONS = [
+  { label: 'Qualsiasi', value: 0 },
+  { label: '< 1 km', value: 1 },
+  { label: '< 2 km', value: 2 },
+  { label: '< 5 km', value: 5 },
+  { label: '< 10 km', value: 10 },
+];
+
+const RATING_OPTIONS = [
+  { label: 'Qualsiasi', value: 0 },
+  { label: '4.5+', value: 4.5 },
+  { label: '4.7+', value: 4.7 },
+  { label: '4.9+', value: 4.9 },
+];
+
+const LANGUAGE_OPTIONS = [
+  { label: 'Qualsiasi', value: '', flag: '🌍' },
+  { label: 'Italiano', value: 'Italiano', flag: '🇮🇹' },
+  { label: 'Francese', value: 'Francese', flag: '🇫🇷' },
+  { label: 'Inglese', value: 'Inglese', flag: '🇬🇧' },
+  { label: 'Spagnolo', value: 'Spagnolo', flag: '🇪🇸' },
+  { label: 'Tedesco', value: 'Tedesco', flag: '🇩🇪' },
 ];
 
 // ─── Service options per category ───
@@ -52,19 +77,74 @@ function getServiceOptions(category: string) {
   return MOCK_SERVICES.filter((s) => s.category === category);
 }
 
+// ─── Filter types ───
+
+interface Filters {
+  category: string;
+  selectedService: string;
+  selectedDays: number[];
+  timeFrom: string;
+  timeTo: string;
+  priceMin: number;
+  priceMax: number;
+  maxDistance: number;
+  minRating: number;
+  selectedLanguage: string;
+  verifiedOnly: boolean;
+  immediatelyAvailable: boolean;
+}
+
+const DEFAULT_FILTERS: Filters = {
+  category: '',
+  selectedService: '',
+  selectedDays: [],
+  timeFrom: '',
+  timeTo: '',
+  priceMin: 0,
+  priceMax: 999,
+  maxDistance: 0,
+  minRating: 0,
+  selectedLanguage: '',
+  verifiedOnly: false,
+  immediatelyAvailable: false,
+};
+
 // ─── Availability matching ───
 
-function isAvailableAt(pro: any, day: number, time: string): boolean {
+function isAvailableOnDays(pro: any, days: number[]): boolean {
+  if (!pro.availability || days.length === 0) return true;
+  return days.some((day) => pro.availability.some((a: any) => a.day === day));
+}
+
+function isAvailableInTimeRange(pro: any, days: number[], timeFrom: string, timeTo: string): boolean {
   if (!pro.availability) return true;
-  const slots = pro.availability.filter((a: any) => a.day === day);
-  if (slots.length === 0) return false;
-  if (!time) return true;
-  return slots.some((s: any) => time >= s.start && time < s.end);
+  if (!timeFrom && !timeTo) return true;
+  const from = timeFrom || '00:00';
+  const to = timeTo || '23:59';
+  const checkDays = days.length > 0 ? days : [0, 1, 2, 3, 4, 5, 6];
+  return checkDays.some((day) =>
+    pro.availability.some((a: any) => a.day === day && a.start <= to && a.end >= from)
+  );
 }
 
 function hasService(pro: any, serviceName: string): boolean {
   if (!serviceName) return true;
   return pro.services.some((s: string) => s.toLowerCase().includes(serviceName.toLowerCase()));
+}
+
+function applyAllFilters(pros: any[], f: Filters): any[] {
+  let result = [...pros];
+  if (f.category) result = result.filter((p) => p.category === f.category);
+  if (f.selectedService) result = result.filter((p) => hasService(p, f.selectedService));
+  if (f.selectedDays.length > 0) result = result.filter((p) => isAvailableOnDays(p, f.selectedDays));
+  if (f.timeFrom || f.timeTo) result = result.filter((p) => isAvailableInTimeRange(p, f.selectedDays, f.timeFrom, f.timeTo));
+  if (f.priceMin > 0 || f.priceMax < 999) result = result.filter((p) => p.hourlyRate >= f.priceMin && p.hourlyRate <= f.priceMax);
+  if (f.maxDistance > 0) result = result.filter((p) => p.distance <= f.maxDistance);
+  if (f.minRating > 0) result = result.filter((p) => p.averageRating >= f.minRating);
+  if (f.selectedLanguage) result = result.filter((p) => p.languages?.includes(f.selectedLanguage));
+  if (f.verifiedOnly) result = result.filter((p) => p.verified);
+  if (f.immediatelyAvailable) result = result.filter((p) => p.immediatelyAvailable);
+  return result;
 }
 
 // ─── Enhanced Swipe Card ───
@@ -220,37 +300,52 @@ function SwipeCardEnhanced({
 // ─── Filter Panel Component ───
 
 function FilterPanel({
-  category,
-  setCategory,
-  selectedDay,
-  setSelectedDay,
-  selectedTime,
-  setSelectedTime,
-  selectedService,
-  setSelectedService,
+  filters,
+  updateFilter,
+  resetFilters,
   onApply,
   resultCount,
 }: {
-  category: string;
-  setCategory: (v: string) => void;
-  selectedDay: number;
-  setSelectedDay: (v: number) => void;
-  selectedTime: string;
-  setSelectedTime: (v: string) => void;
-  selectedService: string;
-  setSelectedService: (v: string) => void;
+  filters: Filters;
+  updateFilter: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
+  resetFilters: () => void;
   onApply: () => void;
   resultCount: number;
 }) {
-  const serviceOptions = getServiceOptions(category);
+  const serviceOptions = getServiceOptions(filters.category);
+  const hasAny = JSON.stringify(filters) !== JSON.stringify(DEFAULT_FILTERS);
+
+  const toggleDay = (day: number) => {
+    const days = filters.selectedDays.includes(day)
+      ? filters.selectedDays.filter((d) => d !== day)
+      : [...filters.selectedDays, day];
+    updateFilter('selectedDays', days);
+  };
+
+  const setPriceRange = (min: number, max: number) => {
+    updateFilter('priceMin', min);
+    updateFilter('priceMax', max);
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="bg-white rounded-3xl shadow-xl shadow-gray-200/60 border border-gray-100 p-5 mb-4"
+      className="bg-white rounded-3xl shadow-xl shadow-gray-200/60 border border-gray-100 p-5 mb-4 max-h-[75vh] overflow-y-auto"
     >
+      {/* Header with reset */}
+      {hasAny && (
+        <div className="flex justify-end mb-3">
+          <button
+            onClick={resetFilters}
+            className="text-xs text-gray-400 hover:text-primary-500 flex items-center gap-1 transition-colors"
+          >
+            <RotateCcw size={11} /> Reset filtri
+          </button>
+        </div>
+      )}
+
       {/* Category */}
       <div className="mb-5">
         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">
@@ -260,10 +355,10 @@ function FilterPanel({
           {CATEGORY_FILTERS.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => { setCategory(cat.key); setSelectedService(''); }}
+              onClick={() => { updateFilter('category', cat.key); updateFilter('selectedService', ''); }}
               className={clsx(
                 'flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-sm font-medium transition-all',
-                category === cat.key
+                filters.category === cat.key
                   ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-md shadow-primary-500/20'
                   : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
               )}
@@ -274,7 +369,7 @@ function FilterPanel({
         </div>
       </div>
 
-      {/* Specific service (if category selected) */}
+      {/* Specific service */}
       {serviceOptions.length > 0 && (
         <div className="mb-5">
           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">
@@ -282,10 +377,10 @@ function FilterPanel({
           </label>
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setSelectedService('')}
+              onClick={() => updateFilter('selectedService', '')}
               className={clsx(
                 'px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
-                !selectedService
+                !filters.selectedService
                   ? 'bg-primary-100 text-primary-700 border border-primary-200'
                   : 'bg-gray-50 text-gray-500 border border-gray-100',
               )}
@@ -295,10 +390,10 @@ function FilterPanel({
             {serviceOptions.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setSelectedService(s.name)}
+                onClick={() => updateFilter('selectedService', s.name)}
                 className={clsx(
                   'flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
-                  selectedService === s.name
+                  filters.selectedService === s.name
                     ? 'bg-primary-100 text-primary-700 border border-primary-200'
                     : 'bg-gray-50 text-gray-500 border border-gray-100',
                 )}
@@ -310,56 +405,206 @@ function FilterPanel({
         </div>
       )}
 
-      {/* Day selector */}
+      {/* Days — multi-select */}
       <div className="mb-5">
         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <Calendar size={12} /> Giorno
+          <Calendar size={12} /> Giorni
         </label>
         <div className="flex flex-wrap gap-1.5">
-          {DAY_OPTIONS.map((d) => (
+          <button
+            onClick={() => updateFilter('selectedDays', [])}
+            className={clsx(
+              'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+              filters.selectedDays.length === 0
+                ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-sm'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+            )}
+          >
+            Tutti
+          </button>
+          {DAY_BUTTONS.map((d) => (
             <button
               key={d.value}
-              onClick={() => setSelectedDay(d.value)}
+              onClick={() => toggleDay(d.value)}
               className={clsx(
                 'px-3 py-2 rounded-xl text-sm font-medium transition-all',
-                selectedDay === d.value
+                filters.selectedDays.includes(d.value)
                   ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-sm'
                   : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
               )}
             >
-              {d.short || d.label}
+              {d.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Time selector */}
+      {/* Time range — from / to */}
       <div className="mb-5">
         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <Clock size={12} /> Orario
+          <Clock size={12} /> Fascia oraria
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <span className="text-[10px] text-gray-400 font-medium mb-1 block">Dalle</span>
+            <select
+              value={filters.timeFrom}
+              onChange={(e) => {
+                const v = e.target.value;
+                updateFilter('timeFrom', v);
+                if (v && filters.timeTo && v >= filters.timeTo) updateFilter('timeTo', '');
+              }}
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+            >
+              <option value="">--</option>
+              {TIME_OPTIONS.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <span className="text-[10px] text-gray-400 font-medium mb-1 block">Alle</span>
+            <select
+              value={filters.timeTo}
+              onChange={(e) => {
+                const v = e.target.value;
+                updateFilter('timeTo', v);
+                if (v && filters.timeFrom && v <= filters.timeFrom) updateFilter('timeFrom', '');
+              }}
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+            >
+              <option value="">--</option>
+              {TIME_OPTIONS.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Price range */}
+      <div className="mb-5">
+        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          Prezzo /h
         </label>
         <div className="flex flex-wrap gap-1.5">
-          {TIME_SLOTS.map((t) => (
+          {PRICE_OPTIONS.map((p) => (
             <button
-              key={t.value}
-              onClick={() => setSelectedTime(t.value)}
+              key={p.label}
+              onClick={() => setPriceRange(p.min, p.max)}
               className={clsx(
                 'px-3 py-2 rounded-xl text-sm font-medium transition-all',
-                selectedTime === t.value
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm'
+                filters.priceMin === p.min && filters.priceMax === p.max
+                  ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-sm'
                   : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
               )}
             >
-              {t.label}
+              {p.label}
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Distance */}
+      <div className="mb-5">
+        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <MapPin size={12} /> Distanza
+        </label>
+        <div className="flex flex-wrap gap-1.5">
+          {DISTANCE_OPTIONS.map((d) => (
+            <button
+              key={d.value}
+              onClick={() => updateFilter('maxDistance', d.value)}
+              className={clsx(
+                'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+                filters.maxDistance === d.value
+                  ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-sm'
+                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+              )}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Rating */}
+      <div className="mb-5">
+        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Star size={12} /> Rating minimo
+        </label>
+        <div className="flex flex-wrap gap-1.5">
+          {RATING_OPTIONS.map((r) => (
+            <button
+              key={r.value}
+              onClick={() => updateFilter('minRating', r.value)}
+              className={clsx(
+                'px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1',
+                filters.minRating === r.value
+                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-sm'
+                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+              )}
+            >
+              {r.value > 0 && <Star size={12} fill={filters.minRating === r.value ? 'white' : 'currentColor'} />}
+              {r.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Language */}
+      <div className="mb-5">
+        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Globe size={12} /> Lingua
+        </label>
+        <div className="flex flex-wrap gap-1.5">
+          {LANGUAGE_OPTIONS.map((l) => (
+            <button
+              key={l.value}
+              onClick={() => updateFilter('selectedLanguage', l.value)}
+              className={clsx(
+                'px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1',
+                filters.selectedLanguage === l.value
+                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-sm'
+                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+              )}
+            >
+              <span>{l.flag}</span> {l.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Toggles: Verified + Immediately available */}
+      <div className="mb-5 grid grid-cols-2 gap-2">
+        <button
+          onClick={() => updateFilter('verifiedOnly', !filters.verifiedOnly)}
+          className={clsx(
+            'flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all',
+            filters.verifiedOnly
+              ? 'bg-green-50 text-green-600 border-2 border-green-300 shadow-sm'
+              : 'bg-gray-50 text-gray-500 border border-gray-100 hover:bg-gray-100',
+          )}
+        >
+          <Shield size={16} /> Verificato
+        </button>
+        <button
+          onClick={() => updateFilter('immediatelyAvailable', !filters.immediatelyAvailable)}
+          className={clsx(
+            'flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all',
+            filters.immediatelyAvailable
+              ? 'bg-amber-50 text-amber-600 border-2 border-amber-300 shadow-sm'
+              : 'bg-gray-50 text-gray-500 border border-gray-100 hover:bg-gray-100',
+          )}
+        >
+          <Zap size={16} /> Disponibile ora
+        </button>
       </div>
 
       {/* Apply button */}
       <button
         onClick={onApply}
-        className="w-full btn-primary flex items-center justify-center gap-2 py-3"
+        className="w-full btn-primary flex items-center justify-center gap-2 py-3 sticky bottom-0"
       >
         <Check size={18} />
         Mostra risultati ({resultCount})
@@ -370,28 +615,29 @@ function FilterPanel({
 
 // ─── Active Filters Summary ───
 
-function ActiveFilters({
-  category,
-  selectedDay,
-  selectedTime,
-  selectedService,
-}: {
-  category: string;
-  selectedDay: number;
-  selectedTime: string;
-  selectedService: string;
-}) {
+function ActiveFilters({ filters }: { filters: Filters }) {
   const parts: string[] = [];
-  if (category) {
-    const cat = CATEGORY_FILTERS.find((c) => c.key === category);
-    parts.push(cat ? `${cat.icon} ${cat.label}` : category);
+  if (filters.category) {
+    const cat = CATEGORY_FILTERS.find((c) => c.key === filters.category);
+    parts.push(cat ? `${cat.icon} ${cat.label}` : filters.category);
   }
-  if (selectedService) parts.push(selectedService);
-  if (selectedDay >= 0) {
-    const day = DAY_OPTIONS.find((d) => d.value === selectedDay);
-    parts.push(day?.short || day?.label || '');
+  if (filters.selectedService) parts.push(filters.selectedService);
+  if (filters.selectedDays.length > 0) {
+    const dayLabels = filters.selectedDays.map((d) => DAY_BUTTONS.find((b) => b.value === d)?.label).filter(Boolean);
+    parts.push(dayLabels.join(', '));
   }
-  if (selectedTime) parts.push(selectedTime);
+  if (filters.timeFrom || filters.timeTo) {
+    parts.push(`${filters.timeFrom || '...'} - ${filters.timeTo || '...'}`);
+  }
+  if (filters.priceMin > 0 || filters.priceMax < 999) {
+    const p = PRICE_OPTIONS.find((o) => o.min === filters.priceMin && o.max === filters.priceMax);
+    parts.push(p?.label || `€${filters.priceMin}-${filters.priceMax}`);
+  }
+  if (filters.maxDistance > 0) parts.push(`< ${filters.maxDistance} km`);
+  if (filters.minRating > 0) parts.push(`${filters.minRating}+`);
+  if (filters.selectedLanguage) parts.push(filters.selectedLanguage);
+  if (filters.verifiedOnly) parts.push('Verificato');
+  if (filters.immediatelyAvailable) parts.push('Disponibile ora');
 
   if (parts.length === 0) return null;
 
@@ -413,11 +659,16 @@ export default function SwipePage() {
   const { user, loading: authLoading } = useAuth();
 
   // Filter state
-  const [category, setCategory] = useState('');
-  const [selectedDay, setSelectedDay] = useState(-1);
-  const [selectedTime, setSelectedTime] = useState('');
-  const [selectedService, setSelectedService] = useState('');
+  const [filters, setFilters] = useState<Filters>({ ...DEFAULT_FILTERS });
   const [showFilters, setShowFilters] = useState(false);
+
+  const updateFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    setFilters({ ...DEFAULT_FILTERS });
+  }, []);
 
   // Swipe state
   const [professionals, setProfessionals] = useState<any[]>([]);
@@ -451,34 +702,7 @@ export default function SwipePage() {
 
   // Apply filters and load
   const applyFilters = useCallback(() => {
-    let pros = [...MOCK_SWIPE_PROFESSIONALS];
-
-    // Category filter
-    if (category) {
-      pros = pros.filter((p) => p.category === category);
-    }
-
-    // Specific service filter
-    if (selectedService) {
-      pros = pros.filter((p) => hasService(p, selectedService));
-    }
-
-    // Day filter
-    if (selectedDay >= 0) {
-      pros = pros.filter((p) => isAvailableAt(p, selectedDay, ''));
-    }
-
-    // Time filter (requires day too; if no day selected, check all days)
-    if (selectedTime) {
-      if (selectedDay >= 0) {
-        pros = pros.filter((p) => isAvailableAt(p, selectedDay, selectedTime));
-      } else {
-        // Available at that time on ANY day
-        pros = pros.filter((p) =>
-          [0, 1, 2, 3, 4, 5, 6].some((d) => isAvailableAt(p, d, selectedTime))
-        );
-      }
-    }
+    let pros = applyAllFilters(MOCK_SWIPE_PROFESSIONALS, filters);
 
     // Shuffle
     for (let i = pros.length - 1; i > 0; i--) {
@@ -489,25 +713,12 @@ export default function SwipePage() {
     setProfessionals(pros);
     setCurrentIndex(0);
     setShowFilters(false);
-  }, [category, selectedDay, selectedTime, selectedService]);
+  }, [filters]);
 
   // Count results for filter preview
   const getFilteredCount = useCallback(() => {
-    let pros = [...MOCK_SWIPE_PROFESSIONALS];
-    if (category) pros = pros.filter((p) => p.category === category);
-    if (selectedService) pros = pros.filter((p) => hasService(p, selectedService));
-    if (selectedDay >= 0) pros = pros.filter((p) => isAvailableAt(p, selectedDay, ''));
-    if (selectedTime) {
-      if (selectedDay >= 0) {
-        pros = pros.filter((p) => isAvailableAt(p, selectedDay, selectedTime));
-      } else {
-        pros = pros.filter((p) =>
-          [0, 1, 2, 3, 4, 5, 6].some((d) => isAvailableAt(p, d, selectedTime))
-        );
-      }
-    }
-    return pros.length;
-  }, [category, selectedDay, selectedTime, selectedService]);
+    return applyAllFilters(MOCK_SWIPE_PROFESSIONALS, filters).length;
+  }, [filters]);
 
   // Load initially
   useEffect(() => {
@@ -542,7 +753,7 @@ export default function SwipePage() {
   const nextPro = professionals[currentIndex + 1];
   const isFinished = currentIndex >= professionals.length;
   const progress = professionals.length > 0 ? Math.min(currentIndex / professionals.length, 1) : 0;
-  const hasActiveFilters = !!(category || selectedDay >= 0 || selectedTime || selectedService);
+  const hasActiveFilters = JSON.stringify(filters) !== JSON.stringify(DEFAULT_FILTERS);
 
   return (
     <div className="animate-fade-up min-h-screen bg-gray-50/80">
@@ -558,12 +769,7 @@ export default function SwipePage() {
               <p className="text-xs text-gray-400 mt-0.5">
                 {professionals.length} professionisti{hasActiveFilters ? ' (filtrati)' : ''}
               </p>
-              <ActiveFilters
-                category={category}
-                selectedDay={selectedDay}
-                selectedTime={selectedTime}
-                selectedService={selectedService}
-              />
+              <ActiveFilters filters={filters} />
             </div>
             <div className="flex items-center gap-2">
               {liked.length > 0 && (
@@ -608,14 +814,9 @@ export default function SwipePage() {
         <AnimatePresence>
           {showFilters && (
             <FilterPanel
-              category={category}
-              setCategory={setCategory}
-              selectedDay={selectedDay}
-              setSelectedDay={setSelectedDay}
-              selectedTime={selectedTime}
-              setSelectedTime={setSelectedTime}
-              selectedService={selectedService}
-              setSelectedService={setSelectedService}
+              filters={filters}
+              updateFilter={updateFilter}
+              resetFilters={resetFilters}
               onApply={applyFilters}
               resultCount={getFilteredCount()}
             />
