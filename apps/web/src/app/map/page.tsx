@@ -1,14 +1,26 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
-import { MOCK_MAP_PROFESSIONALS } from '@/lib/mock-data';
-import { ArrowLeft, Star, MapPin, Shield, List, Map, Navigation, ChevronRight, X, Clock, SlidersHorizontal, RotateCcw } from 'lucide-react';
+import { MOCK_MAP_PROFESSIONALS, MOCK_SERVICES } from '@/lib/mock-data';
+import { ArrowLeft, Star, MapPin, Shield, List, Map, Navigation, ChevronRight, X, Clock, Calendar, SlidersHorizontal, RotateCcw, Zap, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
 import dynamic from 'next/dynamic';
+import {
+  Filters,
+  DEFAULT_FILTERS,
+  DAY_BUTTONS,
+  TIME_OPTIONS,
+  PRICE_OPTIONS,
+  DISTANCE_OPTIONS,
+  RATING_OPTIONS,
+  LANGUAGE_OPTIONS,
+  applyAllFilters,
+  countActiveFilters,
+} from '@/lib/filters';
 
 const CATEGORY_COLORS: Record<string, string> = {
   CLEANING: '#10b981',
@@ -40,68 +52,54 @@ const MapComponent = dynamic(() => import('./map-component'), { ssr: false });
 export default function MapPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [filters, setFilters] = useState<Filters>({ ...DEFAULT_FILTERS });
   const [selectedPro, setSelectedPro] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Advanced filters
-  const [maxPrice, setMaxPrice] = useState(60);
-  const [maxDistance, setMaxDistance] = useState(10);
-  const [minRating, setMinRating] = useState(0);
-  const [onlyVerified, setOnlyVerified] = useState(false);
+  const updateFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+    setSelectedPro(null);
+  }, []);
 
-  // Track if any advanced filter is active
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (maxPrice < 60) count++;
-    if (maxDistance < 10) count++;
-    if (minRating > 0) count++;
-    if (onlyVerified) count++;
-    return count;
-  }, [maxPrice, maxDistance, minRating, onlyVerified]);
+  const activeFilterCount = useMemo(() => countActiveFilters(filters), [filters]);
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
   }, [user, loading, router]);
 
   const filteredPros = useMemo(() => {
-    let pros = [...MOCK_MAP_PROFESSIONALS];
+    return applyAllFilters(MOCK_MAP_PROFESSIONALS, filters).sort((a, b) => a.distance - b.distance);
+  }, [filters]);
 
-    // Category filter
-    if (selectedCategory) {
-      pros = pros.filter((p) => p.category === selectedCategory);
+  // Reset selectedPro if filtered out
+  useEffect(() => {
+    if (selectedPro && !filteredPros.some((p) => p.profileId === selectedPro)) {
+      setSelectedPro(null);
     }
+  }, [filteredPros, selectedPro]);
 
-    // Price filter
-    if (maxPrice < 60) {
-      pros = pros.filter((p) => p.hourlyRate <= maxPrice);
-    }
+  const handleReset = useCallback(() => {
+    setFilters({ ...DEFAULT_FILTERS });
+    setSelectedPro(null);
+  }, []);
 
-    // Distance filter
-    if (maxDistance < 10) {
-      pros = pros.filter((p) => p.distance <= maxDistance);
-    }
-
-    // Rating filter
-    if (minRating > 0) {
-      pros = pros.filter((p) => p.averageRating >= minRating);
-    }
-
-    // Verified filter
-    if (onlyVerified) {
-      pros = pros.filter((p) => p.verified);
-    }
-
-    return pros.sort((a, b) => a.distance - b.distance);
-  }, [selectedCategory, maxPrice, maxDistance, minRating, onlyVerified]);
-
-  const handleReset = () => {
-    setMaxPrice(60);
-    setMaxDistance(10);
-    setMinRating(0);
-    setOnlyVerified(false);
+  const toggleDay = (day: number) => {
+    const days = filters.selectedDays.includes(day)
+      ? filters.selectedDays.filter((d) => d !== day)
+      : [...filters.selectedDays, day];
+    updateFilter('selectedDays', days);
   };
+
+  const setPriceRange = (min: number, max: number) => {
+    setFilters((prev) => ({ ...prev, priceMin: min, priceMax: max }));
+    setSelectedPro(null);
+  };
+
+  const serviceOptions = useMemo(
+    () => (filters.category ? MOCK_SERVICES.filter((s) => s.category === filters.category) : []),
+    [filters.category]
+  );
 
   if (loading || !user) return <PageLoading />;
 
@@ -167,10 +165,13 @@ export default function MapPage() {
           {CATEGORY_FILTERS.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => { setSelectedCategory(cat.key); setSelectedPro(null); }}
+              onClick={() => {
+                setFilters((prev) => ({ ...prev, category: cat.key, selectedService: '' }));
+                setSelectedPro(null);
+              }}
               className={clsx(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border transition-all',
-                selectedCategory === cat.key
+                filters.category === cat.key
                   ? 'bg-primary-50 border-primary-300 text-primary-700 shadow-sm'
                   : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
               )}
@@ -358,131 +359,276 @@ export default function MapPage() {
               animate={{ y: 0 }}
               exit={{ y: 400 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-10"
+              className="bg-white rounded-t-3xl w-full max-w-lg flex flex-col max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Handle bar */}
-              <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4" />
-
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-gray-900">Filtri avanzati</h3>
-                <button onClick={() => setShowFilters(false)} className="p-2 text-gray-400">
-                  <X size={20} />
-                </button>
+              <div className="pt-3 pb-2 flex-shrink-0">
+                <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto" />
               </div>
 
-              <div className="space-y-6">
-                {/* Max Price */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700">Prezzo massimo</label>
-                    <span className="text-sm font-bold text-primary-600">
-                      {maxPrice >= 60 ? 'Tutti' : `€${maxPrice}/h`}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={5}
-                    max={60}
-                    step={5}
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-primary-500"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                    <span>€5/h</span>
-                    <span>€60/h</span>
-                  </div>
+              <div className="flex items-center justify-between px-6 pb-3 flex-shrink-0">
+                <h3 className="text-lg font-bold text-gray-900">Filtri avanzati</h3>
+                <div className="flex items-center gap-2">
+                  {activeFilterCount > 0 && (
+                    <button
+                      onClick={handleReset}
+                      className="text-xs text-gray-400 hover:text-primary-500 flex items-center gap-1 transition-colors"
+                    >
+                      <RotateCcw size={11} /> Reset
+                    </button>
+                  )}
+                  <button onClick={() => setShowFilters(false)} className="p-2 text-gray-400">
+                    <X size={20} />
+                  </button>
                 </div>
+              </div>
 
-                {/* Max Distance */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700">Distanza massima</label>
-                    <span className="text-sm font-bold text-primary-600">
-                      {maxDistance >= 10 ? 'Tutti' : `${maxDistance} km`}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0.5}
-                    max={10}
-                    step={0.5}
-                    value={maxDistance}
-                    onChange={(e) => setMaxDistance(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-primary-500"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                    <span>0.5 km</span>
-                    <span>10 km</span>
-                  </div>
-                </div>
-
-                {/* Min Rating */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700">Valutazione minima</label>
-                    <span className="text-sm font-bold text-primary-600">
-                      {minRating === 0 ? 'Tutte' : `${minRating}+`}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    {[0, 3, 3.5, 4, 4.5, 4.8].map((val) => (
+              <div className="px-6 overflow-y-auto flex-1 space-y-5">
+                {/* Specific service */}
+                {serviceOptions.length > 0 && (
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">
+                      Servizio specifico
+                    </label>
+                    <div className="flex flex-wrap gap-2">
                       <button
-                        key={val}
-                        onClick={() => setMinRating(val)}
+                        onClick={() => updateFilter('selectedService', '')}
                         className={clsx(
-                          'flex-1 py-2 rounded-xl text-xs font-medium border transition-all',
-                          minRating === val
-                            ? 'bg-primary-50 border-primary-300 text-primary-700'
-                            : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
+                          'px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
+                          !filters.selectedService
+                            ? 'bg-primary-100 text-primary-700 border border-primary-200'
+                            : 'bg-gray-50 text-gray-500 border border-gray-100',
                         )}
                       >
-                        {val === 0 ? 'Tutte' : (
-                          <span className="flex items-center justify-center gap-0.5">
-                            <Star size={10} className="text-amber-400" fill="#fbbf24" />
-                            {val}+
-                          </span>
+                        Tutti
+                      </button>
+                      {serviceOptions.map((s) => (
+                        <button
+                          key={s.id}
+                          onClick={() => updateFilter('selectedService', s.name)}
+                          className={clsx(
+                            'flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-medium transition-all',
+                            filters.selectedService === s.name
+                              ? 'bg-primary-100 text-primary-700 border border-primary-200'
+                              : 'bg-gray-50 text-gray-500 border border-gray-100',
+                          )}
+                        >
+                          {s.icon} {s.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Days */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Calendar size={12} /> Giorni
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => updateFilter('selectedDays', [])}
+                      className={clsx(
+                        'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+                        filters.selectedDays.length === 0
+                          ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-sm'
+                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+                      )}
+                    >
+                      Tutti
+                    </button>
+                    {DAY_BUTTONS.map((d) => (
+                      <button
+                        key={d.value}
+                        onClick={() => toggleDay(d.value)}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+                          filters.selectedDays.includes(d.value)
+                            ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-sm'
+                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
                         )}
+                      >
+                        {d.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Only Verified */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Shield size={16} className="text-blue-500" />
-                    <label className="text-sm font-medium text-gray-700">Solo verificati</label>
+                {/* Time range */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Clock size={12} /> Fascia oraria
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-[10px] text-gray-400 font-medium mb-1 block">Dalle</span>
+                      <select
+                        value={filters.timeFrom}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setFilters((prev) => ({
+                            ...prev,
+                            timeFrom: v,
+                            timeTo: v && prev.timeTo && v >= prev.timeTo ? '' : prev.timeTo,
+                          }));
+                        }}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                      >
+                        <option value="">--</option>
+                        {TIME_OPTIONS.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-gray-400 font-medium mb-1 block">Alle</span>
+                      <select
+                        value={filters.timeTo}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setFilters((prev) => ({
+                            ...prev,
+                            timeTo: v,
+                            timeFrom: v && prev.timeFrom && v <= prev.timeFrom ? '' : prev.timeFrom,
+                          }));
+                        }}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                      >
+                        <option value="">--</option>
+                        {TIME_OPTIONS.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
+                </div>
+
+                {/* Price range */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">
+                    Prezzo /h
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {PRICE_OPTIONS.map((p) => (
+                      <button
+                        key={p.label}
+                        onClick={() => setPriceRange(p.min, p.max)}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+                          filters.priceMin === p.min && filters.priceMax === p.max
+                            ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-sm'
+                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+                        )}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Distance */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <MapPin size={12} /> Distanza
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {DISTANCE_OPTIONS.map((d) => (
+                      <button
+                        key={d.value}
+                        onClick={() => updateFilter('maxDistance', d.value)}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl text-sm font-medium transition-all',
+                          filters.maxDistance === d.value
+                            ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-sm'
+                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+                        )}
+                      >
+                        {d.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Rating */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Star size={12} /> Rating minimo
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {RATING_OPTIONS.map((r) => (
+                      <button
+                        key={r.value}
+                        onClick={() => updateFilter('minRating', r.value)}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1',
+                          filters.minRating === r.value
+                            ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-sm'
+                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+                        )}
+                      >
+                        {r.value > 0 && <Star size={12} fill={filters.minRating === r.value ? 'white' : 'currentColor'} />}
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Language */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Globe size={12} /> Lingua
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {LANGUAGE_OPTIONS.map((l) => (
+                      <button
+                        key={l.value}
+                        onClick={() => updateFilter('selectedLanguage', l.value)}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1',
+                          filters.selectedLanguage === l.value
+                            ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-sm'
+                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100',
+                        )}
+                      >
+                        <span>{l.flag}</span> {l.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Toggles */}
+                <div className="grid grid-cols-2 gap-2 pb-2">
                   <button
-                    onClick={() => setOnlyVerified(!onlyVerified)}
+                    onClick={() => updateFilter('verifiedOnly', !filters.verifiedOnly)}
                     className={clsx(
-                      'w-12 h-7 rounded-full p-0.5 transition-colors duration-200',
-                      onlyVerified ? 'bg-primary-500' : 'bg-gray-200'
+                      'flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all',
+                      filters.verifiedOnly
+                        ? 'bg-green-50 text-green-600 border-2 border-green-300 shadow-sm'
+                        : 'bg-gray-50 text-gray-500 border border-gray-100 hover:bg-gray-100',
                     )}
                   >
-                    <motion.div
-                      layout
-                      className="w-6 h-6 bg-white rounded-full shadow-sm"
-                      animate={{ x: onlyVerified ? 20 : 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
+                    <Shield size={16} /> Verificato
+                  </button>
+                  <button
+                    onClick={() => updateFilter('immediatelyAvailable', !filters.immediatelyAvailable)}
+                    className={clsx(
+                      'flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all',
+                      filters.immediatelyAvailable
+                        ? 'bg-amber-50 text-amber-600 border-2 border-amber-300 shadow-sm'
+                        : 'bg-gray-50 text-gray-500 border border-gray-100 hover:bg-gray-100',
+                    )}
+                  >
+                    <Zap size={16} /> Disponibile ora
                   </button>
                 </div>
               </div>
 
-              {/* Action buttons */}
-              <div className="flex gap-3 mt-8">
-                <button
-                  onClick={handleReset}
-                  className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm flex items-center justify-center gap-1.5 hover:bg-gray-50 transition-colors"
-                >
-                  <RotateCcw size={14} /> Reset
-                </button>
+              {/* Action button */}
+              <div className="px-6 py-4 border-t border-gray-100 flex-shrink-0">
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="flex-[2] btn-primary py-3 text-sm"
+                  className="w-full btn-primary py-3 text-sm"
                 >
                   Mostra {filteredPros.length} risultati
                 </button>
