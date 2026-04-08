@@ -8,7 +8,7 @@ import { Avatar } from '@/components/avatar';
 import { PageLoading } from '@/components/loading-spinner';
 import {
   LogOut, ChevronRight, User, Briefcase, Calendar,
-  MapPin, CreditCard, Camera, X, Award,
+  MapPin, CreditCard, Camera, X, Award, Wallet,
   BookOpen, Euro, Heart, CheckCircle2, Clock, AlertCircle,
   TrendingUp, Crown, Lock, Zap, Star, Upload, ShieldCheck, ChevronDown, ChevronUp, MessageSquare,
 } from 'lucide-react';
@@ -522,6 +522,23 @@ export default function ProfilePage() {
             <span className="flex-1 font-medium text-gray-900">Metodi di pagamento</span>
             <ChevronRight size={18} className="text-gray-300 group-hover:text-primary-500 transition-colors" />
           </button>
+
+          {/* Welfare Wallet (client only) */}
+          {!isPro && (
+            <button
+              onClick={() => router.push('/wallet')}
+              className="card-elevated w-full p-4 flex items-center gap-4 text-left group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center">
+                <Wallet size={18} className="text-violet-600" />
+              </div>
+              <div className="flex-1">
+                <span className="font-medium text-gray-900">Credito Welfare</span>
+                <p className="text-xs text-gray-400 mt-0.5">Collega e usa i crediti welfare aziendali</p>
+              </div>
+              <ChevronRight size={18} className="text-gray-300 group-hover:text-primary-500 transition-colors" />
+            </button>
+          )}
         </motion.div>
 
         {/* Logout */}
