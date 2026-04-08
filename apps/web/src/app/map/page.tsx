@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PageLoading } from '@/components/loading-spinner';
@@ -56,6 +57,11 @@ export default function MapPage() {
   const [selectedPro, setSelectedPro] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
   const [showFilters, setShowFilters] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const updateFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -344,14 +350,15 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Filters Bottom Sheet */}
+      {/* Filters Bottom Sheet — rendered in a portal to escape the flex-col h-screen container */}
+      {mounted && createPortal(
       <AnimatePresence>
         {showFilters && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center"
+            className="fixed inset-0 bg-black/50 z-[9999] flex items-end justify-center"
             onClick={() => setShowFilters(false)}
           >
             <motion.div
@@ -636,7 +643,8 @@ export default function MapPage() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body)}
     </div>
   );
 }
