@@ -184,7 +184,8 @@ def test_unprofitable_agents_die_and_profitable_ones_split():
 
 # ---------------------------------------------------------------- sicurezza
 def test_live_requires_double_confirmation():
-    c = Config(mode="live", broker="ccxt")
+    c = Config(mode="live", broker="ibkr")
+    c.ibkr.port = 4001
     with pytest.raises(RuntimeError):
         validate(c)
     c.secrets.confirm_live = True
@@ -298,3 +299,109 @@ def test_universe_normalizes_names():
     from evo.config import MarketCfg
     m = MarketCfg(instruments=["BTCUSDT", "yahoo:ENI.MI"], default_source="binance")
     assert m.universe() == ["binance:BTCUSDT", "yahoo:ENI.MI"]
+
+
+def test_minimum_fee_per_order_hurts_small_orders():
+    costs = CostsCfg(fee_bps=5, slippage_bps=0, funding_apr_pct=0, min_fee=1.25)
+    small = Agent(genome(), cash=20, allocation=20)
+    small.step(1, 100, 100, 100, 100, "t1", costs, 0)
+    small.step(0, 100, 100, 100, 100, "t2", costs, 0)
+    assert small.cash == pytest.approx(20 - 2.5)          # 2 x 1,25 € = 12,5% di 20 €
+    big = Agent(genome(), cash=5000, allocation=5000)
+    big.step(1, 100, 100, 100, 100, "t1", costs, 0)
+    big.step(0, 100, 100, 100, 100, "t2", costs, 0)
+    assert big.cash == pytest.approx(5000 - 5.0)          # 2 x 0,05% = 0,1%
+
+
+# ---------------------------------------------------------------- IBKR (con un IB finto)
+class FakeContract:
+    def __init__(self, conId, currency):
+        self.conId, self.currency = conId, currency
+
+
+class FakeIB:
+    def __init__(self, positions=None):
+        self.orders, self._pos = [], positions or {}
+        self.contracts = {"yahoo:ENI.MI": FakeContract(1, "EUR"), "yahoo:SPY": FakeContract(2, "USD")}
+
+    def isConnected(self):
+        return True
+
+    def qualifyContracts(self, c):
+        return [self.contracts[{"ENI": "yahoo:ENI.MI", "SPY": "yahoo:SPY"}[c.symbol]]]
+
+    def positions(self):
+        from types import SimpleNamespace as NS
+        return [NS(contract=NS(conId=k), position=v, account="") for k, v in self._pos.items()]
+
+    def reqTickers(self, c):
+        from types import SimpleNamespace as NS
+        return [NS(marketPrice=lambda: 1.10, close=1.10)]          # 1 EUR = 1,10 USD
+
+    def accountSummary(self, account=""):
+        from types import SimpleNamespace as NS
+        return [NS(tag="NetLiquidation", value="1000", currency="EUR")]
+
+    def placeOrder(self, c, order):
+        self.orders.append((c.conId, order.action, order.totalQuantity))
+
+
+def ibkr_cfg(**kw):
+    c = Config(broker="ibkr")
+    c.ecosystem.initial_capital = 1000
+    c.ibkr.contracts = {"yahoo:ENI.MI": {"secType": "STK", "symbol": "ENI", "exchange": "BVME",
+                                         "currency": "EUR"},
+                        "yahoo:SPY": {"secType": "STK", "symbol": "SPY", "exchange": "SMART",
+                                      "currency": "USD"}}
+    for k, v in kw.items():
+        setattr(c.ibkr, k, v)
+    return c
+
+
+def test_ibkr_sends_only_the_difference_in_whole_shares(tmp_path):
+    from evo.brokers import IBKRBroker
+    ib = FakeIB(positions={1: 4})                                   # già 4 ENI in portafoglio
+    b = IBKRBroker(ibkr_cfg(), ib=ib, kill_switch=str(tmp_path / "STOP"))
+    msgs = b.sync({"yahoo:ENI.MI": 255.0, "yahoo:SPY": -330.0},
+                  {"yahoo:ENI.MI": 25.0, "yahoo:SPY": 600.0}, {"yahoo:ENI.MI", "yahoo:SPY"})
+    # ENI: 255/25 = 10,2 -> 10 pezzi, ne ho 4 -> compra 6. SPY: 330 EUR = 0,6 azioni -> 0.
+    assert ib.orders == [(1, "BUY", 6.0)]
+    assert any("valore netto 1000" in m for m in msgs)
+
+
+def test_ibkr_converts_currency_and_skips_closed_markets(tmp_path):
+    from evo.brokers import IBKRBroker
+    ib = FakeIB()
+    b = IBKRBroker(ibkr_cfg(), ib=ib, kill_switch=str(tmp_path / "STOP"))
+    b.sync({"yahoo:SPY": 1100.0, "yahoo:ENI.MI": 100.0}, {"yahoo:SPY": 500.0, "yahoo:ENI.MI": 25.0},
+           tradable={"yahoo:SPY"})
+    # 500 USD = 454,5 EUR per azione: 1100 EUR -> 2 azioni
+    assert ib.orders == [(2, "BUY", 2.0)]                         # ENI saltato: mercato chiuso
+
+
+def test_ibkr_kill_switch_only_reduces_and_caps_apply(tmp_path):
+    from evo.brokers import IBKRBroker
+    stop = tmp_path / "STOP"
+    stop.write_text("")
+    ib = FakeIB(positions={1: 10})
+    b = IBKRBroker(ibkr_cfg(), ib=ib, kill_switch=str(stop))
+    b.sync({"yahoo:ENI.MI": 1000.0}, {"yahoo:ENI.MI": 25.0}, {"yahoo:ENI.MI"})
+    assert ib.orders == []                                          # niente aumenti col file STOP
+    b.sync({"yahoo:ENI.MI": 100.0}, {"yahoo:ENI.MI": 25.0}, {"yahoo:ENI.MI"})
+    assert ib.orders == [(1, "SELL", 6.0)]                          # riduzioni consentite
+    stop.unlink()
+    ib.orders.clear()
+    b2 = IBKRBroker(ibkr_cfg(max_gross_exposure=0.5, max_order_value=200), ib=FakeIB(),
+                    kill_switch=str(stop))
+    b2.sync({"yahoo:ENI.MI": 5000.0}, {"yahoo:ENI.MI": 25.0}, {"yahoo:ENI.MI"})
+    assert b2.ib.orders == [(1, "BUY", 8.0)]                        # tetto di 200 EUR per ordine
+
+
+def test_ibkr_ports_must_match_mode():
+    c = ibkr_cfg(port=4001)
+    with pytest.raises(RuntimeError):
+        validate(c)                                                  # paper sul conto reale
+    c = ibkr_cfg(port=4002)
+    c.mode, c.secrets.confirm_live = "live", True
+    with pytest.raises(RuntimeError):
+        validate(c)                                                  # live sul conto demo

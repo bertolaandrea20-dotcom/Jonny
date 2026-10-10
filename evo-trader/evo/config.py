@@ -38,6 +38,7 @@ class CostsCfg:
     fee_bps: float = 10.0            # commissione per lato
     slippage_bps: float = 5.0        # slippage stimato per lato
     funding_apr_pct: float = 10.0    # costo annuo di leva/short sul capitale preso a prestito
+    min_fee: float = 0.0             # commissione minima per ordine (es. IBKR sulle borse europee)
     # Costi diversi per fonte o strumento, es. {"yahoo": {"fee_bps": 5}, "binance:BTCUSDT": {...}}
     overrides: dict = field(default_factory=dict)
 
@@ -45,12 +46,15 @@ class CostsCfg:
     def roundtrip_bps(self) -> float:
         return 2 * (self.fee_bps + self.slippage_bps)
 
+    def fee(self, notional: float) -> float:
+        return max(abs(notional) * self.fee_bps / 1e4, self.min_fee)
+
     def for_instrument(self, instrument: str) -> "CostsCfg":
         src = instrument.split(":", 1)[0]
         o = {**self.overrides.get(src, {}), **self.overrides.get(instrument, {})}
         if not o:
             return self
-        base = {k: getattr(self, k) for k in ("fee_bps", "slippage_bps", "funding_apr_pct")}
+        base = {k: getattr(self, k) for k in ("fee_bps", "slippage_bps", "funding_apr_pct", "min_fee")}
         return CostsCfg(**{**base, **o})
 
 
@@ -94,6 +98,24 @@ class EcosystemCfg:
 
 
 @dataclass
+class IBKRCfg:
+    host: str = "127.0.0.1"
+    port: int = 4002                 # IB Gateway: 4002 conto DEMO, 4001 conto REALE (TWS: 7497 / 7496)
+    client_id: int = 17
+    account: str = ""                # vuoto = l'unico conto collegato
+    base_currency: str = "EUR"       # valuta in cui ragiona il bot (initial_capital)
+    # Strumento del bot -> contratto IBKR, es.
+    # "yahoo:ENI.MI": {secType: STK, symbol: ENI, exchange: BVME, currency: EUR}
+    contracts: dict = field(default_factory=dict)
+    min_order_value: float = 5.0     # ordini più piccoli vengono saltati
+    max_order_value: float = 0.0     # tetto per singolo ordine (0 = initial_capital)
+    max_gross_exposure: float = 2.0  # esposizione lorda massima = N x initial_capital
+
+    LIVE_PORTS = (4001, 7496)
+    DEMO_PORTS = (4002, 7497)
+
+
+@dataclass
 class Secrets:
     broker_api_key: str = ""
     broker_api_secret: str = ""
@@ -103,7 +125,7 @@ class Secrets:
 @dataclass
 class Config:
     mode: str = "paper"              # paper | live (live richiede anche CONFIRM_LIVE=yes nel .env)
-    broker: str = "paper"            # paper | ccxt | ibkr
+    broker: str = "paper"            # paper (solo simulazione) | ibkr (Interactive Brokers)
     market: MarketCfg = field(default_factory=MarketCfg)
     costs: CostsCfg = field(default_factory=CostsCfg)
     genome: GenomeCfg = field(default_factory=GenomeCfg)
@@ -112,6 +134,7 @@ class Config:
     # cache del filtro TradingAgents per simbolo, stesso formato di kronos-sol-bot/bias_cache.json
     bias_cache_files: dict = field(default_factory=dict)
     state_dir: str = "state"
+    ibkr: IBKRCfg = field(default_factory=IBKRCfg)
     secrets: Secrets = field(default_factory=Secrets)
 
 
@@ -140,6 +163,7 @@ def load_config(path: str | os.PathLike = "config.yaml") -> Config:
         kronos_cache_dir=raw.get("kronos_cache_dir", "data/kronos"),
         bias_cache_files=raw.get("bias_cache_files") or {},
         state_dir=raw.get("state_dir", "state"),
+        ibkr=_build(IBKRCfg, raw.get("ibkr")),
         secrets=Secrets(
             broker_api_key=os.getenv("BROKER_API_KEY", ""),
             broker_api_secret=os.getenv("BROKER_API_SECRET", ""),
@@ -153,8 +177,8 @@ def load_config(path: str | os.PathLike = "config.yaml") -> Config:
 def validate(cfg: Config) -> None:
     if cfg.mode not in ("paper", "live"):
         raise ValueError("mode deve essere 'paper' o 'live'")
-    if cfg.broker not in ("paper", "ccxt", "ibkr"):
-        raise ValueError("broker deve essere 'paper', 'ccxt' o 'ibkr'")
+    if cfg.broker not in ("paper", "ibkr"):
+        raise ValueError("broker deve essere 'paper' o 'ibkr'")
     if cfg.genome.max_leverage < 1:
         raise ValueError("genome.max_leverage deve essere >= 1")
     e = cfg.ecosystem
@@ -162,9 +186,15 @@ def validate(cfg: Config) -> None:
         raise ValueError("ecosystem.agent_allocation deve stare in (0, initial_capital]")
     if e.min_agents > e.max_agents or e.founders > e.max_agents:
         raise ValueError("min_agents e founders non possono superare max_agents")
+    if cfg.broker == "ibkr":
+        port = cfg.ibkr.port
+        if cfg.mode == "paper" and port in IBKRCfg.LIVE_PORTS:
+            raise RuntimeError(f"mode=paper ma la porta {port} è quella del conto REALE: usa 4002 (demo)")
+        if cfg.mode == "live" and port in IBKRCfg.DEMO_PORTS:
+            raise RuntimeError(f"mode=live ma la porta {port} è quella del conto DEMO")
     if cfg.mode == "live":
         # Doppia sicurezza: il live richiede config E variabile d'ambiente esplicita.
         if not cfg.secrets.confirm_live:
             raise RuntimeError("mode=live richiede CONFIRM_LIVE=yes nel .env")
         if cfg.broker == "paper":
-            raise RuntimeError("mode=live richiede un broker reale (ccxt o ibkr)")
+            raise RuntimeError("mode=live richiede un broker reale (ibkr)")

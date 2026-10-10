@@ -4,7 +4,8 @@
   python -m evo.paper --once          # un solo aggiornamento (utile con cron/systemd timer)
 
 Lo stato (agenti, tesoreria, storia) è in state/ecosystem.json: il bot riparte da lì dopo
-un riavvio. In mode paper nessun ordine reale viene inviato.
+un riavvio. Con broker: paper nessun ordine viene inviato; con broker: ibkr gli ordini vanno al
+conto demo (mode paper) o al conto reale (mode live + CONFIRM_LIVE=yes).
 """
 from __future__ import annotations
 
@@ -32,7 +33,7 @@ def load_recent(cfg: Config, now: pd.Timestamp, instruments: list[str]) -> dict[
                        default_source=cfg.market.default_source)
 
 
-def cycle(cfg: Config, state_path: Path, now: pd.Timestamp | None = None) -> list[str]:
+def cycle(cfg: Config, state_path: Path, now: pd.Timestamp | None = None, broker=None) -> list[str]:
     now = now or pd.Timestamp.now(tz="UTC")
     state = json.loads(state_path.read_text()) if state_path.exists() else None
     # L'universo si fissa al primo avvio: gli agenti vivi devono ritrovare i loro strumenti.
@@ -72,7 +73,11 @@ def cycle(cfg: Config, state_path: Path, now: pd.Timestamp | None = None) -> lis
     if new_idx:
         i = new_idx[-1]
         exposure = target_exposure(eco, i)
-        orders = make_broker(cfg.broker, cfg.mode).sync(exposure)
+        # Ordini solo sugli strumenti con una candela appena chiusa (mercato aperto); il
+        # dimensionamento usa l'ultimo prezzo di chiusura.
+        tradable = {s for s in eco.symbols if eco.valid[s][i]}
+        prices = {s: float(eco.ohlc[s]["close"][i]) for s in tradable}
+        orders = (broker or make_broker(cfg)).sync(exposure, prices, tradable)
         events.append(f"{ts.iloc[i]}: portafoglio reale {eco.portfolio_value(i):.2f} $ — "
                       f"esposizione {', '.join(orders) or 'nessuna'}")
         eco.save_state(str(state_path), extra={"last_bar_time": str(ts.iloc[i]),
@@ -87,11 +92,18 @@ def main() -> None:
     ap.add_argument("--once", action="store_true")
     args = ap.parse_args()
     cfg = load_config(args.config)
-    make_broker(cfg.broker, cfg.mode)        # blocca subito un live senza adapter
+    broker = make_broker(cfg)
+    if cfg.broker == "ibkr":
+        broker.connect()
+        nl = broker.net_liquidation()
+        print(f"Collegato a IBKR ({'CONTO REALE' if cfg.mode == 'live' else 'conto demo'}), "
+              f"valore netto {nl} {cfg.ibkr.base_currency}", flush=True)
+        if cfg.mode == "live" and (nl is None or nl < cfg.ecosystem.initial_capital):
+            raise RuntimeError("Il conto ha meno di initial_capital: il bot non parte")
     state_path = Path(cfg.state_dir) / "ecosystem.json"
     step = interval_to_timedelta(cfg.market.interval)
     while True:
-        for e in cycle(cfg, state_path):
+        for e in cycle(cfg, state_path, broker=broker):
             print(e, flush=True)
         if args.once:
             break

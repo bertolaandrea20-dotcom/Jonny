@@ -58,7 +58,7 @@ class Agent:
         lev = self.genome.leverage
         entry = price * (1 + side * costs.slippage_bps / 1e4)
         notional = self.cash * lev
-        fee = notional * costs.fee_bps / 1e4
+        fee = costs.fee(notional)
         self.cash -= fee
         self.fees_paid += fee
         self.position = Position(side, notional / entry, entry, notional, lev)
@@ -68,7 +68,7 @@ class Agent:
     def _close(self, price: float, costs: CostsCfg, t, reason: str) -> None:
         p = self.position
         exit_ = price * (1 - p.side * costs.slippage_bps / 1e4)
-        fee = p.qty * exit_ * costs.fee_bps / 1e4
+        fee = costs.fee(p.qty * exit_)
         pnl = p.side * p.qty * (exit_ - p.entry) - fee
         self.cash = max(self.cash + pnl, 0.0)
         self.fees_paid += fee

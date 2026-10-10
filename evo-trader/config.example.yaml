@@ -1,40 +1,43 @@
-# Copia in config.yaml e modifica. I segreti (chiavi del broker) vanno in .env, MAI qui.
+# Copia in config.yaml e modifica. I segreti vanno in .env, MAI qui.
 
 mode: paper            # paper | live  (live richiede anche CONFIRM_LIVE=yes nel .env)
-broker: paper          # paper | ccxt | ibkr  (vedi README: scelta del broker in Italia)
+broker: paper          # paper = solo simulazione | ibkr = ordini su Interactive Brokers
+                       # (mode paper + ibkr = ordini sul conto DEMO, porta 4002)
 
 market:
-  # Universo nel formato fonte:simbolo. Qualsiasi mix: crypto, azioni, ETF, indici, forex,
-  # materie prime, oppure csv:percorso.csv con dati esportati dal tuo broker.
+  # Universo nel formato fonte:simbolo (dati di mercato). Qui strumenti comprabili da un
+  # cliente retail in Italia: ETF UCITS, azioni europee, ETC (gli ETF USA come SPY non hanno
+  # il KID richiesto in UE e IBKR non li vende ai retail europei).
   instruments:
-    - binance:BTCUSDT      # crypto
-    - binance:ETHUSDT
-    - yahoo:SPY            # ETF S&P 500
-    - yahoo:QQQ            # ETF Nasdaq 100
-    - yahoo:EXSA.DE        # ETF Stoxx Europe 600
+    - yahoo:IWDA.AS        # iShares Core MSCI World UCITS (EUR)
+    - yahoo:EXSA.DE        # iShares STOXX Europe 600 (EUR)
     - yahoo:ENI.MI         # azioni italiane
     - yahoo:ISP.MI
     - yahoo:UCG.MI
-    - yahoo:GLD            # oro
+    - yahoo:4GLD.DE        # Xetra-Gold (oro fisico)
+    - yahoo:BTCE.DE        # ETC fisico su Bitcoin
+    - yahoo:ZETH.DE        # ETC fisico su Ethereum
     - yahoo:EURUSD=X       # forex
-  default_source: binance
+  default_source: yahoo
   interval: 4h             # su 1h si perdeva molto di più (vedi docs/)
-  auto_top: 0              # >0: aggiunge i N strumenti più scambiati di auto_source
+  auto_top: 0              # >0: aggiunge i N strumenti più scambiati di auto_source (binance)
   auto_source: binance
   auto_quote: USDT
   min_history_bars: 500
 
 costs:
-  fee_bps: 10          # commissione per lato (verifica quella del tuo broker)
-  slippage_bps: 5      # slippage stimato per lato
-  funding_apr_pct: 10  # costo annuo di leva/short sul capitale preso a prestito
-  overrides:           # costi diversi per fonte o strumento (verifica quelli del tuo broker)
-    yahoo: {fee_bps: 5, slippage_bps: 3}
+  fee_bps: 5           # commissione per lato (IBKR borse europee: ~0,05%)
+  min_fee: 1.25        # commissione minima per ordine (verifica il listino IBKR attuale)
+  slippage_bps: 5
+  funding_apr_pct: 6   # interesse IBKR su margine/short (verifica il tasso attuale)
+  overrides:
+    yahoo:EURUSD=X: {fee_bps: 0.2, min_fee: 2.0, slippage_bps: 1}
 
 genome:
-  max_leverage: 5.0
+  max_leverage: 2.0
   max_leverage_by_instrument:   # limiti ESMA retail: crypto 2, azioni 5, indici 20, forex 30
-    binance: 2.0
+    yahoo:BTCE.DE: 1.0
+    yahoo:ZETH.DE: 1.0
   allow_short: true
   mutation_scale: 0.15
   families: [trend_ma, breakout, rsi_revert, bollinger, momentum]
@@ -42,8 +45,8 @@ genome:
   use_bias: false      # filtro TradingAgents (richiede bias_cache_files)
 
 ecosystem:
-  initial_capital: 100     # capitale reale totale
-  agent_allocation: 20     # capitale reale per agente promosso (max 5 agenti finanziati)
+  initial_capital: 5000    # i SOLI soldi che il bot può usare, nella valuta base (EUR)
+  agent_allocation: 1000   # capitale per agente promosso (max 5 agenti con soldi veri)
   founders: 16
   max_agents: 30
   min_agents: 8
@@ -62,6 +65,26 @@ ecosystem:
   spawn_attempts: 30
   seed: 42
 
+ibkr:
+  host: 127.0.0.1
+  port: 4002               # IB Gateway: 4002 DEMO, 4001 REALE (TWS: 7497 / 7496)
+  client_id: 17
+  account: ""              # vuoto = unico conto; usa un conto dedicato al bot
+  base_currency: EUR
+  min_order_value: 5
+  max_order_value: 0       # 0 = initial_capital
+  max_gross_exposure: 2.0  # esposizione lorda massima = 2 x initial_capital
+  contracts:               # strumento -> contratto IBKR (lot = quantità minima)
+    yahoo:IWDA.AS: {secType: STK, symbol: IWDA, exchange: AEB, currency: EUR}
+    yahoo:EXSA.DE: {secType: STK, symbol: EXSA, exchange: IBIS, currency: EUR}
+    yahoo:ENI.MI:  {secType: STK, symbol: ENI, exchange: BVME, currency: EUR}
+    yahoo:ISP.MI:  {secType: STK, symbol: ISP, exchange: BVME, currency: EUR}
+    yahoo:UCG.MI:  {secType: STK, symbol: UCG, exchange: BVME, currency: EUR}
+    yahoo:4GLD.DE: {secType: STK, symbol: 4GLD, exchange: IBIS, currency: EUR}
+    yahoo:BTCE.DE: {secType: STK, symbol: BTCE, exchange: IBIS, currency: EUR}
+    yahoo:ZETH.DE: {secType: STK, symbol: ZETH, exchange: IBIS, currency: EUR}
+    yahoo:EURUSD=X: {secType: CASH, symbol: EUR, exchange: IDEALPRO, currency: USD}
+
 kronos_cache_dir: data/kronos
-bias_cache_files: {}       # es. {SOLUSDT: ../kronos-sol-bot/bias_cache.json}
+bias_cache_files: {}
 state_dir: state

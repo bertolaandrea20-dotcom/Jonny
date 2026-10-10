@@ -12,7 +12,7 @@ profitto muore** e il suo capitale torna in tesoreria.
 
 | Repository | Cosa usa Evo Trader |
 |---|---|
-| [awesome-systematic-trading](https://github.com/wangzhe3224/awesome-systematic-trading) | Le famiglie di strategia del DNA (trend following, breakout di Donchian, mean reversion RSI e Bollinger, momentum) e le API broker di riferimento (ib_insync per IBKR, ccxt per gli exchange crypto) |
+| [awesome-systematic-trading](https://github.com/wangzhe3224/awesome-systematic-trading) | Le famiglie di strategia del DNA (trend following, breakout di Donchian, mean reversion RSI e Bollinger, momentum) e l'API broker: ib_insync, oggi `ib_async`, per Interactive Brokers |
 | [Kronos](https://github.com/shiyu-coder/Kronos) | Gene opzionale "filtro Kronos": l'agente apre solo se il modello prevede un movimento nella sua direzione (cache precalcolata con `evo.kronos_cache`) |
 | [TradingAgents](https://github.com/TauricResearch/TradingAgents) | Gene opzionale "filtro bias": niente long nei giorni bearish, niente short in quelli bullish (stessa cache giornaliera di `kronos-sol-bot`) |
 
@@ -35,8 +35,9 @@ nascita ──► prova sul passato (60 giorni prima della nascita: deve essere 
          (il figlio rifà prova sul passato e incubazione)
 ```
 
-Il DNA contiene: famiglia e parametri della strategia, stop loss, take profit, **leva (fino a 2x)**,
-short sì/no, mercato (BTC, ETH, SOL), filtri Kronos/TradingAgents.
+Il DNA contiene: famiglia e parametri della strategia, stop loss, take profit, **leva**
+(con limite per strumento), short sì/no, lo strumento su cui opera (uno qualsiasi
+dell'universo configurato), filtri Kronos/TradingAgents.
 
 ## Uso
 
@@ -53,26 +54,52 @@ python -m evo.evolve --start 2025-06-17 --end 2026-10-01 --seeds 5
 python -m evo.paper
 ```
 
+Universo: qualsiasi lista di strumenti `fonte:simbolo` in `market.instruments`
+(`yahoo:` azioni, ETF, indici, forex, materie prime; `binance:` crypto; `csv:` dati esportati
+dal broker), anche mescolati: ogni strumento segue i propri orari di mercato.
 Se `api.binance.com` non è raggiungibile: `export BINANCE_API_BASE=https://data-api.binance.vision`.
 
 Output della simulazione in `results/seed_N/`: `history.csv` (portafoglio per epoca),
 `lineage.csv` (albero genealogico con DNA e causa di morte), `trades.csv`, `summary.json`.
 
-## Broker in Italia
+## Trading automatico su Interactive Brokers
 
-Il bot calcola un'unica **esposizione netta per simbolo** (somma degli agenti finanziati) e la
-manda al broker. Oggi esiste solo `PaperBroker`: il live è bloccato finché non si sceglie e
-si testa un adapter.
+Il bot somma le posizioni di tutti gli agenti finanziati in un'unica **esposizione netta per
+strumento**, la confronta con le posizioni reali sul conto e invia solo gli ordini di differenza
+(a mercato, validi in giornata, in pezzi interi). Usa **solo** `initial_capital`, mai il resto
+del conto.
 
-| Opzione | Leva retail | Note |
-|---|---|---|
-| **Interactive Brokers** (`ib_async`) | Sì, limiti ESMA | Regolamentato, molto usato in Italia, conto paper gratuito. Consigliato |
-| Exchange crypto con licenza UE (`ccxt`, es. Kraken) | Limitata/assente per il retail | Verificare quali derivati sono offerti ai residenti in Italia |
-| MetaTrader 5 con broker UE | CFD crypto max 2:1 | Libreria Python solo su Windows |
+### 1. Prima sul conto demo (obbligatorio)
 
-Il live richiede **doppia conferma**: `mode: live` in `config.yaml` **e** `CONFIRM_LIVE=yes` nel `.env`.
-Tasse: in Italia le plusvalenze crypto sono tassate e con molti trade serve un registro
-completo — da verificare con un commercialista.
+1. Apri un conto IBKR e attiva il **paper trading account** (gratuito, dal Client Portal).
+2. Installa **IB Gateway** (consigliato per un bot 24/7) o TWS, accedi con l'utente *paper*.
+   In Configure → Settings → API: abilita "ActiveX and Socket Clients", porta **4002**,
+   aggiungi 127.0.0.1 tra gli IP fidati.
+3. `pip install ib_async`
+4. In `config.yaml`: `mode: paper`, `broker: ibkr`, `ibkr.port: 4002`.
+5. `python -m evo.paper` — gli ordini arrivano sul conto demo. Lascialo girare settimane.
+
+### 2. Conto reale (solo dopo il demo, importi piccoli)
+
+- `mode: live`, `ibkr.port: 4001`, nel `.env` `CONFIRM_LIVE=yes`. Il bot rifiuta combinazioni
+  incoerenti (es. mode paper sulla porta del conto reale) e non parte se il conto vale meno di
+  `initial_capital`.
+- Usa un **conto o sotto-conto dedicato**: sugli strumenti dell'universo il bot considera sue
+  tutte le posizioni che trova.
+- **Freni di emergenza**: crea un file `STOP` nella cartella → il bot può solo ridurre le
+  posizioni. Tetti in config: `max_order_value` per ordine, `max_gross_exposure` sul totale.
+
+### Cose da sapere in Italia
+
+- **Strumenti**: gli ETF americani (SPY, QQQ…) non hanno il KID UE e non si possono comprare
+  da retail: l'universo di esempio usa ETF UCITS, azioni europee ed ETC.
+- **Capitale**: IBKR ha una commissione minima per ordine e si comprano pezzi interi. Con
+  100 € quasi ogni ordine costa più dell'1% e molti strumenti costano più di 20 €: vedi la
+  simulazione in [docs/](docs/). Servono alcune migliaia di euro perché i costi pesino poco.
+- **Leva**: con un conto margin, entro i limiti ESMA per i retail (configurabili per strumento).
+- **Tasse**: IBKR è un broker estero in regime **dichiarativo**: plusvalenze, interessi e
+  dividendi vanno dichiarati da te (quadri RT/RM/RW). Con molti trade serve un registro
+  completo: parlane con un commercialista prima di partire.
 
 ## Struttura
 
@@ -85,5 +112,6 @@ completo — da verificare con un commercialista.
 | `evo/ecosystem.py` | Regole di vita: prova sul passato, incubazione, promozione, morte, sdoppiamento |
 | `evo/evolve.py` | Simulazione storica multi-seme |
 | `evo/paper.py` | Bot automatico a ogni candela chiusa, riparte dallo stato salvato |
-| `evo/brokers.py` | Esposizione netta per simbolo, PaperBroker |
+| `evo/brokers.py` | Esposizione netta per strumento, PaperBroker, IBKRBroker (ordini di differenza, tetti, kill switch) |
+| `evo/data.py` | Fonti dati `binance:`, `yahoo:`, `csv:`, selezione automatica dei più scambiati |
 | `evo/kronos_cache.py` | Precalcolo delle previsioni Kronos per il gene filtro |
