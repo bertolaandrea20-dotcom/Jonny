@@ -1,0 +1,54 @@
+# Configurazione per capitale piccolo (100-150 €) su un exchange crypto spot:
+# niente commissione minima, frazioni di moneta, solo long (sullo spot non si va short),
+# niente leva, candele giornaliere per fare pochi trade.
+
+mode: paper
+broker: paper
+
+market:
+  instruments: [binance:BTCUSDT, binance:ETHUSDT, binance:BNBUSDT, binance:XRPUSDT,
+                binance:ADAUSDT, binance:LTCUSDT, binance:LINKUSDT, binance:TRXUSDT,
+                binance:DOGEUSDT, binance:XLMUSDT]
+  default_source: binance
+  interval: 1d
+  auto_top: 0
+  min_history_bars: 500
+
+costs:
+  fee_bps: 10          # exchange spot: ~0,1% per lato (verifica quello che usi)
+  min_fee: 0
+  slippage_bps: 5
+  funding_apr_pct: 0   # niente leva né short
+
+genome:
+  max_leverage: 1.0
+  allow_short: false
+  mutation_scale: 0.15
+  families: [trend_ma, breakout, rsi_revert, bollinger, momentum]
+  use_kronos: false
+  use_bias: false
+
+ecosystem:
+  initial_capital: 150
+  agent_allocation: 30     # max 5 agenti con soldi veri
+  founders: 16
+  max_agents: 30
+  min_agents: 8
+  epoch_bars: 7            # 1 settimana di candele giornaliere
+  incubation_epochs: 4     # 4 settimane con soldi finti
+  survival_window: 8       # vive solo se in profitto sulle ultime 8 settimane
+  min_age_epochs: 4
+  death_drawdown_pct: 25
+  split_return_pct: 8
+  min_trades_to_split: 2
+  child_starts_funded: false
+  prior_test_bars: 365     # prova sul passato alla nascita: 1 anno
+  prior_min_return_pct: 5
+  prior_max_drawdown_pct: 30
+  prior_max_trades_per_week: 1
+  spawn_attempts: 30
+  seed: 42
+
+kronos_cache_dir: data/kronos
+bias_cache_files: {}
+state_dir: state

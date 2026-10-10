@@ -42,3 +42,32 @@ semi è grande quanto le differenze tra varianti a 1h.
    CPU) e gene TradingAgents (costa API LLM: da decidere con l'utente).
 3. Costi più bassi (broker con commissioni minori, ordini limite) e timeframe giornaliero.
 4. Validare su un secondo anno di dati prima di qualsiasi uso di soldi veri.
+
+## Capitale piccolo (150 €) su exchange crypto spot, candele giornaliere, 2019-2026
+
+10 crypto con storia lunga (BTC, ETH, BNB, XRP, ADA, LTC, LINK, TRX, DOGE, XLM), fee 0,10% +
+slippage 0,05% per lato, solo long, niente leva. Config: `config.crypto-small.example.yaml`.
+
+**Ecosistema di agenti** (5 semi, 28/10/2019 → 30/09/2026): rendimento medio **−6,0%**
+(da −30,4% a +32,3%) contro **+1276%** del buy & hold equipesato. Le regole di
+sopravvivenza (in profitto sulle ultime 8 settimane) uccidono proprio le strategie di trend
+following, che hanno lunghe fasi in perdita prima dei grandi rialzi; buona parte del capitale
+resta ferma in tesoreria.
+
+**Regole semplici** (`python -m evo.rules`, 01/01/2019 → 30/09/2026, ogni moneta 1/10 del
+capitale, investita se il prezzo è sopra la sua media mobile, altrimenti in contanti):
+
+| Regola | Totale | Annuo | Max drawdown | 2022 | 2025 |
+|---|---|---|---|---|---|
+| Buy & hold | +2450% | 51,9% | 82,0% | −62,1% | −17,6% |
+| Sopra media 40 giorni | +3422% | 58,4% | 60,5% | −40,5% | −13,0% |
+| Sopra media 50 giorni | +5233% | 67,1% | 67,8% | −41,3% | −13,6% |
+| Sopra media 60 giorni | +3153% | 56,8% | 75,5% | −38,9% | −8,7% |
+| Sopra media 100 giorni | +1787% | 46,1% | 81,4% | −44,8% | −12,9% |
+| Sopra media 200 giorni | +989% | 36,1% | 78,3% | −24,8% | −45,1% |
+
+- Con medie tra 40 e 75 giorni il filtro di trend fa circa come o meglio del buy & hold con
+  drawdown più bassi; con costi doppi la media 50 resta sopra (+4062%). 50 è il picco: in
+  pratica conta l'intervallo, non il numero esatto.
+- **Attenzione**: le 10 monete sono scelte oggi tra quelle sopravvissute (bias di
+  sopravvivenza, gonfia tutti i risultati) e anche il filtro ha perso fino al 60-75% nei crolli.
