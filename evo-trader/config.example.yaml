@@ -1,0 +1,46 @@
+# Copia in config.yaml e modifica. I segreti (chiavi del broker) vanno in .env, MAI qui.
+
+mode: paper            # paper | live  (live richiede anche CONFIRM_LIVE=yes nel .env)
+broker: paper          # paper | ccxt | ibkr  (vedi README: scelta del broker in Italia)
+
+market:
+  symbols: [BTCUSDT, ETHUSDT, SOLUSDT]   # dati Binance pubblici (solo prezzi)
+  interval: 4h         # su 1h l'ecosistema perdeva molto di più (vedi docs/)
+
+costs:
+  fee_bps: 10          # commissione per lato (verifica quella del tuo broker)
+  slippage_bps: 5      # slippage stimato per lato
+  funding_apr_pct: 10  # costo annuo di leva/short sul capitale preso a prestito
+
+genome:
+  max_leverage: 2.0    # ESMA: max 2:1 sui CFD crypto per i clienti retail in UE
+  allow_short: true
+  mutation_scale: 0.15
+  families: [trend_ma, breakout, rsi_revert, bollinger, momentum]
+  use_kronos: false    # filtro Kronos (prima: python -m evo.kronos_cache, lento su CPU)
+  use_bias: false      # filtro TradingAgents (richiede bias_cache_files)
+
+ecosystem:
+  initial_capital: 100     # capitale reale totale
+  agent_allocation: 20     # capitale reale per agente promosso (max 5 agenti finanziati)
+  founders: 16
+  max_agents: 30
+  min_agents: 8
+  epoch_bars: 42           # 1 settimana di candele 4h
+  incubation_epochs: 2     # settimane con soldi finti prima di ricevere soldi veri
+  survival_window: 4       # vive solo se in profitto sulle ultime 4 settimane
+  min_age_epochs: 2
+  death_drawdown_pct: 20
+  split_return_pct: 5      # si sdoppia se +5% nella finestra
+  min_trades_to_split: 3
+  child_starts_funded: false
+  prior_test_bars: 360      # prova sul passato alla nascita: 60 giorni di candele 4h
+  prior_min_return_pct: 2
+  prior_max_drawdown_pct: 15
+  prior_max_trades_per_week: 7
+  spawn_attempts: 30
+  seed: 42
+
+kronos_cache_dir: data/kronos
+bias_cache_files: {}       # es. {SOLUSDT: ../kronos-sol-bot/bias_cache.json}
+state_dir: state

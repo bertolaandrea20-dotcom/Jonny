@@ -1,0 +1,8 @@
+pandas>=2.0,<3
+numpy>=1.24
+pyyaml>=6.0
+requests>=2.31
+pytest>=8.0
+# Solo per i broker reali (opzionale, vedi README):
+# ccxt>=4.0        exchange crypto (es. Kraken)
+# ib_async>=1.0    Interactive Brokers
