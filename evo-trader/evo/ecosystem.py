@@ -50,13 +50,34 @@ class Ecosystem:
         self.e = cfg.ecosystem
         self.market = market
         self.symbols = list(market)
-        self.ts = market[self.symbols[0]]["timestamps"]
-        self.ohlc = {s: {k: d[k].to_numpy(float) for k in ("open", "high", "low", "close")}
-                     for s, d in market.items()}
+        # Linea del tempo comune = unione degli orari di tutti gli strumenti. Ogni strumento
+        # ha candele solo nei suoi orari (NaN altrove): un agente opera solo quando il suo
+        # mercato ha una candela, e viene valutato all'ultimo prezzo noto.
+        self.ts = pd.Series(sorted(set().union(*(set(d["timestamps"]) for d in market.values()))))
+        index = pd.Index(self.ts)
+        self.ohlc, self.valid, self.pos, self.dt_years = {}, {}, {}, {}
+        step_years = 1 / bars_per_year(cfg.market.interval)
+        for sym, d in market.items():
+            pos = index.get_indexer(d["timestamps"])
+            self.pos[sym] = pos
+            arrs = {}
+            for k in ("open", "high", "low", "close"):
+                a = np.full(len(self.ts), np.nan)
+                a[pos] = d[k].to_numpy(float)
+                arrs[k] = a
+            self.valid[sym] = ~np.isnan(arrs["close"])
+            arrs["mark"] = pd.Series(arrs["close"]).ffill().bfill().to_numpy()
+            self.ohlc[sym] = arrs
+            # Anni trascorsi dalla candela precedente dello stesso strumento (per il funding:
+            # una posizione tenuta di notte o nel weekend paga anche quelle ore).
+            dt = np.full(len(self.ts), step_years)
+            gaps = d["timestamps"].diff().dt.total_seconds().to_numpy() / (365 * 86400)
+            dt[pos[1:]] = gaps[1:]
+            self.dt_years[sym] = dt
+        self.costs = {sym: cfg.costs.for_instrument(sym) for sym in self.symbols}
         self.kronos = kronos or {}
         self.bias = bias or {}
         self.rng = np.random.default_rng(self.e.seed)
-        self.funding_per_bar = cfg.costs.funding_apr_pct / 100 / bars_per_year(cfg.market.interval)
         self.treasury = self.e.initial_capital
         self.agents: list[Agent] = []
         self.graveyard: list[Agent] = []
@@ -83,6 +104,23 @@ class Ecosystem:
         self._counts["births"] += 1
         return a
 
+    def leverage_cap(self, symbol: str) -> float:
+        caps = self.cfg.genome.max_leverage_by_instrument
+        src = symbol.split(":", 1)[0]
+        return min(self.cfg.genome.max_leverage, caps.get(src, np.inf), caps.get(symbol, np.inf))
+
+    def _fit(self, g: Genome) -> Genome:
+        g.leverage = float(min(g.leverage, self.leverage_cap(g.symbol)))
+        return g
+
+    def _step_agent(self, a: Agent, i: int) -> None:
+        sym = a.genome.symbol
+        if not self.valid[sym][i]:
+            return                       # mercato chiuso per questo strumento
+        o, c = self.ohlc[sym], self.costs[sym]
+        a.step(self.signal_of(a)[i], o["open"][i], o["high"][i], o["low"][i], o["close"][i],
+               self.ts.iloc[i], c, c.funding_apr_pct / 100 * self.dt_years[sym][i])
+
     def prior_test(self, g: Genome) -> bool:
         """Simula il DNA sulle `prior_test_bars` candele prima della candela corrente."""
         n = self.e.prior_test_bars
@@ -92,24 +130,22 @@ class Ecosystem:
         i0 = max(1, i1 - n)
         if i1 - i0 < n // 2:
             return False
-        sig = self.signal_of_genome(g)
         a = Agent(genome=g, allocation=100.0, cash=100.0)
-        o = self.ohlc[g.symbol]
+        mark = self.ohlc[g.symbol]["mark"]
         peak, max_dd = 100.0, 0.0
         for i in range(i0, i1):
-            a.step(sig[i - 1], o["open"][i], o["high"][i], o["low"][i], o["close"][i],
-                   self.ts.iloc[i], self.cfg.costs, self.funding_per_bar)
-            eq = a.equity(o["close"][i])
+            self._step_agent(a, i)
+            eq = a.equity(mark[i])
             peak = max(peak, eq)
             max_dd = max(max_dd, (1 - eq / peak) * 100)
-        ret = a.equity(o["close"][i1 - 1]) - 100.0
+        ret = a.equity(mark[i1 - 1]) - 100.0
         weeks = (i1 - i0) / max(1, self.e.epoch_bars)
         return (ret >= self.e.prior_min_return_pct and max_dd <= self.e.prior_max_drawdown_pct
                 and len(a.trades) / weeks <= self.e.prior_max_trades_per_week)
 
     def _spawn_random(self) -> Agent | None:
         for _ in range(max(1, self.e.spawn_attempts)):
-            g = random_genome(self.rng, self.cfg.genome, self.symbols)
+            g = self._fit(random_genome(self.rng, self.cfg.genome, self.symbols))
             if self.prior_test(g):
                 return self._spawn(g)
             self.stillborn += 1
@@ -117,7 +153,8 @@ class Ecosystem:
         return None
 
     def _kill(self, a: Agent, i: int, reason: str) -> None:
-        a.liquidate(self.ohlc[a.genome.symbol]["close"][i], self.cfg.costs, self.ts.iloc[i], "morte")
+        sym = a.genome.symbol
+        a.liquidate(self.ohlc[sym]["mark"][i], self.costs[sym], self.ts.iloc[i], "morte")
         if a.status == "funded":
             self.treasury += a.cash
         a.status, a.death_reason = "dead", reason
@@ -139,22 +176,23 @@ class Ecosystem:
         return self.signal_of_genome(a.genome)
 
     def signal_of_genome(self, g: Genome) -> np.ndarray:
+        """Per ogni candela della linea comune: il segnale all'ultima candela CHIUSA dello
+        strumento prima di questa (è quello su cui si opera all'apertura)."""
         if g.id not in self._signals:
-            self._signals[g.id] = signal(g, self.market[g.symbol], self.kronos.get(g.symbol),
-                                         self.bias.get(g.symbol))
+            own = signal(g, self.market[g.symbol], self.kronos.get(g.symbol), self.bias.get(g.symbol))
+            full = np.full(len(self.ts), np.nan)
+            full[self.pos[g.symbol]] = own
+            self._signals[g.id] = pd.Series(full).ffill().shift(1).fillna(0.0).to_numpy()
         return self._signals[g.id]
 
     # ---------------------------------------------------------------- simulazione
     def portfolio_value(self, i: int) -> float:
-        return self.treasury + sum(a.equity(self.ohlc[a.genome.symbol]["close"][i])
+        return self.treasury + sum(a.equity(self.ohlc[a.genome.symbol]["mark"][i])
                                    for a in self.agents if a.status == "funded")
 
     def step_bar(self, i: int) -> None:
-        t = self.ts.iloc[i]
         for a in self.agents:
-            o = self.ohlc[a.genome.symbol]
-            a.step(self.signal_of(a)[i - 1], o["open"][i], o["high"][i], o["low"][i], o["close"][i],
-                   t, self.cfg.costs, self.funding_per_bar)
+            self._step_agent(a, i)
 
     def run_epoch(self, start: int) -> int:
         """Simula un'epoca a partire dalla candela `start`, poi giudica. Ritorna la prossima candela."""
@@ -171,7 +209,7 @@ class Ecosystem:
         self._judging = True
         self._bar = i + 1
         for a in list(self.agents):
-            price = self.ohlc[a.genome.symbol]["close"][i]
+            price = self.ohlc[a.genome.symbol]["mark"][i]
             age = self.epoch - a.born_epoch + 1
             if (1 - a.equity(price) / a.allocation) * 100 >= e.death_drawdown_pct:
                 self._kill(a, i, f"perdita oltre {e.death_drawdown_pct:.0f}%")
@@ -195,7 +233,7 @@ class Ecosystem:
             recent = self.epoch - self._last_split.get(a.genome.id, -10**9) < e.survival_window
             if (not recent and window_ret(a) >= e.split_return_pct
                     and a.window_trades(self._window(a)) >= e.min_trades_to_split):
-                child = mutate(a.genome, self.rng, self.cfg.genome, self.symbols)
+                child = self._fit(mutate(a.genome, self.rng, self.cfg.genome, self.symbols))
                 if self.prior_test(child):
                     self._spawn(child, funded=e.child_starts_funded)
                 else:
@@ -252,11 +290,11 @@ class Ecosystem:
             self._founders_pending -= 1
             self._spawn_random()
         for a in self.agents:
-            a.start_epoch(self.ohlc[a.genome.symbol]["close"][i - 1])
+            a.start_epoch(self.ohlc[a.genome.symbol]["mark"][i - 1])
 
     def end_epoch_at(self, i: int) -> None:
         for a in self.agents:
-            a.end_epoch(self.ohlc[a.genome.symbol]["close"][i])
+            a.end_epoch(self.ohlc[a.genome.symbol]["mark"][i])
         self.judge(i)
 
     def restore(self, state: dict) -> None:

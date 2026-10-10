@@ -4,16 +4,37 @@ mode: paper            # paper | live  (live richiede anche CONFIRM_LIVE=yes nel
 broker: paper          # paper | ccxt | ibkr  (vedi README: scelta del broker in Italia)
 
 market:
-  symbols: [BTCUSDT, ETHUSDT, SOLUSDT]   # dati Binance pubblici (solo prezzi)
-  interval: 4h         # su 1h l'ecosistema perdeva molto di più (vedi docs/)
+  # Universo nel formato fonte:simbolo. Qualsiasi mix: crypto, azioni, ETF, indici, forex,
+  # materie prime, oppure csv:percorso.csv con dati esportati dal tuo broker.
+  instruments:
+    - binance:BTCUSDT      # crypto
+    - binance:ETHUSDT
+    - yahoo:SPY            # ETF S&P 500
+    - yahoo:QQQ            # ETF Nasdaq 100
+    - yahoo:EXSA.DE        # ETF Stoxx Europe 600
+    - yahoo:ENI.MI         # azioni italiane
+    - yahoo:ISP.MI
+    - yahoo:UCG.MI
+    - yahoo:GLD            # oro
+    - yahoo:EURUSD=X       # forex
+  default_source: binance
+  interval: 4h             # su 1h si perdeva molto di più (vedi docs/)
+  auto_top: 0              # >0: aggiunge i N strumenti più scambiati di auto_source
+  auto_source: binance
+  auto_quote: USDT
+  min_history_bars: 500
 
 costs:
   fee_bps: 10          # commissione per lato (verifica quella del tuo broker)
   slippage_bps: 5      # slippage stimato per lato
   funding_apr_pct: 10  # costo annuo di leva/short sul capitale preso a prestito
+  overrides:           # costi diversi per fonte o strumento (verifica quelli del tuo broker)
+    yahoo: {fee_bps: 5, slippage_bps: 3}
 
 genome:
-  max_leverage: 2.0    # ESMA: max 2:1 sui CFD crypto per i clienti retail in UE
+  max_leverage: 5.0
+  max_leverage_by_instrument:   # limiti ESMA retail: crypto 2, azioni 5, indici 20, forex 30
+    binance: 2.0
   allow_short: true
   mutation_scale: 0.15
   families: [trend_ma, breakout, rsi_revert, bollinger, momentum]

@@ -18,7 +18,8 @@ EVERY_KEY = "__every__"   # nella cache Kronos: una previsione ogni N candele
 
 
 def kronos_path(cache_dir: str, symbol: str, interval: str) -> Path:
-    return Path(cache_dir) / f"{symbol}_{interval}.pkl"
+    safe = symbol.replace(":", "_").replace("/", "_").replace("^", "IDX_").replace("=", "_")
+    return Path(cache_dir) / f"{safe}_{interval}.pkl"
 
 
 def load_kronos(cache_dir: str, symbol: str, interval: str, ts: pd.Series) -> np.ndarray | None:
@@ -38,3 +39,16 @@ def load_bias(path: str | None, ts: pd.Series) -> np.ndarray | None:
     data = json.loads(Path(path).read_text())
     days = (ts - pd.Timedelta(hours=REFRESH_HOUR_UTC)).dt.date.astype(str)
     return np.array([(data.get(d) or {}).get("bias", "neutral") for d in days], dtype=object)
+
+
+def load_signals(cfg, market: dict[str, pd.DataFrame]) -> tuple[dict, dict]:
+    """Cache Kronos e TradingAgents per ogni strumento, allineate alle SUE candele."""
+    kronos, bias = {}, {}
+    for sym, d in market.items():
+        k = load_kronos(cfg.kronos_cache_dir, sym, cfg.market.interval, d["timestamps"])
+        if k is not None:
+            kronos[sym] = k
+        b = load_bias(cfg.bias_cache_files.get(sym), d["timestamps"])
+        if b is not None:
+            bias[sym] = b
+    return kronos, bias

@@ -10,8 +10,27 @@ import yaml
 
 @dataclass
 class MarketCfg:
-    symbols: list[str] = field(default_factory=lambda: ["BTCUSDT", "ETHUSDT", "SOLUSDT"])
-    interval: str = "1h"
+    # Universo di strumenti nel formato fonte:simbolo (vedi evo/data.py). Qualsiasi mix è
+    # ammesso: crypto, azioni, ETF, indici, forex, materie prime, CSV esportati dal broker.
+    instruments: list[str] = field(default_factory=lambda: [
+        "binance:BTCUSDT", "binance:ETHUSDT", "yahoo:SPY", "yahoo:GLD", "yahoo:EURUSD=X"])
+    default_source: str = "binance"
+    interval: str = "4h"
+    # Selezione automatica: aggiunge i `top` strumenti più scambiati della fonte (0 = spenta).
+    auto_top: int = 0
+    auto_source: str = "binance"
+    auto_quote: str = "USDT"
+    min_history_bars: int = 500       # strumenti con meno storia vengono esclusi
+
+    def universe(self) -> list[str]:
+        from .data import binance_top_symbols, split_instrument
+        names = [f"{src}:{sym}" for src, sym in
+                 (split_instrument(i, self.default_source) for i in self.instruments)]
+        if self.auto_top > 0:
+            if self.auto_source != "binance":
+                raise ValueError("auto_top è disponibile solo per la fonte binance")
+            names += [n for n in binance_top_symbols(self.auto_quote, self.auto_top) if n not in names]
+        return names
 
 
 @dataclass
@@ -19,15 +38,28 @@ class CostsCfg:
     fee_bps: float = 10.0            # commissione per lato
     slippage_bps: float = 5.0        # slippage stimato per lato
     funding_apr_pct: float = 10.0    # costo annuo di leva/short sul capitale preso a prestito
+    # Costi diversi per fonte o strumento, es. {"yahoo": {"fee_bps": 5}, "binance:BTCUSDT": {...}}
+    overrides: dict = field(default_factory=dict)
 
     @property
     def roundtrip_bps(self) -> float:
         return 2 * (self.fee_bps + self.slippage_bps)
 
+    def for_instrument(self, instrument: str) -> "CostsCfg":
+        src = instrument.split(":", 1)[0]
+        o = {**self.overrides.get(src, {}), **self.overrides.get(instrument, {})}
+        if not o:
+            return self
+        base = {k: getattr(self, k) for k in ("fee_bps", "slippage_bps", "funding_apr_pct")}
+        return CostsCfg(**{**base, **o})
+
 
 @dataclass
 class GenomeCfg:
-    max_leverage: float = 2.0        # limite ESMA per CFD crypto ai clienti retail in UE
+    max_leverage: float = 2.0        # leva massima del DNA (limite ESMA retail per le crypto: 2)
+    # Leva massima per fonte o strumento (limiti ESMA retail: crypto 2, azioni 5, indici 20,
+    # forex principali 30), es. {"yahoo": 5, "yahoo:EURUSD=X": 30}. Vale il limite più basso.
+    max_leverage_by_instrument: dict = field(default_factory=dict)
     allow_short: bool = True
     mutation_scale: float = 0.15     # ampiezza delle mutazioni (frazione dell'intervallo del gene)
     families: list[str] = field(default_factory=lambda: [

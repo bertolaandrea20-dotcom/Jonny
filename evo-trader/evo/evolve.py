@@ -17,7 +17,7 @@ import pandas as pd
 from .config import Config, load_config
 from .data import load_market
 from .ecosystem import Ecosystem
-from .sources import load_bias, load_kronos
+from .sources import load_signals
 
 WARMUP_BARS = 300   # storia minima per gli indicatori più lenti
 
@@ -25,19 +25,20 @@ WARMUP_BARS = 300   # storia minima per gli indicatori più lenti
 def run_once(cfg: Config, market: dict[str, pd.DataFrame], seed: int, out: Path | None) -> dict:
     c = copy.deepcopy(cfg)
     c.ecosystem.seed = seed
-    ts = market[c.market.symbols[0]]["timestamps"]
-    kronos = {s: k for s in market if (k := load_kronos(c.kronos_cache_dir, s, c.market.interval, ts)) is not None}
-    bias = {s: b for s, p in c.bias_cache_files.items() if s in market and (b := load_bias(p, ts)) is not None}
+    kronos, bias = load_signals(c, market)
     if c.genome.use_kronos and not kronos:
         print("  ⚠ use_kronos attivo ma nessuna cache Kronos trovata: il filtro resta spento")
+    elif c.genome.use_kronos:
+        print(f"  Kronos disponibile per: {', '.join(kronos)}")
     eco = Ecosystem(c, market, kronos=kronos, bias=bias)
+    ts = eco.ts
     warmup = WARMUP_BARS + c.ecosystem.prior_test_bars
     eco.run(warmup)
 
     hist = pd.DataFrame([vars(h) for h in eco.history])
-    start_px = {s: d["close"].iloc[warmup - 1] for s, d in market.items()}
-    end_px = {s: d["close"].iloc[-1] for s, d in market.items()}
-    bh = float(np.mean([end_px[s] / start_px[s] - 1 for s in market]) * 100)
+    # Buy & hold equipesato su tutto l'universo, dallo stesso istante di partenza.
+    bh = float(np.mean([eco.ohlc[s]["mark"][-1] / eco.ohlc[s]["mark"][warmup - 1] - 1
+                        for s in market]) * 100)
     pv = np.concatenate([[c.ecosystem.initial_capital], hist["portfolio"].to_numpy()])
     peak = np.maximum.accumulate(pv)
     lineage = eco.lineage()
@@ -51,6 +52,7 @@ def run_once(cfg: Config, market: dict[str, pd.DataFrame], seed: int, out: Path 
         "capitale_finale": round(float(pv[-1]), 2),
         "rendimento_pct": round((pv[-1] / pv[0] - 1) * 100, 2),
         "buy_and_hold_pct": round(bh, 2),
+        "strumenti": len(market),
         "max_drawdown_pct": round(float(((peak - pv) / peak).max() * 100), 2),
         "agenti_nati": len(lineage),
         "dna_scartati_prova_passato": eco.stillborn,
@@ -86,9 +88,11 @@ def main() -> None:
     cfg.mode = "paper"
     if args.prior_bars is not None:
         cfg.ecosystem.prior_test_bars = args.prior_bars
-    market = load_market(cfg.market.symbols, cfg.market.interval, args.start, args.end)
-    n = len(next(iter(market.values())))
-    print(f"Dati: {', '.join(market)} {cfg.market.interval}, {n} candele allineate")
+    market = load_market(cfg.market.universe(), cfg.market.interval, args.start, args.end,
+                         default_source=cfg.market.default_source,
+                         min_bars=cfg.market.min_history_bars)
+    print(f"Universo ({len(market)} strumenti, {cfg.market.interval}): "
+          + ", ".join(f"{k} [{len(d)}]" for k, d in market.items()))
     results = []
     for k in range(args.seeds):
         seed = cfg.ecosystem.seed + k

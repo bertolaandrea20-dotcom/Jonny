@@ -20,7 +20,7 @@ def target_exposure(eco: Ecosystem, i: int) -> dict[str, float]:
         if a.status != "funded" or a.position is None:
             continue
         p = a.position
-        out[a.genome.symbol] += p.side * p.qty * eco.ohlc[a.genome.symbol]["close"][i]
+        out[a.genome.symbol] += p.side * p.qty * eco.ohlc[a.genome.symbol]["mark"][i]
     return out
 
 

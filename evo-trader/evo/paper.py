@@ -17,31 +17,35 @@ import pandas as pd
 
 from .brokers import make_broker, target_exposure
 from .config import Config, load_config
-from .data import fetch_history, interval_to_timedelta
+from .data import interval_to_timedelta, load_market
 from .ecosystem import Ecosystem
 from .evolve import WARMUP_BARS
-from .sources import load_bias, load_kronos
+from .sources import load_signals
 
 
-def load_recent(cfg: Config, now: pd.Timestamp) -> dict[str, pd.DataFrame]:
+def load_recent(cfg: Config, now: pd.Timestamp, instruments: list[str]) -> dict[str, pd.DataFrame]:
     step = interval_to_timedelta(cfg.market.interval)
     need = WARMUP_BARS + cfg.ecosystem.prior_test_bars + cfg.ecosystem.epoch_bars + 50
-    start = now - need * step
-    market = {s: fetch_history(s, cfg.market.interval, start, now) for s in cfg.market.symbols}
-    common = set.intersection(*(set(d["timestamps"]) for d in market.values()))
-    return {k: d[d["timestamps"].isin(common)].reset_index(drop=True) for k, d in market.items()}
+    # Margine per gli strumenti che non quotano 24/7 (azioni: ~1/4 delle ore della settimana).
+    start = now - need * step * 4
+    return load_market(instruments, cfg.market.interval, start, now, cache_dir=None,
+                       default_source=cfg.market.default_source)
 
 
 def cycle(cfg: Config, state_path: Path, now: pd.Timestamp | None = None) -> list[str]:
     now = now or pd.Timestamp.now(tz="UTC")
-    market = load_recent(cfg, now)
-    ts = market[cfg.market.symbols[0]]["timestamps"]
-    kronos = {s: k for s in market if (k := load_kronos(cfg.kronos_cache_dir, s, cfg.market.interval, ts)) is not None}
-    bias = {s: b for s, p in cfg.bias_cache_files.items() if s in market and (b := load_bias(p, ts)) is not None}
+    state = json.loads(state_path.read_text()) if state_path.exists() else None
+    # L'universo si fissa al primo avvio: gli agenti vivi devono ritrovare i loro strumenti.
+    instruments = state["universe"] if state else cfg.market.universe()
+    market = load_recent(cfg, now, instruments)
+    missing = {a["genome"]["symbol"] for a in (state or {}).get("agents", [])} - set(market)
+    if missing:
+        raise RuntimeError(f"Dati non disponibili per strumenti con agenti vivi: {sorted(missing)}")
+    kronos, bias = load_signals(cfg, market)
     eco = Ecosystem(cfg, market, kronos=kronos, bias=bias)
+    ts = eco.ts
 
-    if state_path.exists():
-        state = json.loads(state_path.read_text())
+    if state:
         eco.restore(state)
         last = pd.Timestamp(state["last_bar_time"])
         bars_in_epoch = state["bars_in_epoch"]
@@ -72,7 +76,8 @@ def cycle(cfg: Config, state_path: Path, now: pd.Timestamp | None = None) -> lis
         events.append(f"{ts.iloc[i]}: portafoglio reale {eco.portfolio_value(i):.2f} $ — "
                       f"esposizione {', '.join(orders) or 'nessuna'}")
         eco.save_state(str(state_path), extra={"last_bar_time": str(ts.iloc[i]),
-                                               "bars_in_epoch": bars_in_epoch})
+                                               "bars_in_epoch": bars_in_epoch,
+                                               "universe": instruments})
     return events
 
 

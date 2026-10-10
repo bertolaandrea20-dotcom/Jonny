@@ -200,10 +200,10 @@ def test_paper_bot_restarts_from_state_and_matches_one_shot_simulation(tmp_path,
     cfg = eco_cfg(initial_capital=100, agent_allocation=20, founders=8, epoch_bars=50,
                   prior_test_bars=200, prior_min_return_pct=-100, prior_max_drawdown_pct=100,
                   prior_max_trades_per_week=1e9)
-    cfg.market.symbols = list(m)
+    cfg.market.instruments = list(m)
     monkeypatch.setattr(paper, "load_recent",
-                        lambda c, now: {s: d[d["timestamps"] <= now].reset_index(drop=True)
-                                        for s, d in m.items()})
+                        lambda c, now, inst: {s: d[d["timestamps"] <= now].reset_index(drop=True)
+                                              for s, d in m.items()})
     ts = m["AAA"]["timestamps"]
     first, last = 600, 900
     state = tmp_path / "eco.json"
@@ -237,3 +237,64 @@ def test_kronos_cache_every_n_is_forward_filled_only(tmp_path):
     k = load_kronos(str(tmp_path), "AAA", "4h", ts)
     assert np.all(np.isnan(k[:5]))                 # prima della prima previsione: nulla
     assert np.all(k[5:11] == 80.0) and k[11] == -40.0
+
+
+# ---------------------------------------------------------------- universo generale
+def test_instruments_with_different_trading_hours():
+    """Una crypto 24/7 e un'azione aperta solo nei giorni feriali nello stesso ecosistema."""
+    m = market(2000, seed=5, symbols=("binance:CRYPTO", "yahoo:STOCK"))
+    stock = m["yahoo:STOCK"]
+    m["yahoo:STOCK"] = stock[stock["timestamps"].dt.weekday < 5].reset_index(drop=True)
+    cfg = eco_cfg(founders=0, min_agents=0, epoch_bars=100)
+    cfg.costs.funding_apr_pct = 10.0
+    eco = Ecosystem(cfg, m)
+    assert len(eco.ts) == 2000                      # linea comune = unione degli orari
+    a = eco._spawn(genome(symbol="yahoo:STOCK", leverage=2.0, family="momentum",
+                          params={"lookback": 5, "threshold": 0.0}, stop_loss=0.5, take_profit=0.9))
+    weekend = np.where(eco.ts.dt.weekday >= 5)[0]
+    weekend = weekend[weekend > 400]
+    a_before = None
+    for i in range(300, weekend[0]):
+        eco.step_bar(i)
+    a_before = (a.cash, a.position)
+    for i in weekend[:10]:
+        eco.step_bar(i)                             # mercato chiuso: l'agente non fa nulla
+    assert (a.cash, a.position) == a_before
+    # Il primo giorno dopo il weekend paga il funding di tutte le ore trascorse.
+    monday = next(i for i in range(weekend[0], len(eco.ts)) if eco.valid["yahoo:STOCK"][i])
+    assert eco.dt_years["yahoo:STOCK"][monday] > 1.9 / 365    # da venerdì sera a lunedì
+    assert eco.portfolio_value(weekend[0]) == pytest.approx(eco.portfolio_value(weekend[5]))
+
+
+def test_leverage_and_costs_can_differ_per_instrument():
+    cfg = eco_cfg()
+    cfg.genome.max_leverage = 5.0
+    cfg.genome.max_leverage_by_instrument = {"binance": 2.0, "yahoo:EURUSD=X": 30.0}
+    cfg.costs.overrides = {"yahoo": {"fee_bps": 2.0}}
+    m = market(500, symbols=("binance:BTCUSDT", "yahoo:SPY", "yahoo:EURUSD=X"))
+    eco = Ecosystem(cfg, m)
+    assert eco.leverage_cap("binance:BTCUSDT") == 2.0
+    assert eco.leverage_cap("yahoo:SPY") == 5.0
+    assert eco.leverage_cap("yahoo:EURUSD=X") == 5.0      # vale il limite più basso
+    assert eco._fit(genome(symbol="binance:BTCUSDT", leverage=4.0)).leverage == 2.0
+    assert eco.costs["yahoo:SPY"].fee_bps == 2.0 and eco.costs["binance:BTCUSDT"].fee_bps == 10.0
+
+
+def test_yahoo_parser_and_resample_to_4h():
+    from evo.data import parse_yahoo, resample
+    t0 = int(pd.Timestamp("2026-03-02 08:00", tz="UTC").timestamp())
+    js = {"chart": {"result": [{"timestamp": [t0 + 3600 * k for k in range(8)],
+                                "indicators": {"quote": [{
+                                    "open": [1, 2, 3, 4, 5, 6, 7, 8], "high": [2, 3, 4, 9, 6, 7, 8, 9],
+                                    "low": [0.5, 1, 2, 3, 4, 5, 6, None], "close": [2, 3, 4, 5, 6, 7, 8, 9],
+                                    "volume": [10, 10, 10, 10, 10, 10, 10, None]}]}}]}}
+    df = parse_yahoo(js)
+    assert len(df) == 7                                   # candela incompleta scartata
+    r = resample(df, "4h")
+    assert list(r["open"]) == [1, 5] and list(r["high"]) == [9, 8] and list(r["close"]) == [5, 8]
+
+
+def test_universe_normalizes_names():
+    from evo.config import MarketCfg
+    m = MarketCfg(instruments=["BTCUSDT", "yahoo:ENI.MI"], default_source="binance")
+    assert m.universe() == ["binance:BTCUSDT", "yahoo:ENI.MI"]
