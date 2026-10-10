@@ -218,3 +218,19 @@ def test_kronos_wrapper_puts_modules_in_eval_mode(cfg, tmp_path, monkeypatch):
     kf = KronosForecaster(cfg.forecaster, "5m")
     assert kf.predictor.model.training is False
     assert kf.predictor.tokenizer.training is False
+
+
+def test_kronos_forecast_many_matches_single_windows(cfg, ohlcv):
+    cfg.forecaster.sample_count = 4
+    offsets = [0.5, 0.2, -0.1, 0.3]
+    ctx = cfg.forecaster.context_bars
+    windows = [ohlcv.iloc[i:i + ctx] for i in (0, 250, 700)]
+    many = KronosForecaster(cfg.forecaster, "5m", predictor=FakePredictor(offsets * 3))
+    batch = many.forecast_many(windows)
+    assert len(many.predictor.calls) == 1                       # una sola chiamata al modello
+    assert many.predictor.calls[0]["x"].shape == (12, ctx, 6)
+    for w, fb in zip(windows, batch):
+        fs = KronosForecaster(cfg.forecaster, "5m", predictor=FakePredictor(offsets)).forecast(w)
+        assert fb.last_close == pytest.approx(fs.last_close)
+        assert fb.pred_path == pytest.approx(fs.pred_path, rel=1e-5)
+        assert fb.sample_closes == pytest.approx(fs.sample_closes, rel=1e-5)

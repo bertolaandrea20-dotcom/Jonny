@@ -104,28 +104,44 @@ class KronosForecaster(BaseForecaster):
                         axis=1).astype(np.float32)
 
     def forecast(self, df: pd.DataFrame) -> Forecast:
-        ctx = df.tail(self.cfg.context_bars).reset_index(drop=True)
-        x = ctx[PRICE_COLS].to_numpy(dtype=np.float32)
-        if np.isnan(x).any():
-            raise ValueError("Candele con valori NaN: impossibile prevedere")
-        # Kronos vuole timestamp naive: togliamo il fuso (tutto è UTC).
-        x_ts = ctx["timestamps"].dt.tz_localize(None)
-        y_ts = pd.Series(pd.date_range(x_ts.iloc[-1] + self.step,
-                                       periods=self.cfg.horizon_bars, freq=self.step))
-        clip = getattr(self.predictor, "clip", 5)
-        mean, std = x.mean(axis=0), x.std(axis=0)
-        xn = np.clip((x - mean) / (std + 1e-5), -clip, clip)
+        return self.forecast_many([df])[0]
 
+    def forecast_many(self, dfs: list[pd.DataFrame]) -> list[Forecast]:
+        """Previsioni per più finestre in una sola chiamata al modello (più veloce su CPU,
+        usato per precalcolare le previsioni dei backtest). Ogni finestra è normalizzata
+        per conto suo, esattamente come in `forecast`."""
         n = max(1, self.cfg.sample_count)
-        preds = self.predictor.generate(
-            np.repeat(xn[None], n, axis=0),
-            np.repeat(self._time_features(x_ts)[None], n, axis=0),
-            np.repeat(self._time_features(y_ts)[None], n, axis=0),
-            self.cfg.horizon_bars, self.cfg.temperature, 0, self.cfg.top_p, 1, False)
-        closes = np.asarray(preds)[:, :, 3] * (std[3] + 1e-5) + mean[3]  # (campioni, orizzonte)
-        path = [float(v) for v in closes.mean(axis=0)]
-        return Forecast(last_close=float(ctx["close"].iloc[-1]), pred_close=path[-1],
-                        pred_path=path, sample_closes=[float(c) for c in closes[:, -1]])
+        xs, x_stamps, y_stamps, stats, last = [], [], [], [], []
+        clip = getattr(self.predictor, "clip", 5)
+        for df in dfs:
+            ctx = df.tail(self.cfg.context_bars).reset_index(drop=True)
+            x = ctx[PRICE_COLS].to_numpy(dtype=np.float32)
+            if np.isnan(x).any():
+                raise ValueError("Candele con valori NaN: impossibile prevedere")
+            # Kronos vuole timestamp naive: togliamo il fuso (tutto è UTC).
+            x_ts = ctx["timestamps"].dt.tz_localize(None)
+            y_ts = pd.Series(pd.date_range(x_ts.iloc[-1] + self.step,
+                                           periods=self.cfg.horizon_bars, freq=self.step))
+            mean, std = x.mean(axis=0), x.std(axis=0)
+            xn = np.clip((x - mean) / (std + 1e-5), -clip, clip)
+            xs.append(np.repeat(xn[None], n, axis=0))
+            x_stamps.append(np.repeat(self._time_features(x_ts)[None], n, axis=0))
+            y_stamps.append(np.repeat(self._time_features(y_ts)[None], n, axis=0))
+            stats.append((mean[3], std[3]))
+            last.append(float(ctx["close"].iloc[-1]))
+        if len({len(x[0]) for x in xs}) > 1:
+            raise ValueError("forecast_many: le finestre devono avere la stessa lunghezza")
+
+        preds = np.asarray(self.predictor.generate(
+            np.concatenate(xs), np.concatenate(x_stamps), np.concatenate(y_stamps),
+            self.cfg.horizon_bars, self.cfg.temperature, 0, self.cfg.top_p, 1, False))
+        out = []
+        for k, ((m, sd), lc) in enumerate(zip(stats, last)):
+            closes = preds[k * n:(k + 1) * n, :, 3] * (sd + 1e-5) + m  # (campioni, orizzonte)
+            path = [float(v) for v in closes.mean(axis=0)]
+            out.append(Forecast(last_close=lc, pred_close=path[-1], pred_path=path,
+                                sample_closes=[float(c) for c in closes[:, -1]]))
+        return out
 
 
 def make_forecaster(cfg: ForecasterCfg, interval: str) -> BaseForecaster:
