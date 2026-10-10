@@ -9,26 +9,30 @@ perché nascita, promozione, sdoppiamento e morte usano solo dati passati.
 - 5 semi casuali diversi per ogni variante, per misurare quanto conta la fortuna
 - Buy & hold = media equipesata dei 3 asset nello stesso periodo
 
-| Variante | Periodo | Rendimento medio | Min / max sui semi | Buy & hold | Max DD medio | Fee medie |
-|---|---|---|---|---|---|---|
-| 1h, solo incubazione di 2 settimane | 27/09/2025 → 30/09/2026 | **−46,7%** | −52,2% / −38,3% | −32,6% | 48,7% | 28,6 $ |
-| 1h + prova sul passato (60 giorni) | 27/09/2025 → 30/09/2026 | **−29,0%** | −48,0% / −19,4% | −32,6% | 36,1% | 14,7 $ |
-| 4h + prova sul passato (60 giorni) | 05/10/2025 → 30/09/2026 | **−19,1%** | −32,5% / +8,7% | −40,0% | 27,8% | 11,1 $ |
+| Variante | Periodo | Rendimento medio | Min / max sui semi | Buy & hold | Semi sopra il B&H | Max DD medio | Fee medie |
+|---|---|---|---|---|---|---|---|
+| 1h, solo incubazione di 2 settimane | 27/09/2025 → 30/09/2026 | **−38,1%** | −60,7% / −16,0% | −32,6% | 2 su 5 | 46,4% | 32,3 $ |
+| 1h + prova sul passato (60 giorni) | 27/09/2025 → 30/09/2026 | **−33,3%** | −39,9% / −15,7% | −32,6% | 1 su 5 | 35,2% | 17,9 $ |
+| 4h + prova sul passato (60 giorni) | 05/10/2025 → 30/09/2026 | **−19,7%** | −37,6% / −9,7% | −40,0% | 5 su 5 | 26,8% | 11,3 $ |
+
+Nessun seme, in nessuna variante, chiude in positivo. Rilanciando con un'altra sequenza casuale
+(versione precedente del codice) le medie erano −46,7%, −29,0% e −19,1%: la variabilità tra
+semi è grande quanto le differenze tra varianti a 1h.
 
 ## Cosa dicono i numeri
 
 - **Il meccanismo funziona come progettato**: gli agenti senza profitto muoiono (~150 nati per
   anno, quasi tutti eliminati), quelli in profitto si sdoppiano, i soldi veri vanno solo a chi ha
   superato l'incubazione, il capitale dei morti torna in tesoreria.
-- **Ma nessuna variante fa soldi in modo affidabile.** La migliore (4h) batte il buy & hold in un
-  anno in cui le crypto sono scese del 40%, ma perde comunque in 4 semi su 5, e la differenza tra
-  semi (da −32% a +9%) dice che il risultato dipende molto dalla fortuna.
+- **Nessuna variante fa soldi.** La migliore (4h) batte il buy & hold in tutti i semi in un anno
+  in cui le crypto sono scese del 40%, perché sta spesso fuori mercato o short, ma perde comunque
+  tra il 10% e il 38%: meglio sarebbe stato restare in contanti.
 - **Perdono tutte le famiglie di strategia, sia long sia short, su tutti e 3 gli asset** (diagnosi
   sulla variante 1h con prova sul passato). Lo stop loss è la voce di perdita principale.
 - **L'evoluzione seleziona, non crea vantaggio**: se il "materiale genetico" (indicatori tecnici
   classici) non ha un vantaggio al netto dei costi, la selezione naturale non può inventarlo.
   Una selezione su finestre brevi premia chi è stato fortunato, che poi torna nella media.
-- La prova sul passato alla nascita dimezza fee e perdite: va tenuta.
+- La prova sul passato alla nascita dimezza le fee e riduce il drawdown: va tenuta.
 
 ## Prossimi passi sensati
 
