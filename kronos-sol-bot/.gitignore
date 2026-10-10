@@ -1,0 +1,15 @@
+.env
+config.yaml
+state.json
+state.json.tmp
+trades.csv
+bot.log
+STOP
+bias_cache.json
+bias_cache.json.tmp
+vendor/
+backtest_results/
+data/
+__pycache__/
+.pytest_cache/
+.venv/

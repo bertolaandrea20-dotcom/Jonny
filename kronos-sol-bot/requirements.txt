@@ -1,0 +1,13 @@
+pandas>=2.0
+numpy>=1.24
+pyyaml>=6.0
+requests>=2.31
+python-dotenv>=1.0
+pytest>=8.0
+
+# Kronos (installa anche il requirements.txt del repo Kronos, vedi README)
+torch>=2.0
+huggingface_hub>=0.20
+
+# Solo per la modalità live
+solders>=0.21

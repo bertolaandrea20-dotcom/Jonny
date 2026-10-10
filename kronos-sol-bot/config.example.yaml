@@ -1,0 +1,78 @@
+# Copia in config.yaml e modifica. I segreti vanno in .env, MAI qui.
+
+mode: paper            # paper | live  (live richiede anche CONFIRM_LIVE=yes nel .env)
+
+market:
+  symbol: SOLUSDT      # feed prezzi Binance (pubblico)
+  interval: 5m         # 1m | 5m | 15m | 1h ...
+  usdc_mint: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+  sol_mint: So11111111111111111111111111111111111111112
+
+forecaster:
+  type: kronos         # kronos | baseline
+  kronos_repo_path: ./vendor/Kronos
+  model: NeoQuasar/Kronos-small
+  tokenizer: NeoQuasar/Kronos-Tokenizer-base
+  device: cpu          # cpu | cuda | mps
+  max_context: 512
+  context_bars: 400    # candele passate date al modello
+  horizon_bars: 6      # candele previste (6 x 5m = 30 minuti)
+  sample_count: 5      # più campioni = previsione più stabile ma più lenta
+  temperature: 1.0
+  top_p: 0.9
+  seed: null           # es. 42 per backtest riproducibili (Kronos campiona in modo casuale)
+
+strategy:
+  min_edge_bps: 15     # entra solo se rendimento previsto > costi + 15bps
+  exit_edge_bps: -5
+  take_profit_bps: 60  # +0,60%
+  stop_loss_bps: 40    # -0,40%
+  max_hold_bars: 12    # esci comunque dopo 1 ora (12 x 5m)
+  min_up_fraction: 0   # filtro di confidenza: es. 0.8 = entra solo se >=80% dei campioni
+                       # Kronos prevede un rialzo (0 = disattivato; serve sample_count > 1)
+  intrabar_stops: true # SL/TP dentro la candela: high/low nel backtest, prezzo ogni 5s nel live
+
+costs:                 # stime per il backtest e per la soglia di ingresso
+  fee_bps: 5           # per lato
+  slippage_bps: 10     # per lato
+
+risk:
+  starting_equity_usd: 200
+  position_fraction: 0.5      # usa il 50% del capitale per trade
+  min_order_usd: 10
+  max_trades_per_day: 20
+  daily_loss_limit_pct: 3     # stop aperture se -3% nel giorno
+  max_drawdown_pct: 10        # bot fermato se -10% dal massimo
+  max_consecutive_errors: 5
+  min_sol_reserve: 0.02       # SOL sempre lasciati per le fee di rete
+
+jupiter:
+  quote_url: https://lite-api.jup.ag/swap/v1/quote   # verifica sulla doc attuale
+  swap_url: https://lite-api.jup.ag/swap/v1/swap
+  slippage_bps: 30
+  max_price_deviation_bps: 50
+  priority_fee_max_lamports: 200000
+  confirm_timeout_s: 60
+
+bias:                          # filtro giornaliero TradingAgents (vedi README)
+  enabled: false
+  ticker: SOL-USD              # formato Yahoo Finance
+  policy: block_bearish        # block_bearish = niente aperture nei giorni bearish
+                               # only_bullish  = aperture solo nei giorni bullish
+  exit_on_bearish: false       # chiudi subito la posizione se il bias diventa bearish
+  refresh_hour_utc: 6          # dalle 06:00 UTC vale il bias del nuovo giorno
+  fallback: neutral            # se TradingAgents fallisce: neutral | bearish (più prudente)
+  cache_file: bias_cache.json
+  tradingagents_repo_path: ./vendor/TradingAgents
+  tradingagents_config:        # unito a DEFAULT_CONFIG di TradingAgents
+    llm_provider: anthropic    # o openai, google, deepseek, ollama...
+    deep_think_llm: ""         # inserisci i nomi dei modelli del provider scelto
+    quick_think_llm: ""
+    max_debate_rounds: 1
+
+telegram:
+  enabled: true
+
+state_file: state.json
+trades_file: trades.csv
+log_file: bot.log
