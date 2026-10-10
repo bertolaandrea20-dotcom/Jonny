@@ -30,7 +30,8 @@ python -m bot.main --config config.yaml
 - [x] Verificata l'API di Kronos (commit 67b630e): `predict` media i campioni internamente,
       quindi `bot/forecaster.py` replica la normalizzazione e chiama `generate` con un campione
       per riga del batch. Da riverificare se si aggiorna `vendor/Kronos`.
-- [ ] Backtest Kronos vs baseline su almeno 3 periodi diversi da 30 giorni
+- [x] Backtest Kronos vs baseline su almeno 3 periodi diversi da 30 giorni
+      (`docs/backtest_2026-10.md`: Kronos perde in tutti e 3, batte solo il baseline; strategia da rivedere)
 - [ ] Provare timeframe 1m / 5m / 15m e orizzonti diversi
 - [x] Stop loss/take profit intrabar (high/low nel backtest, prezzo ogni 5s nel live)
 - [x] Filtro di confidenza sui campioni Kronos (`strategy.min_up_fraction`)
