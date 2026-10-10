@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 
 REFRESH_HOUR_UTC = 6
-EVERY_KEY = "__every__"   # nella cache Kronos: una previsione ogni N candele
+EVERY_KEY = "__mode__"    # nella cache Kronos: "daily" (una al giorno) o "all"
 
 
 def kronos_path(cache_dir: str, symbol: str, interval: str) -> Path:
@@ -27,10 +27,17 @@ def load_kronos(cache_dir: str, symbol: str, interval: str, ts: pd.Series) -> np
     if not path.exists():
         return None
     cache: dict = pickle.loads(path.read_bytes())
-    every = int(cache.get(EVERY_KEY, 1))
+    mode = cache.get(EVERY_KEY, "all")
     vals = pd.Series([cache.get(t.isoformat(), np.nan) for t in ts], dtype=float)
-    # Una previsione ogni N candele vale per le N candele successive (solo in avanti).
-    return vals.ffill(limit=every - 1).to_numpy() if every > 1 else vals.to_numpy()
+    if mode == "daily":
+        # La previsione giornaliera vale fino alla successiva (solo in avanti, max ~4 giorni).
+        return vals.ffill(limit=_bars_in_days(ts, 4)).to_numpy()
+    return vals.to_numpy()
+
+
+def _bars_in_days(ts: pd.Series, days: int) -> int:
+    per_day = ts.groupby(ts.dt.date).size().median() if len(ts) else 1
+    return max(1, int(per_day * days))
 
 
 def load_bias(path: str | None, ts: pd.Series) -> np.ndarray | None:
