@@ -2,6 +2,7 @@
 
   binance:BTCUSDT     crypto (storico lungo, pubblico)
   yahoo:ENI.MI        azioni, ETF, indici (^GSPC), forex (EURUSD=X), futures (GC=F), crypto (BTC-EUR)
+  kraken:BTC/EUR      crypto su Kraken (ultime 720 candele: per il bot, non per backtest lunghi)
   csv:path/file.csv   qualsiasi strumento esportato da un broker (timestamps,open,high,low,close[,volume])
 
 Senza prefisso si usa `market.default_source`. Ogni strumento tiene i SUOI orari (le azioni
@@ -128,6 +129,30 @@ def fetch_yahoo(symbol: str, interval: str, start: pd.Timestamp, end: pd.Timesta
     return df[df["timestamps"] + step <= pd.Timestamp.now(tz="UTC")]   # solo candele chiuse
 
 
+# ---------------------------------------------------------------- Kraken (ccxt)
+def ccxt_exchange(name: str, api_key: str = "", secret: str = ""):
+    import ccxt
+    ex = getattr(ccxt, name)({"apiKey": api_key, "secret": secret, "enableRateLimit": True})
+    ca = os.environ.get("REQUESTS_CA_BUNDLE")
+    if ca:                         # rete con proxy aziendale/CA propria
+        ex.validateServerSsl = ca
+    return ex
+
+
+_KRAKEN = None
+
+
+def fetch_kraken(symbol: str, interval: str, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
+    global _KRAKEN
+    _KRAKEN = _KRAKEN or ccxt_exchange("kraken")
+    rows = _KRAKEN.fetch_ohlcv(symbol, interval, since=int(start.timestamp() * 1000), limit=720)
+    df = pd.DataFrame(rows, columns=["t", "open", "high", "low", "close", "volume"])
+    df["timestamps"] = pd.to_datetime(df["t"], unit="ms", utc=True)
+    step = interval_to_timedelta(interval)
+    df = df[df["timestamps"] + step <= pd.Timestamp.now(tz="UTC")]   # solo candele chiuse
+    return df[COLUMNS]
+
+
 # ---------------------------------------------------------------- CSV
 def load_csv(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
@@ -145,6 +170,8 @@ def fetch(instrument: str, interval: str, start: pd.Timestamp, end: pd.Timestamp
         df = fetch_binance(sym, interval, start, end)
     elif src == "yahoo":
         df = fetch_yahoo(sym, interval, start, end)
+    elif src == "kraken":
+        df = fetch_kraken(sym, interval, start, end)
     elif src == "csv":
         df = load_csv(sym)
     else:

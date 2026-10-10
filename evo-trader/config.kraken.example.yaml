@@ -1,0 +1,25 @@
+# Bot di trend su Kraken per capitale piccolo (es. 200 €).
+# Prova SENZA soldi veri: broker: paper (prezzi reali di Kraken, ordini simulati).
+# Soldi veri: broker: kraken + mode: live + nel .env CONFIRM_LIVE=yes, KRAKEN_API_KEY,
+# KRAKEN_API_SECRET (chiave con permessi SOLO "Query funds" e "Create & modify orders",
+# MAI "Withdraw funds").
+
+mode: paper
+broker: paper
+strategy: trend
+
+trend:
+  instruments: [kraken:BTC/EUR, kraken:ETH/EUR, kraken:XRP/EUR, kraken:ADA/EUR, kraken:LTC/EUR,
+                kraken:LINK/EUR, kraken:TRX/EUR, kraken:DOGE/EUR, kraken:XLM/EUR, kraken:SOL/EUR]
+  interval: 4h             # controllo ogni 4 ore (~1 trade al giorno in totale sul paniere)
+  sma_days: 50             # tra 40 e 75 giorni i risultati storici erano simili (docs/)
+  capital: 200             # i SOLI soldi che il bot può usare: 20 € per moneta
+  order_mode: maker_then_market   # prima ordine limite (commissione più bassa), poi a mercato
+  maker_wait_s: 120
+  min_order: 5
+
+costs:                     # usati dalla simulazione (broker: paper)
+  fee_bps: 25              # Kraken Pro, ordini limite sui volumi bassi: verifica il listino
+  slippage_bps: 5
+
+state_dir: state

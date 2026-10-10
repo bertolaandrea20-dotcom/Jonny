@@ -8,6 +8,33 @@ profitto muore** e il suo capitale torna in tesoreria.
 > negativi (vedi [docs/risultati_2026-10.md](docs/risultati_2026-10.md)): oggi serve per
 > ricerca e paper trading, **non per soldi veri**.
 
+## Bot Kraken per capitale piccolo (100-200 €)
+
+Con poco capitale l'ecosistema di agenti perde (vedi [docs/](docs/)); la strategia che ha
+retto meglio sui dati 2019-2026 è più semplice: **un paniere di 10 crypto, ogni moneta con
+1/10 del capitale, comprata quando il prezzo sta sopra la sua media di 50 giorni e venduta
+quando scende sotto**. Controllo ogni 4 ore, circa un trade al giorno sull'intero paniere.
+
+```bash
+pip install ccxt
+cp config.kraken.example.yaml config.yaml
+python -m evo.trend                 # simulazione sui prezzi reali di Kraken (nessuna chiave)
+```
+
+Per i soldi veri (solo dopo qualche settimana di simulazione):
+1. Su Kraken crea una chiave API con permessi **solo** "Query funds" e "Create & modify
+   orders" — **mai** "Withdraw funds".
+2. Nel `.env`: `KRAKEN_API_KEY=...`, `KRAKEN_API_SECRET=...`, `CONFIRM_LIVE=yes`.
+3. In `config.yaml`: `mode: live`, `broker: kraken`, `trend.capital` = quanto vuoi rischiare.
+
+Il bot usa solo `trend.capital` e vende solo le quantità comprate da lui; un file `STOP`
+nella cartella fa vendere tutto e blocca gli acquisti. Ordini limite "maker" (commissione
+più bassa) con ripiego a mercato dopo 2 minuti.
+
+**Non è una garanzia**: nel periodo testato il filtro ha comunque perso fino al 60-75% nei
+crolli e le monete sono scelte tra le sopravvissute (risultati gonfiati). Molti trade al
+giorno con le commissioni di Kraken portano quasi sempre a perdere (−51% / −94% nel test).
+
 ## Da dove viene
 
 | Repository | Cosa usa Evo Trader |
@@ -115,3 +142,5 @@ del conto.
 | `evo/brokers.py` | Esposizione netta per strumento, PaperBroker, IBKRBroker (ordini di differenza, tetti, kill switch) |
 | `evo/data.py` | Fonti dati `binance:`, `yahoo:`, `csv:`, selezione automatica dei più scambiati |
 | `evo/kronos_cache.py` | Precalcolo delle previsioni Kronos per il gene filtro |
+| `evo/trend.py` | Bot di trend su paniere (Kraken o simulazione), ordini maker con ripiego a mercato |
+| `evo/rules.py` | Regole di riferimento a basso turnover per confronto |

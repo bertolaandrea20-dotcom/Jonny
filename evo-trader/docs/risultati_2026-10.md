@@ -71,3 +71,16 @@ capitale, investita se il prezzo è sopra la sua media mobile, altrimenti in con
   pratica conta l'intervallo, non il numero esatto.
 - **Attenzione**: le 10 monete sono scelte oggi tra quelle sopravvissute (bias di
   sopravvivenza, gonfia tutti i risultati) e anche il filtro ha perso fino al 60-75% nei crolli.
+
+## Kraken, 200 €: frequenza dei trade e commissioni (2019-2026)
+
+Stesso paniere con SOL al posto di BNB (non quotata su Kraken), dati Binance come
+approssimazione dei prezzi, commissioni Kraken: ordini limite 0,25% o a mercato 0,40%
+per lato, più 0,05% di slippage.
+
+| Strategia | Trade/anno (paniere) | Ordini limite | Ordini a mercato |
+|---|---|---|---|
+| Giornaliera, media 50 giorni | ~220 | +3242% (DD 75%) | +2611% |
+| Ogni 4h, media 50 giorni (config Kraken) | ~500 | +2453% (DD 76%) | +1516% |
+| Buy & hold | 1 | +1548% (DD 86%) | +1546% |
+| Ogni 4h, media 5 giorni ("tanti trade") | ~2000 | **−51%** | **−94%** |

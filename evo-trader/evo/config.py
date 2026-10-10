@@ -98,6 +98,21 @@ class EcosystemCfg:
 
 
 @dataclass
+class TrendCfg:
+    """Strategia di trend su un paniere: ogni strumento ha una quota fissa del capitale,
+    investita quando il prezzo è sopra la sua media di `sma_days` giorni, altrimenti in contanti."""
+    instruments: list[str] = field(default_factory=lambda: [
+        "kraken:BTC/EUR", "kraken:ETH/EUR", "kraken:XRP/EUR", "kraken:ADA/EUR", "kraken:LTC/EUR",
+        "kraken:LINK/EUR", "kraken:TRX/EUR", "kraken:DOGE/EUR", "kraken:XLM/EUR", "kraken:SOL/EUR"])
+    interval: str = "4h"             # ogni quanto controllare
+    sma_days: int = 50               # lunghezza della media in giorni
+    capital: float = 200.0           # i SOLI soldi che il bot può usare (in EUR)
+    order_mode: str = "maker_then_market"   # maker_then_market (commissioni più basse) | market
+    maker_wait_s: int = 120          # quanto aspettare l'ordine limite prima di passare a mercato
+    min_order: float = 5.0           # ordini più piccoli vengono saltati
+
+
+@dataclass
 class IBKRCfg:
     host: str = "127.0.0.1"
     port: int = 4002                 # IB Gateway: 4002 conto DEMO, 4001 conto REALE (TWS: 7497 / 7496)
@@ -117,15 +132,16 @@ class IBKRCfg:
 
 @dataclass
 class Secrets:
-    broker_api_key: str = ""
-    broker_api_secret: str = ""
+    broker_api_key: str = ""         # KRAKEN_API_KEY (o BROKER_API_KEY)
+    broker_api_secret: str = ""      # KRAKEN_API_SECRET (o BROKER_API_SECRET)
     confirm_live: bool = False
 
 
 @dataclass
 class Config:
     mode: str = "paper"              # paper | live (live richiede anche CONFIRM_LIVE=yes nel .env)
-    broker: str = "paper"            # paper (solo simulazione) | ibkr (Interactive Brokers)
+    strategy: str = "ecosystem"      # ecosystem (agenti evolutivi) | trend (paniere con media mobile)
+    broker: str = "paper"            # paper (solo simulazione) | ibkr (Interactive Brokers) | kraken
     market: MarketCfg = field(default_factory=MarketCfg)
     costs: CostsCfg = field(default_factory=CostsCfg)
     genome: GenomeCfg = field(default_factory=GenomeCfg)
@@ -135,6 +151,7 @@ class Config:
     bias_cache_files: dict = field(default_factory=dict)
     state_dir: str = "state"
     ibkr: IBKRCfg = field(default_factory=IBKRCfg)
+    trend: TrendCfg = field(default_factory=TrendCfg)
     secrets: Secrets = field(default_factory=Secrets)
 
 
@@ -155,6 +172,7 @@ def load_config(path: str | os.PathLike = "config.yaml") -> Config:
     raw = (yaml.safe_load(Path(path).read_text()) if Path(path).exists() else None) or {}
     cfg = Config(
         mode=raw.get("mode", "paper"),
+        strategy=raw.get("strategy", "ecosystem"),
         broker=raw.get("broker", "paper"),
         market=_build(MarketCfg, raw.get("market")),
         costs=_build(CostsCfg, raw.get("costs")),
@@ -164,9 +182,10 @@ def load_config(path: str | os.PathLike = "config.yaml") -> Config:
         bias_cache_files=raw.get("bias_cache_files") or {},
         state_dir=raw.get("state_dir", "state"),
         ibkr=_build(IBKRCfg, raw.get("ibkr")),
+        trend=_build(TrendCfg, raw.get("trend")),
         secrets=Secrets(
-            broker_api_key=os.getenv("BROKER_API_KEY", ""),
-            broker_api_secret=os.getenv("BROKER_API_SECRET", ""),
+            broker_api_key=os.getenv("KRAKEN_API_KEY", os.getenv("BROKER_API_KEY", "")),
+            broker_api_secret=os.getenv("KRAKEN_API_SECRET", os.getenv("BROKER_API_SECRET", "")),
             confirm_live=os.getenv("CONFIRM_LIVE", "no").lower() == "yes",
         ),
     )
@@ -177,8 +196,12 @@ def load_config(path: str | os.PathLike = "config.yaml") -> Config:
 def validate(cfg: Config) -> None:
     if cfg.mode not in ("paper", "live"):
         raise ValueError("mode deve essere 'paper' o 'live'")
-    if cfg.broker not in ("paper", "ibkr"):
-        raise ValueError("broker deve essere 'paper' o 'ibkr'")
+    if cfg.broker not in ("paper", "ibkr", "kraken"):
+        raise ValueError("broker deve essere 'paper', 'ibkr' o 'kraken'")
+    if cfg.strategy not in ("ecosystem", "trend"):
+        raise ValueError("strategy deve essere 'ecosystem' o 'trend'")
+    if cfg.trend.order_mode not in ("maker_then_market", "market"):
+        raise ValueError("trend.order_mode deve essere 'maker_then_market' o 'market'")
     if cfg.genome.max_leverage < 1:
         raise ValueError("genome.max_leverage deve essere >= 1")
     e = cfg.ecosystem
@@ -197,4 +220,6 @@ def validate(cfg: Config) -> None:
         if not cfg.secrets.confirm_live:
             raise RuntimeError("mode=live richiede CONFIRM_LIVE=yes nel .env")
         if cfg.broker == "paper":
-            raise RuntimeError("mode=live richiede un broker reale (ibkr)")
+            raise RuntimeError("mode=live richiede un broker reale (ibkr o kraken)")
+        if cfg.broker == "kraken" and not (cfg.secrets.broker_api_key and cfg.secrets.broker_api_secret):
+            raise RuntimeError("mode=live con kraken richiede KRAKEN_API_KEY e KRAKEN_API_SECRET nel .env")
