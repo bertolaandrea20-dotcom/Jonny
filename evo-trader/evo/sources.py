@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 REFRESH_HOUR_UTC = 6
+EVERY_KEY = "__every__"   # nella cache Kronos: una previsione ogni N candele
 
 
 def kronos_path(cache_dir: str, symbol: str, interval: str) -> Path:
@@ -24,8 +25,11 @@ def load_kronos(cache_dir: str, symbol: str, interval: str, ts: pd.Series) -> np
     path = kronos_path(cache_dir, symbol, interval)
     if not path.exists():
         return None
-    cache: dict[str, float] = pickle.loads(path.read_bytes())
-    return np.array([cache.get(t.isoformat(), np.nan) for t in ts], dtype=float)
+    cache: dict = pickle.loads(path.read_bytes())
+    every = int(cache.get(EVERY_KEY, 1))
+    vals = pd.Series([cache.get(t.isoformat(), np.nan) for t in ts], dtype=float)
+    # Una previsione ogni N candele vale per le N candele successive (solo in avanti).
+    return vals.ffill(limit=every - 1).to_numpy() if every > 1 else vals.to_numpy()
 
 
 def load_bias(path: str | None, ts: pd.Series) -> np.ndarray | None:

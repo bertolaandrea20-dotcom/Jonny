@@ -225,3 +225,15 @@ def test_paper_bot_restarts_from_state_and_matches_one_shot_simulation(tmp_path,
     assert [a["genome"]["id"] for a in saved["agents"]] == [a.genome.id for a in eco.agents]
     assert [a["cash"] for a in saved["agents"]] == pytest.approx([a.cash for a in eco.agents])
     assert len(saved["history"]) == len(eco.history) == 6
+
+
+def test_kronos_cache_every_n_is_forward_filled_only(tmp_path):
+    import pickle
+    from evo.sources import EVERY_KEY, kronos_path, load_kronos
+    ts = pd.Series(pd.date_range("2026-01-01", periods=12, freq="4h", tz="UTC"))
+    cache = {EVERY_KEY: 6, ts[5].isoformat(): 80.0, ts[11].isoformat(): -40.0}
+    p = kronos_path(str(tmp_path), "AAA", "4h")
+    p.write_bytes(pickle.dumps(cache))
+    k = load_kronos(str(tmp_path), "AAA", "4h", ts)
+    assert np.all(np.isnan(k[:5]))                 # prima della prima previsione: nulla
+    assert np.all(k[5:11] == 80.0) and k[11] == -40.0

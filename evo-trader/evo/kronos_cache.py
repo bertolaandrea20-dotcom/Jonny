@@ -3,7 +3,12 @@
 Usa il wrapper di kronos-sol-bot (stessa normalizzazione, previsioni in batch).
 Riprende da dove si era fermato: la cache si salva ogni `--save-every` candele.
 
-  python -m evo.kronos_cache --symbol SOLUSDT --start 2025-06-01 --end 2026-10-01 --horizon 6
+  python -m evo.kronos_cache --symbol SOLUSDT --start 2025-04-01 --end 2026-10-01 --horizon 6 --every 6
+
+Con --every N si calcola una previsione ogni N candele (quelle che chiudono a un multiplo di
+N candele dalla mezzanotte UTC) e la si usa per le N candele successive: con 4h, --every 6 e
+--horizon 6 è una previsione giornaliera a 24 ore. Nessun look-ahead: ogni previsione usa solo
+candele già chiuse.
 """
 from __future__ import annotations
 
@@ -16,8 +21,8 @@ from pathlib import Path
 import pandas as pd
 
 from .config import load_config
-from .data import load_market
-from .sources import kronos_path
+from .data import interval_to_timedelta, load_market
+from .sources import EVERY_KEY, kronos_path
 
 KRONOS_BOT = Path(__file__).resolve().parents[2] / "kronos-sol-bot"
 
@@ -29,7 +34,8 @@ def main() -> None:
     ap.add_argument("--start", required=True)
     ap.add_argument("--end", required=True)
     ap.add_argument("--horizon", type=int, default=6, help="candele previste")
-    ap.add_argument("--batch", type=int, default=8)
+    ap.add_argument("--every", type=int, default=1, help="una previsione ogni N candele")
+    ap.add_argument("--batch", type=int, default=1, help="su CPU il batch non accelera")
     ap.add_argument("--save-every", type=int, default=64)
     args = ap.parse_args()
 
@@ -43,9 +49,18 @@ def main() -> None:
     df = load_market([args.symbol], cfg.market.interval, args.start, args.end)[args.symbol]
     path = kronos_path(cfg.kronos_cache_dir, args.symbol, cfg.market.interval)
     path.parent.mkdir(parents=True, exist_ok=True)
-    cache: dict[str, float] = pickle.loads(path.read_bytes()) if path.exists() else {}
+    cache: dict = pickle.loads(path.read_bytes()) if path.exists() else {}
+    if cache.get(EVERY_KEY, args.every) != args.every:
+        raise SystemExit(f"La cache esistente usa --every {cache[EVERY_KEY]}: cancellala o usa lo stesso valore")
+    cache[EVERY_KEY] = args.every
+    step_s = interval_to_timedelta(cfg.market.interval).total_seconds()
+
+    def anchored(ts) -> bool:   # la candela chiude a un multiplo di `every` candele
+        return int((ts.timestamp() + step_s) // step_s) % args.every == 0
+
     todo = [i for i in range(fcfg.context_bars - 1, len(df))
-            if df["timestamps"].iloc[i].isoformat() not in cache]
+            if anchored(df["timestamps"].iloc[i])
+            and df["timestamps"].iloc[i].isoformat() not in cache]
     print(f"{args.symbol} {cfg.market.interval}: {len(todo)} previsioni da calcolare "
           f"({len(cache)} già in cache)", flush=True)
     kf = KronosForecaster(fcfg, cfg.market.interval)
