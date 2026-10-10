@@ -191,3 +191,30 @@ def test_fetch_history_period_and_context():
     assert len(df) == 2 * 288 + 100
     assert df["timestamps"].iloc[-1] < end
     assert df["timestamps"].is_monotonic_increasing and df["timestamps"].is_unique
+
+
+def test_kronos_wrapper_puts_modules_in_eval_mode(cfg, tmp_path, monkeypatch):
+    # Repo Kronos finto: from_pretrained restituisce moduli in training, come quello vero.
+    pkg = tmp_path / "model"
+    pkg.mkdir()
+    (pkg / "__init__.py").write_text(
+        "class _Mod:\n"
+        "    training = True\n"
+        "    @classmethod\n"
+        "    def from_pretrained(cls, name):\n"
+        "        return cls()\n"
+        "    def eval(self):\n"
+        "        self.training = False\n"
+        "        return self\n"
+        "class Kronos(_Mod): pass\n"
+        "class KronosTokenizer(_Mod): pass\n"
+        "class KronosPredictor:\n"
+        "    def __init__(self, model, tokenizer, device=None, max_context=512):\n"
+        "        self.model, self.tokenizer = model, tokenizer\n")
+    import sys
+    monkeypatch.delitem(sys.modules, "model", raising=False)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    cfg.forecaster.kronos_repo_path = str(tmp_path)
+    kf = KronosForecaster(cfg.forecaster, "5m")
+    assert kf.predictor.model.training is False
+    assert kf.predictor.tokenizer.training is False

@@ -5,13 +5,17 @@ per decidere; l'esecuzione reale avviene su Jupiter (vedi executor.py).
 """
 from __future__ import annotations
 
+import os
 import time
 
 import pandas as pd
 import requests
 
-BINANCE_KLINES = "https://api.binance.com/api/v3/klines"
-BINANCE_PRICE = "https://api.binance.com/api/v3/ticker/price"
+# BINANCE_API_BASE permette di usare il mirror pubblico https://data-api.binance.vision
+# (stessi dati di mercato) dove api.binance.com è bloccato per area geografica.
+BINANCE_API_BASE = os.environ.get("BINANCE_API_BASE", "https://api.binance.com").rstrip("/")
+BINANCE_KLINES = f"{BINANCE_API_BASE}/api/v3/klines"
+BINANCE_PRICE = f"{BINANCE_API_BASE}/api/v3/ticker/price"
 COLUMNS = ["timestamps", "open", "high", "low", "close", "volume", "amount"]
 
 

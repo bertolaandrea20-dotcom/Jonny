@@ -87,8 +87,10 @@ class KronosForecaster(BaseForecaster):
         sys.path.insert(0, str(repo))
         from model import Kronos, KronosPredictor, KronosTokenizer  # type: ignore
 
-        tokenizer = KronosTokenizer.from_pretrained(cfg.tokenizer)
-        model = Kronos.from_pretrained(cfg.model)
+        # from_pretrained lascia i moduli in modalità training: senza eval() il dropout resta
+        # attivo in inferenza (previsioni più rumorose e attention ~3x più lenta su CPU).
+        tokenizer = KronosTokenizer.from_pretrained(cfg.tokenizer).eval()
+        model = Kronos.from_pretrained(cfg.model).eval()
         if cfg.seed is not None:
             import torch
             torch.manual_seed(cfg.seed)  # campionamento riproducibile nei backtest
