@@ -1,5 +1,5 @@
 {
- "last_bar": "2026-10-11 08:00:00+00:00",
+ "last_bar": "2026-10-11 12:00:00+00:00",
  "sleeves": [
   {
    "instrument": "kraken:BTC/EUR",
@@ -7,7 +7,7 @@
    "qty": 0.0002692462868644399,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.9783
+   "value": 20.1606
   },
   {
    "instrument": "kraken:ETH/EUR",
@@ -15,15 +15,15 @@
    "qty": 0.008915052280849432,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.939
+   "value": 20.175
   },
   {
    "instrument": "kraken:XRP/EUR",
-   "cash": 19.699606507876098,
-   "qty": 0.0,
-   "trades": 2,
-   "fees": 0.09937244738816065,
-   "value": 19.6996
+   "cash": 7.771561172376096e-16,
+   "qty": 15.4544030648256,
+   "trades": 3,
+   "fees": 0.1486214636578509,
+   "value": 19.6405
   },
   {
    "instrument": "kraken:ADA/EUR",
@@ -31,7 +31,7 @@
    "qty": 89.78840760907202,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.7847
+   "value": 20.3533
   },
   {
    "instrument": "kraken:LTC/EUR",
@@ -39,7 +39,7 @@
    "qty": 0.349090160801952,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.7829
+   "value": 20.1181
   },
   {
    "instrument": "kraken:LINK/EUR",
@@ -47,7 +47,7 @@
    "qty": 1.7159311997824107,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.7449
+   "value": 20.4598
   },
   {
    "instrument": "kraken:TRX/EUR",
@@ -55,15 +55,15 @@
    "qty": 67.52328088493799,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.9237
+   "value": 19.9278
   },
   {
    "instrument": "kraken:DOGE/EUR",
-   "cash": 20.0,
-   "qty": 0.0,
-   "trades": 0,
-   "fees": 0.0,
-   "value": 20.0
+   "cash": 7.077671781985373e-16,
+   "qty": 256.1336463923295,
+   "trades": 1,
+   "fees": 0.05,
+   "value": 19.94
   },
   {
    "instrument": "kraken:XLM/EUR",
@@ -71,7 +71,7 @@
    "qty": 113.61710969110037,
    "trades": 1,
    "fees": 0.05,
-   "value": 20.0389
+   "value": 20.7626
   },
   {
    "instrument": "kraken:SOL/EUR",
@@ -79,7 +79,7 @@
    "qty": 0.20297261792556492,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.8568
+   "value": 20.2709
   }
  ]
 }

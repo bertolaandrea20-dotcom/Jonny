@@ -22,3 +22,8 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-11T12:10:13Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-11 08:00:00+00:00: valore del bot 198.75 € (capitale iniziale 200.00 €)
+=== 2026-10-11T16:10:16Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 15.454403 XRP/EUR per 19.65 € (sopra la media 50g)
+COMPRA 256.13365 DOGE/EUR per 19.95 € (sopra la media 50g)
+2026-10-11 12:00:00+00:00: valore del bot 201.81 € (capitale iniziale 200.00 €)
