@@ -1,0 +1,682 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body><title>Ecosistema degli Agenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: un habitat vivo al centro (le famiglie di agenti attorno ai mercati), pannelli di lettura ai lati che si impilano su telefono. */
+:root{
+  --bg:#eef1ec; --surface:#f8faf6; --sunken:#e3e8e1; --line:#cdd5ca; --fg:#17211c; --muted:#5b6b62;
+  --accent:#b45f2a; --gain:#2d8a4e; --loss:#c23b31; --trial:#2f6fb3; --market:#6b5aa6;
+  --habitat-a:#e7ede4; --habitat-b:#d7e1d6;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --agentL:40%;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1714; --surface:#16211c; --sunken:#0b120f; --line:#26352d; --fg:#e4ece6; --muted:#8fa298;
+  --accent:#e08a4f; --gain:#4fc274; --loss:#f06a5e; --trial:#6aa7ec; --market:#a796e6;
+  --habitat-a:#13201a; --habitat-b:#0a110d; --agentL:62%; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1714; --surface:#16211c; --sunken:#0b120f; --line:#26352d; --fg:#e4ece6; --muted:#8fa298;
+  --accent:#e08a4f; --gain:#4fc274; --loss:#f06a5e; --trial:#6aa7ec; --market:#a796e6;
+  --habitat-a:#13201a; --habitat-b:#0a110d; --agentL:62%; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font:14px/1.5 var(--f-body);padding-inline:16px;padding-block:14px 32px}
+.wrap{max-width:1380px;margin:0 auto;display:grid;gap:14px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font:700 clamp(24px,3.2vw,34px)/1.05 var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.controls{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+button{font:500 13px var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--surface);padding:8px 12px;min-width:0}
+.stat .l{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:500 19px var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .s{font-size:12px;color:var(--muted)}
+.daybar{height:4px;background:var(--sunken);border-radius:2px;overflow:hidden;margin-top:4px}
+.daybar i{display:block;height:100%;background:var(--accent)}
+.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:980px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.panel h2{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.habitat{padding:0;overflow:hidden}
+.habitat .bar{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:12px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+#hab{display:block;width:100%;height:560px;cursor:crosshair;touch-action:manipulation}
+@media (max-width:640px){#hab{height:420px}}
+.col{display:grid;gap:14px;min-width:0}
+.agent-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.agent-name{font:700 20px var(--f-display)}
+.pill{display:inline-block;font:500 11.5px var(--f-body);padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.p-trial{color:var(--trial)} .p-alive{color:var(--gain)} .p-dead{color:var(--loss)}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.kv div{background:var(--sunken);border-radius:8px;padding:6px 8px;min-width:0}
+.kv b{display:block;font:500 15px var(--f-mono);font-variant-numeric:tabular-nums}
+.kv span{font-size:11px;color:var(--muted)}
+.gain{color:var(--gain)} .loss{color:var(--loss)} .mut{color:var(--muted)}
+.dna{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 14px;font-size:12px;margin:6px 0 4px}
+.dna div{display:flex;align-items:center;gap:6px;min-width:0}
+.dna span{flex:0 0 92px;color:var(--muted)}
+.dna i{flex:1;height:4px;background:var(--sunken);border-radius:2px;position:relative}
+.dna i b{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:2px}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}
+.tabs button{padding:3px 9px;font-size:12px}
+.phase{border-left:2px solid var(--line);padding:2px 0 2px 10px;margin:8px 0}
+.phase h3{font:600 11px var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 5px}
+.step{background:var(--sunken);border-radius:8px;padding:6px 9px;margin-bottom:5px;font-size:12.5px}
+.step .who{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:12px}
+.bull{margin-right:14%;border-left:3px solid var(--gain)} .bear{margin-left:14%;border-right:3px solid var(--loss)}
+.sig{display:inline-block;width:64px;height:5px;background:var(--line);border-radius:3px;position:relative;vertical-align:middle;margin-right:4px}
+.sig i{position:absolute;top:0;bottom:0;border-radius:3px}
+.rating{font:600 11.5px var(--f-body);padding:1px 7px;border-radius:5px;background:var(--sunken)}
+.fam{display:grid;gap:4px;max-height:300px;overflow:auto}
+.famrow{display:grid;grid-template-columns:14px minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:12.5px;padding:3px 4px;border-radius:6px;cursor:pointer}
+.famrow:hover{background:var(--sunken)}
+.famrow .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.famrow .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.famrow.ext{opacity:.5}
+#popChart{display:block;width:100%;height:150px}
+.log{max-height:260px;overflow:auto;font-size:12.5px;display:grid;gap:3px}
+.log div{padding:2px 0;border-bottom:1px dashed var(--line)}
+.log .d{font-family:var(--f-mono);color:var(--muted);margin-right:6px}
+.e-morte{color:var(--loss)} .e-nascita,.e-sdoppiamento{color:var(--gain)} .e-giudizio{font-weight:600} .e-guardiano,.e-fondazione{color:var(--market)}
+.laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;font-size:13px}
+.laws div{min-width:0}
+.laws b{display:block;font:600 14px var(--f-display);margin-bottom:2px}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}
+.tablewrap{overflow-x:auto}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Ecosistema degli Agenti</h1>
+      <p class="sub">Ogni cerchio è un agente di trading che ragiona come TradingAgents. I colori sono le famiglie: chi guadagna si sdoppia, chi perde muore e la sua strategia sparisce per sempre. Mercato simulato, nessun denaro reale.</p>
+    </div>
+    <div class="controls" role="group" aria-label="Controlli della simulazione">
+      <button id="play" type="button">Pausa</button>
+      <button type="button" data-speed="1">×1</button>
+      <button type="button" data-speed="4">×4</button>
+      <button type="button" data-speed="12">×12</button>
+      <button id="judge" type="button" title="Esegue subito il giudizio di fine giornata">Giudica ora</button>
+      <button id="reset" type="button">Nuova città</button>
+    </div>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Stato della città"></section>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel habitat">
+        <div class="bar">
+          <div class="legend">
+            <span><i class="sw" style="border:2px dashed var(--trial)"></i>in prova (3 giorni)</span>
+            <span><i class="sw" style="box-shadow:0 0 0 2px var(--gain)"></i>in profitto oggi</span>
+            <span><i class="sw" style="box-shadow:0 0 0 2px var(--loss)"></i>in perdita oggi</span>
+            <span><i class="sw" style="background:var(--market)"></i>mercati</span>
+          </div>
+          <span>grandezza = capitale · linee = genitore → figlio · tocca un agente</span>
+        </div>
+        <canvas id="hab" aria-label="Habitat degli agenti"></canvas>
+      </section>
+
+      <section class="panel">
+        <h2>Popolazione per famiglia <span class="mut" style="text-transform:none;letter-spacing:0">un giorno per colonna</span></h2>
+        <canvas id="popChart"></canvas>
+      </section>
+
+      <section class="panel">
+        <h2>Leggi dell'ecosistema</h2>
+        <div class="laws">
+          <div><b>3 giorni di prova</b>Ogni nuovo agente fa trading per 3 giorni senza essere giudicato. Il primo giudizio guarda tutto il periodo.</div>
+          <div><b>Profitto: si sdoppia</b>Poi ogni sera, chi è in profitto versa il 10% alla tesoreria e genera un figlio con il DNA mutato e metà del portafoglio.</div>
+          <div><b>Perdita: muore</b>Le posizioni vengono chiuse e la strategia entra nella lista nera: né lei né una troppo simile potranno rinascere.</div>
+          <div><b>La città non muore</b>Il 30% resta in tesoreria. Se gli abitanti sono meno di 6, il Guardiano fonda nuove famiglie.</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" id="agentPanel"></section>
+      <section class="panel">
+        <h2>Famiglie <span class="mut" style="text-transform:none;letter-spacing:0">vivi · capitale €</span></h2>
+        <div class="fam" id="fams"></div>
+      </section>
+      <section class="panel">
+        <h2>Cronaca</h2>
+        <div class="log" id="log"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+// ───────────────────────── numeri casuali riproducibili ─────────────────────────
+let rngState = 1;
+const rnd = () => { rngState |= 0; rngState = rngState + 0x6D2B79F5 | 0; let t = Math.imul(rngState ^ rngState >>> 15, 1 | rngState);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const uni = (a, b) => a + (b - a) * rnd();
+const pick = a => a[Math.floor(rnd() * a.length)];
+const gauss = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+const clamp = (x, a = -1, b = 1) => Math.max(a, Math.min(b, x));
+
+// ───────────────────────── regole ─────────────────────────
+const CFG = { capital: 10000, treasuryShare: .30, initial: 12, minPop: 6, maxPop: 64, trial: 3, tax: .10,
+  minCap: 50, fee: .0026, dayTicks: 48, every: 3, radius: .05 };
+
+// ───────────────────────── mercato simulato ─────────────────────────
+const SYMBOLS = [["BTC/EUR", 60000], ["ETH/EUR", 2500], ["SOL/EUR", 150], ["ENI.MI", 14], ["ISP.MI", 4], ["UCG.MI", 40], ["STLAM.MI", 10], ["RACE.MI", 400]];
+const GOOD = ["{s}: utili sopra le attese", "Upgrade degli analisti su {s}", "{s}: nuova partnership strategica", "{s}: flussi record dagli istituzionali"];
+const BAD = ["{s}: indagine della vigilanza", "Downgrade su {s}, stime tagliate", "{s}: perdita peggiore del previsto", "{s}: i grandi fondi vendono"];
+const NEUTRAL = ["{s}: volumi nella media", "{s}: guidance confermata"];
+let market;
+function newMarket() {
+  const m = { tick: 0, news: [], assets: {} };
+  for (const [s, ref] of SYMBOLS) {
+    const crypto = s.includes("/"), start = ref * uni(.9, 1.1);
+    m.assets[s] = { s, crypto, vol: crypto ? uni(.008, .016) : uni(.003, .008), prices: [start], fair: start * uni(.85, 1.15),
+      regime: pick([-1, 0, 0, 1]), nd: 0, crowd: 0,
+      fund: crypto ? { crescita: uni(-.1, .3), adozione: uni(-.05, .2) } : { pe: uni(5, 45), crescita: uni(-.1, .3), debito: uni(.1, 2.5) } };
+  }
+  return m;
+}
+function marketStep(m) {
+  m.tick++;
+  for (const a of Object.values(m.assets)) {
+    if (rnd() < .01) a.regime = pick([-1, 0, 1]);
+    if (rnd() < .035) {
+      const sent = pick([-1, -1, 0, 1, 1]) * uni(.4, 1);
+      const pool = sent > .2 ? GOOD : sent < -.2 ? BAD : NEUTRAL;
+      m.news.push({ tick: m.tick, s: a.s, h: pick(pool).replace("{s}", a.s), sent: +sent.toFixed(2) });
+      a.nd += sent * a.vol * .9; a.fair *= 1 + sent * .02;
+    }
+    const p = a.prices[a.prices.length - 1];
+    const ret = a.regime * a.vol * .08 + a.nd + .004 * Math.log(a.fair / p) + gauss() * a.vol;
+    a.prices.push(p * Math.exp(ret));
+    a.nd *= .93;
+    a.crowd = .85 * a.crowd + .15 * (ret / a.vol) + gauss() * .15;
+    if (a.prices.length > 700) a.prices.splice(0, 200);
+  }
+  if (m.news.length > 400) m.news.splice(0, 150);
+}
+const price = s => { const p = market.assets[s].prices; return p[p.length - 1]; };
+const closes = (s, n) => market.assets[s].prices.slice(-n);
+
+// indicatori
+const sma = (x, n) => { const w = x.slice(-n); return w.reduce((a, b) => a + b, 0) / w.length; };
+const ema = (x, n) => { const k = 2 / (n + 1); const w = x.slice(-4 * n); let e = w[0]; for (const v of w) e = k * v + (1 - k) * e; return e; };
+const rsi = (x, n) => { if (x.length < n + 1) return 50; let up = 0, dn = 0; const w = x.slice(-(n + 1));
+  for (let i = 1; i < w.length; i++) { const d = w[i] - w[i - 1]; d > 0 ? up += d : dn -= d; } return dn === 0 ? (up > 0 ? 100 : 50) : 100 - 100 / (1 + up / dn); };
+const volat = x => { const w = x.slice(-25); const r = []; for (let i = 1; i < w.length; i++) r.push(Math.log(w[i] / w[i - 1]));
+  const m = r.reduce((a, b) => a + b, 0) / r.length; return Math.sqrt(r.reduce((a, b) => a + (b - m) ** 2, 0) / r.length) || 1e-4; };
+
+// ───────────────────────── DNA ─────────────────────────
+const BOUNDS = { wMarket: [0, 1], wSent: [0, 1], wNews: [0, 1], wFund: [0, 1], debate: [1, 3], riskRounds: [1, 2], appetite: [0, 1],
+  entry: [.05, .6], exit: [-.6, 0], size: [.05, .6], sl: [.005, .08], tp: [.005, .15], fast: [3, 20], slow: [15, 80], rsiP: [5, 30], rsiLo: [15, 40], rsiHi: [60, 85] };
+const INTS = new Set(["debate", "riskRounds", "fast", "slow", "rsiP", "rsiLo", "rsiHi"]);
+const STYLES = ["momentum", "mean reversion", "breakout"];
+const fixG = g => { if (g.slow <= g.fast + 4) g.slow = Math.min(80, g.fast + 5); if (g.tp < g.sl) g.tp = Math.min(.15, g.sl * 1.5); return g; };
+const clip = (k, v) => { const [a, b] = BOUNDS[k]; v = Math.max(a, Math.min(b, v)); return INTS.has(k) ? Math.round(v) : v; };
+function randomGenome() {
+  const g = {}; for (const k in BOUNDS) g[k] = clip(k, uni(...BOUNDS[k]));
+  g.style = pick(STYLES); g.contrarian = rnd() < .2;
+  const syms = SYMBOLS.map(s => s[0]).sort(() => rnd() - .5); g.symbols = syms.slice(0, 1 + Math.floor(rnd() * 3));
+  return fixG(g);
+}
+function mutate(p, strength = .12) {
+  const g = { ...p, symbols: [...p.symbols] };
+  for (const k in BOUNDS) if (rnd() < .5) { const [a, b] = BOUNDS[k]; g[k] = clip(k, g[k] + gauss() * strength * (b - a)); }
+  if (rnd() < .08) g.style = pick(STYLES);
+  if (rnd() < .05) g.contrarian = !g.contrarian;
+  if (rnd() < .2) { const s = pick(SYMBOLS)[0]; const i = g.symbols.indexOf(s); if (i >= 0 && g.symbols.length > 1) g.symbols.splice(i, 1); else if (i < 0 && g.symbols.length < 4) g.symbols.push(s); }
+  return fixG(g);
+}
+const crossover = (a, b) => fixG(Object.fromEntries(Object.keys(a).map(k => [k, rnd() < .5 ? a[k] : b[k]])));
+const vec = g => [...Object.keys(BOUNDS).map(k => (g[k] - BOUNDS[k][0]) / (BOUNDS[k][1] - BOUNDS[k][0])), STYLES.indexOf(g.style) / 2, g.contrarian ? 1 : 0];
+function dist(a, b) { const x = vec(a), y = vec(b); let s = 0; for (let i = 0; i < x.length; i++) s += (x[i] - y[i]) ** 2;
+  let d = Math.sqrt(s / x.length); if ([...a.symbols].sort().join() !== [...b.symbols].sort().join()) d += .05; return d; }
+function fingerprint(g) { const s = Object.keys(BOUNDS).map(k => Math.round((g[k] - BOUNDS[k][0]) / (BOUNDS[k][1] - BOUNDS[k][0]) * 10)).join("") + g.style + g.contrarian + [...g.symbols].sort().join();
+  let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return (h >>> 0).toString(16).padStart(8, "0"); }
+function describe(g) {
+  const w = { mercato: g.wMarket, sentiment: g.wSent, news: g.wNews, fondamentali: g.wFund };
+  const top = Object.keys(w).sort((a, b) => w[b] - w[a])[0];
+  return `${g.style}, si fida di ${top}, ${g.appetite > .66 ? "audace" : g.appetite < .33 ? "prudente" : "equilibrato"}${g.contrarian ? ", contrarian" : ""}`;
+}
+
+// ───────────────────────── il ragionamento (grafo di TradingAgents) ─────────────────────────
+const RIT = { Buy: "Compra", Overweight: "Sovrappesa", Hold: "Mantieni", Underweight: "Sottopesa", Sell: "Vendi" };
+const toRating = (sc, e) => sc >= e * 1.6 ? "Buy" : sc >= e ? "Overweight" : sc <= -e * 1.6 ? "Sell" : sc <= -e ? "Underweight" : "Hold";
+const st = (agent, phase, text, signal = 0, conf = 0) => ({ agent, phase, text, signal, conf });
+const f4 = v => Number(v.toPrecision(4)).toString();
+
+function deliberate(s, g, held, avg, dd) {
+  const c = closes(s, 160), p = price(s), vol = volat(c);
+  // 1. analisti
+  const fast = sma(c, g.fast), slow = sma(c, g.slow), r = rsi(c, g.rsiP);
+  let ms, mt;
+  if (g.style === "momentum") {
+    const trend = (fast - slow) / slow / (vol * Math.sqrt(g.slow)), mac = (ema(c, 12) - ema(c, 26)) / (p * vol);
+    ms = clamp(.7 * Math.tanh(trend) + .3 * Math.tanh(mac));
+    mt = `Trend ${fast > slow ? "rialzista" : "ribassista"}: media ${g.fast} a ${f4(fast)} contro media ${g.slow} a ${f4(slow)}. RSI ${r.toFixed(0)}. Seguo la direzione.`;
+  } else if (g.style === "mean reversion") {
+    const w = c.slice(-20), mid = w.reduce((a, b) => a + b, 0) / w.length, sd = Math.sqrt(w.reduce((a, b) => a + (b - mid) ** 2, 0) / w.length) || 1;
+    const band = (p - mid) / (2 * sd), rs = r < g.rsiLo ? 1 : r > g.rsiHi ? -1 : (50 - r) / 50;
+    ms = clamp(.6 * rs - .4 * band);
+    mt = `RSI ${r.toFixed(0)} (${r < g.rsiLo ? "ipervenduto" : r > g.rsiHi ? "ipercomprato" : "neutro"}), prezzo a ${band.toFixed(2)} bande dal centro. Scommetto sul ritorno alla media.`;
+  } else {
+    const w = c.slice(-(g.slow + 1), -1), lo = Math.min(...w), hi = Math.max(...w);
+    ms = p > hi ? clamp(.5 + (p / hi - 1) / vol / 4) : p < lo ? clamp(-.5 - (1 - p / lo) / vol / 4) : .25 * Math.tanh((fast - slow) / slow / vol);
+    mt = `Canale di ${g.slow} periodi tra ${f4(lo)} e ${f4(hi)}, prezzo ${f4(p)}: ${p > hi ? "rottura al rialzo" : p < lo ? "rottura al ribasso" : "dentro il canale"}.`;
+  }
+  const a = market.assets[s], crowd = Math.tanh(a.crowd / 2);
+  const news = market.news.filter(n => n.s === s && n.tick >= market.tick - 24);
+  let num = 0, den = 0; for (const n of news) { const w = Math.exp(-(market.tick - n.tick) / 12); num += w * n.sent; den += w; }
+  const ns = den ? clamp(num / den) : 0;
+  const gap = p / a.fair - 1, fd = a.fund;
+  let fs = clamp(-gap * 6) * .6 + clamp(fd.crescita * 4) * .2;
+  if (fd.adozione != null) fs += clamp(fd.adozione * 5) * .2;
+  if (fd.pe) fs += clamp((20 - fd.pe) / 20) * .1 - clamp((fd.debito - 1) / 2) * .1;
+  const reports = [
+    st("Market Analyst", "analisti", mt, ms, Math.min(1, Math.abs(ms) * .8 + .2)),
+    st("Social Analyst", "analisti", `Umore della folla ${crowd > .4 ? "euforico" : crowd > .1 ? "positivo" : crowd < -.4 ? "depresso" : crowd < -.1 ? "negativo" : "tiepido"} (${crowd.toFixed(2)}).${g.contrarian ? " Da contrarian vado contro la folla." : ""}`, clamp(g.contrarian ? -crowd : crowd), .3 + Math.abs(crowd) * .6),
+    st("News Analyst", "analisti", news.length ? `${news.length} notizie. La più pesante: «${[...news].sort((x, y) => Math.abs(y.sent) - Math.abs(x.sent))[0].h}». Tono ${ns.toFixed(2)}.` : "Nessuna notizia rilevante nelle ultime ore.", ns, news.length ? Math.min(1, .25 + .15 * news.length) : .1),
+    st("Fundamentals Analyst", "analisti", `Prezzo ${gap < 0 ? "sotto" : "sopra"} il valore equo del ${(Math.abs(gap) * 100).toFixed(1)}%, crescita ${(fd.crescita * 100).toFixed(1)}%${fd.pe ? `, P/E ${fd.pe.toFixed(1)}` : ""}.`, clamp(fs), .5),
+  ];
+  // 2. dibattito
+  const W = [g.wMarket, g.wSent, g.wNews, g.wFund];
+  const strength = (rep, i) => W[i] * rep.signal * rep.conf;
+  const idx = reports.map((r, i) => i);
+  const bulls = idx.filter(i => reports[i].signal > .02).sort((i, j) => strength(reports[j], j) - strength(reports[i], i));
+  const bears = idx.filter(i => reports[i].signal < -.02).sort((i, j) => strength(reports[i], i) - strength(reports[j], j));
+  const research = [];
+  for (let rd = 1; rd <= g.debate; rd++) {
+    research.push(st("Bull Researcher", "ricerca", bulls.length ? `Round ${rd}. Il ${reports[bulls[0]].agent} mi dà ragione: «${reports[bulls[0]].text.slice(0, 110)}»${rd > 1 && bears.length ? ` Al Bear: il segnale del ${reports[bears[0]].agent} è già nel prezzo.` : ""}` : `Round ${rd}. Non trovo argomenti rialzisti solidi.`));
+    research.push(st("Bear Researcher", "ricerca", bears.length ? `Round ${rd}. Il ${reports[bears[0]].agent} segnala un rischio: «${reports[bears[0]].text.slice(0, 110)}»${bulls.length ? " Un solo indicatore non fa una tesi." : ""}` : `Round ${rd}. Non vedo rischi specifici oltre alla normale volatilità.`));
+  }
+  const wsum = reports.reduce((t, r, i) => t + W[i] * Math.max(r.conf, .05), 0) || 1;
+  const score = reports.reduce((t, r, i) => t + W[i] * r.signal * r.conf, 0) / wsum;
+  const rating = toRating(score, g.entry);
+  research.push(st("Research Manager", "ricerca", `Pesati gli analisti, il punteggio è ${score.toFixed(3)}: vince il ${score > 0 ? "Bull" : "Bear"}. Soglia ${g.entry.toFixed(2)}. Rating: ${RIT[rating]}.`, score, Math.min(1, Math.abs(score) * 2)));
+  // 3. trader
+  let action = "hold", frac = 0, tt;
+  if (held <= 0) {
+    if (rating === "Buy" || rating === "Overweight") { action = "buy"; frac = g.size * (rating === "Buy" ? 1 : .6); tt = `Propongo l'acquisto con il ${(frac * 100).toFixed(0)}% del capitale. Stop −${(g.sl * 100).toFixed(1)}%, obiettivo +${(g.tp * 100).toFixed(1)}%.`; }
+    else tt = "Nessuna posizione e nessun segnale d'ingresso: resto fuori.";
+  } else {
+    const pnl = p / avg - 1;
+    if (rating === "Sell" || score <= g.exit) { action = "sell"; frac = 1; tt = `Posizione a ${(pnl * 100).toFixed(2)}%: il punteggio è sotto la soglia d'uscita, vendo tutto.`; }
+    else if (rating === "Underweight") { action = "sell"; frac = .5; tt = `Posizione a ${(pnl * 100).toFixed(2)}%: alleggerisco del 50%.`; }
+    else tt = `Tengo la posizione (${(pnl * 100).toFixed(2)}%).`;
+  }
+  // 4. rischio
+  const hot = vol > .012, props = { aggressive: frac, conservative: frac, neutral: frac }, risk = [];
+  if (action === "buy") { props.aggressive = Math.min(.9, frac * 1.5); props.conservative = frac * (hot || dd < -.02 ? .4 : .7); props.neutral = (props.aggressive + props.conservative) / 2; }
+  if (action === "sell") { props.conservative = 1; props.neutral = Math.max(frac, .75); }
+  for (let rd = 1; rd <= g.riskRounds; rd++) {
+    if (action === "hold") risk.push(st("Aggressive Analyst", "rischio", "Restare fermi costa: senza profitto non si sopravvive al giudizio."), st("Conservative Analyst", "rischio", "Nessun segnale chiaro: aspettare è la scelta sicura."), st("Neutral Analyst", "rischio", "D'accordo con l'attesa, pronti a entrare."));
+    else risk.push(st("Aggressive Analyst", "rischio", `Quota al ${(props.aggressive * 100).toFixed(0)}%: chi non rischia non si sdoppia.`), st("Conservative Analyst", "rischio", `Volatilità ${(vol * 100).toFixed(2)}%${hot ? " (alta)" : ""}: ${(props.conservative * 100).toFixed(0)}%. Chi perde muore e non torna.`), st("Neutral Analyst", "rischio", `Via di mezzo: ${(props.neutral * 100).toFixed(0)}%.`));
+  }
+  // 5. portfolio manager
+  let final = 0, fr = "Hold";
+  if (action !== "hold") {
+    const w = g.appetite >= .5 ? (g.appetite - .5) * 2 : (.5 - g.appetite) * 2;
+    final = g.appetite >= .5 ? w * props.aggressive + (1 - w) * props.neutral : w * props.conservative + (1 - w) * props.neutral;
+    fr = action === "buy" ? (score >= g.entry * 1.6 ? "Buy" : "Overweight") : (final >= .99 ? "Sell" : "Underweight");
+  }
+  const pm = st("Portfolio Manager", "decisione", action === "hold" ? `Rating: Mantieni. Il punteggio ${score.toFixed(3)} non supera le soglie operative.` :
+    `Rating: ${RIT[fr]}. ${action === "buy" ? "Acquisto" : "Vendita"} del ${(final * 100).toFixed(0)}%. Con appetito al rischio ${g.appetite.toFixed(2)} ascolto di più l'analista ${g.appetite >= .5 ? "aggressivo" : "prudente"}.`, score, final);
+  return { s, tick: market.tick, price: p, rating: fr, action, frac: final, score, steps: [...reports, ...research, st("Trader", "trader", tt), ...risk, pm] };
+}
+
+// ───────────────────────── la città ─────────────────────────
+const NAMES = ["Aldo", "Bice", "Carlo", "Dora", "Ettore", "Flora", "Gino", "Ida", "Leo", "Mara", "Nino", "Olga", "Pia", "Rino", "Sara", "Tito", "Ugo", "Vera", "Zeno", "Alba", "Bruno", "Cleo", "Dante", "Elsa", "Fausto", "Gaia", "Iris", "Livio", "Nora", "Otto", "Rita", "Sergio"];
+const HOUSES = ["Rossi", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marino", "Greco", "Bruno", "Gallo", "Conti", "De Luca", "Mancini", "Costa", "Giordano", "Rizzo", "Lombardi", "Moretti", "Barbieri", "Fontana", "Santoro", "Mariani", "Rinaldi", "Caruso", "Ferrara", "Galli", "Martini", "Leone", "Longo", "Gentile", "Martinelli", "Vitale"];
+const ROMAN = n => { let o = ""; for (const [v, s] of [[10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]]) while (n >= v) { o += s; n -= v; } return o; };
+let C;
+
+function newCity(seed) {
+  rngState = seed;
+  market = newMarket();
+  for (let i = 0; i < 150; i++) marketStep(market);
+  market.tick = 0; market.news = market.news.slice(-30).map(n => ({ ...n, tick: 0 }));
+  C = { day: 1, tick: 0, tickInDay: 0, treasury: CFG.capital * CFG.treasuryShare, floor: CFG.capital * CFG.treasuryShare * .5,
+    agents: new Map(), nextId: 1, lineages: new Map(), nextLin: 0, blacklist: [], fame: [], log: [], flashes: [],
+    stats: { born: 0, dead: 0, splits: 0, founded: 0 }, popHistory: [], peak: CFG.capital, seed };
+  const each = CFG.capital * (1 - CFG.treasuryShare) / CFG.initial;
+  for (let i = 0; i < CFG.initial; i++) found(each, "fonda la città");
+  event("città", `La città nasce con ${CFG.initial} famiglie e ${eur(C.treasury)} € in tesoreria.`);
+  snapshotPop(0);
+}
+const prices = () => Object.fromEntries(SYMBOLS.map(([s]) => [s, price(s)]));
+const equity = (a, p = prices()) => a.status !== "alive" ? (a.finalEq ?? 0) : a.cash + Object.entries(a.pos).reduce((t, [s, x]) => t + x.qty * p[s], 0);
+const alive = () => [...C.agents.values()].filter(a => a.status === "alive");
+const cityEquity = () => { const p = prices(); return C.treasury + alive().reduce((t, a) => t + equity(a, p), 0); };
+const banned = g => C.blacklist.some(b => b.fp === fingerprint(g) || dist(g, b.g) < CFG.radius);
+function event(kind, text, id) { C.log.unshift({ day: C.day, kind, text, id }); if (C.log.length > 160) C.log.length = 160; }
+
+function newGenome(parent) {
+  for (let i = 0; i < 300; i++) {
+    let g;
+    if (parent) g = mutate(parent, .12 + i * .01);
+    else if (C.fame.length && rnd() < .6) { const elite = C.fame.slice(0, 8).map(f => f.g); g = mutate(crossover(pick(elite), pick(elite))); }
+    else g = randomGenome();
+    if (!banned(g)) return g;
+  }
+  return randomGenome();
+}
+function spawn(g, cash, parent, pos = {}) {
+  let lin;
+  if (parent) lin = C.lineages.get(parent.lin);
+  else { lin = { id: C.nextLin, name: HOUSES[C.nextLin % HOUSES.length] + (C.nextLin >= HOUSES.length ? " " + ROMAN(Math.floor(C.nextLin / HOUSES.length) + 1) : ""),
+    hue: (C.nextLin * 137.508 + 20) % 360, born: C.day, peak: 0 }; C.lineages.set(lin.id, lin); C.nextLin++; }
+  const gen = parent ? parent.gen + 1 : 1;
+  const a = { id: C.nextId++, name: `${pick(NAMES)} ${lin.name} ${ROMAN(gen)}`, short: `${pick(NAMES)} ${ROMAN(gen)}`, lin: lin.id, gen, parent: parent?.id ?? null,
+    g, cash, pos, status: "alive", daysLived: 0, judged: 0, born: C.day, trades: 0, wins: 0, given: 0, last: {}, lastSym: null, children: [],
+    x: parent ? parent.x : null, y: parent ? parent.y : null, vx: 0, vy: 0, bornAt: performance.now(), deathAt: 0 };
+  a.short = a.name.split(" ")[0] + " " + ROMAN(gen);
+  a.capBirth = a.eqStart = equity(a);
+  C.agents.set(a.id, a); C.stats.born++;
+  if (parent) parent.children.push(a.id);
+  return a;
+}
+function found(each, verb) {
+  C.treasury -= verb === "fonda la città" ? 0 : each;
+  const a = spawn(newGenome(null), each, null); C.stats.founded++;
+  event(verb === "fonda la città" ? "nascita" : "fondazione", `${a.name} ${verb} con ${eur(each)} €: ${describe(a.g)}.`, a.id);
+  return a;
+}
+
+function trade(a, s, side, qty, p, why) {
+  if (!(qty > 0) || !(p > 0)) return false;
+  const slip = .0005 * uni(.2, 1), px = p * (side === "buy" ? 1 + slip : 1 - slip), fee = px * qty * CFG.fee;
+  const pos = a.pos[s] ?? (a.pos[s] = { qty: 0, avg: 0 });
+  let pnl = null;
+  if (side === "buy") {
+    if (qty * px + fee > a.cash + 1e-9) { if (!pos.qty) delete a.pos[s]; return false; }
+    a.cash -= qty * px + fee; pos.avg = (pos.avg * pos.qty + qty * px) / (pos.qty + qty); pos.qty += qty;
+  } else {
+    const q = Math.min(qty, pos.qty); a.cash += q * px - fee; pnl = q * (px - pos.avg) - fee; if (pnl > 0) a.wins++;
+    pos.qty -= q; if (pos.qty <= 1e-12) delete a.pos[s];
+  }
+  a.trades++;
+  C.flashes.push({ id: a.id, s, side, t: performance.now() });
+  if (C.flashes.length > 120) C.flashes.splice(0, 40);
+  return true;
+}
+
+function step() {
+  marketStep(market); C.tick++; C.tickInDay++;
+  const p = prices();
+  for (const a of alive()) {
+    for (const [s, pos] of Object.entries(a.pos)) {
+      const ch = p[s] / pos.avg - 1;
+      if (ch <= -a.g.sl) trade(a, s, "sell", pos.qty, p[s], "stop"); else if (ch >= a.g.tp) trade(a, s, "sell", pos.qty, p[s], "obiettivo");
+    }
+    if ((C.tick + a.id) % CFG.every === 0) {
+      const eq = equity(a, p), dd = eq / a.eqStart - 1;
+      for (const s of a.g.symbols) {
+        const held = a.pos[s]?.qty ?? 0, d = deliberate(s, a.g, held, a.pos[s]?.avg ?? 0, dd);
+        a.last[s] = d; a.lastSym = s;
+        if (d.action === "buy" && held <= 0) { const budget = Math.min(a.cash, eq * d.frac); if (budget >= 1) trade(a, s, "buy", budget / (d.price * (1 + 2 * CFG.fee)), d.price); }
+        else if (d.action === "sell" && held > 0) trade(a, s, "sell", held * Math.min(1, d.frac), d.price);
+      }
+    }
+  }
+  const eq = cityEquity(); C.peak = Math.max(C.peak, eq);
+  if (C.tickInDay >= CFG.dayTicks) judge();
+}
+
+function judge() {
+  const p = prices(), survivors = [], dead = [], trial = [];
+  for (const a of alive()) {
+    a.daysLived++;
+    if (a.daysLived < CFG.trial) { trial.push(a); continue; }
+    const base = a.daysLived === CFG.trial ? a.capBirth : a.eqStart, pnl = equity(a, p) - base;
+    (pnl > 1e-6 ? survivors : dead).push({ a, pnl, base });
+  }
+  for (const { a, pnl } of dead) {
+    for (const [s, pos] of Object.entries(a.pos)) if (!trade(a, s, "sell", pos.qty, p[s], "morte")) { a.cash += pos.qty * p[s]; delete a.pos[s]; }
+    a.finalEq = a.cash; C.treasury += a.cash; a.cash = 0; a.status = "dead"; a.died = C.day; a.deathAt = performance.now();
+    a.cause = Math.abs(pnl) < .005 ? (a.judged ? `nessun profitto nel giorno ${C.day}` : "nessun profitto nel periodo di prova") : `${a.judged ? `in perdita nel giorno ${C.day}` : "in perdita nel periodo di prova"} (${eur(pnl)} €)`;
+    C.blacklist.push({ fp: fingerprint(a.g), g: a.g }); C.stats.dead++;
+    event("morte", `${a.name} muore (${eur(pnl)} €). La sua strategia è bandita.`, a.id);
+  }
+  survivors.sort((x, y) => y.pnl / y.base - x.pnl / x.base);
+  let room = CFG.maxPop - alive().length;
+  for (const { a, pnl, base } of survivors) {
+    const tax = Math.min(a.cash, pnl * CFG.tax); a.cash -= tax; C.treasury += tax; a.judged++;
+    C.fame.push({ r: pnl / base, g: a.g });
+    if (room > 0 && equity(a, p) / 2 >= CFG.minCap) {
+      const cash = a.cash / 2; a.cash -= cash; const pos = {};
+      for (const [s, x] of Object.entries(a.pos)) { pos[s] = { qty: x.qty / 2, avg: x.avg }; x.qty /= 2; }
+      const child = spawn(newGenome(a.g), cash, a, pos); a.given += equity(child, p); C.stats.splits++; room--;
+      event("sdoppiamento", `${a.name} è in profitto (+${eur(pnl)} €) e si sdoppia: nasce ${child.short}.`, child.id);
+    } else event("nascita", `${a.name} sopravvive (+${eur(pnl)} €), ma non c'è spazio per un figlio.`, a.id);
+  }
+  C.fame.sort((x, y) => y.r - x.r); C.fame.length = Math.min(C.fame.length, 40);
+  // il Guardiano
+  const base = CFG.capital * (1 - CFG.treasuryShare) / CFG.initial;
+  const missing = CFG.minPop - alive().length;
+  if (missing > 0) {
+    const spendable = C.treasury - C.floor;
+    let each = spendable >= missing * CFG.minCap ? Math.min(spendable / missing, base) : C.treasury / (2 * missing);
+    if (spendable < missing * CFG.minCap) event("guardiano", "Il Guardiano apre la riserva per non far morire la città.");
+    for (let i = 0; i < missing; i++) found(each, "è fondato dal Guardiano");
+  }
+  const excess = C.treasury - Math.max(cityEquity() * CFG.treasuryShare, C.floor);
+  const n = Math.min(CFG.maxPop - alive().length, Math.floor(excess / base));
+  for (let i = 0; i < n; i++) found(base, "è finanziato dalla tesoreria");
+  event("giudizio", `Fine del giorno ${C.day}: ${survivors.length} sopravvissuti, ${dead.length} morti, ${trial.length} in prova.`);
+  snapshotPop(C.day);
+  C.day++; C.tickInDay = 0;
+  for (const a of alive()) a.eqStart = equity(a, p);
+}
+function snapshotPop(label) {
+  const by = {}; for (const a of alive()) by[a.lin] = (by[a.lin] || 0) + 1;
+  C.popHistory.push({ day: label, by }); if (C.popHistory.length > 40) C.popHistory.shift();
+}
+
+// ───────────────────────── formattazione ─────────────────────────
+const eur = v => (v ?? 0).toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const cls = v => v > 0 ? "gain" : v < 0 ? "loss" : "mut";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// ───────────────────────── colori dal tema ─────────────────────────
+let T = {};
+function readTheme() { const cs = getComputedStyle(document.documentElement); for (const k of ["bg", "surface", "line", "fg", "muted", "accent", "gain", "loss", "trial", "market", "habitat-a", "habitat-b", "agentL"]) T[k] = cs.getPropertyValue("--" + k).trim(); }
+readTheme();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readTheme);
+new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+const linColor = (lin, a = 1) => `hsla(${C.lineages.get(lin).hue},58%,${T.agentL},${a})`;
+
+// ───────────────────────── habitat ─────────────────────────
+const hab = document.getElementById("hab"), hx = hab.getContext("2d");
+let W = 0, H = 0, selected = null, selSym = null;
+function sizeCanvas(cv, ctx) { const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return [w, h]; }
+new ResizeObserver(() => { [W, H] = sizeCanvas(hab, hx); }).observe(hab);
+const symNode = i => { const ang = -Math.PI / 2 + i / SYMBOLS.length * Math.PI * 2; return { x: W / 2 + Math.cos(ang) * (W / 2 - 46), y: H / 2 + Math.sin(ang) * (H / 2 - 30) }; };
+const centers = new Map();
+function lineageCenters() {
+  const live = [...new Set(alive().map(a => a.lin))].sort((a, b) => a - b), n = live.length;
+  live.forEach((lin, i) => {
+    const ang = i / Math.max(n, 1) * Math.PI * 2 + .3, rr = n <= 1 ? 0 : Math.min(W, H) * (n > 8 ? .28 : .22);
+    const tgt = { x: W / 2 + Math.cos(ang) * rr * (W / H > 1.3 ? 1.35 : 1), y: H / 2 + Math.sin(ang) * rr };
+    const c = centers.get(lin) ?? tgt; c.x += (tgt.x - c.x) * .05; c.y += (tgt.y - c.y) * .05; centers.set(lin, c);
+  });
+}
+const radiusOf = (a, p) => 4 + Math.sqrt(Math.max(equity(a, p), 0)) * .32;
+
+function physics(p) {
+  lineageCenters();
+  const live = alive();
+  for (const a of live) {
+    const c = centers.get(a.lin) ?? { x: W / 2, y: H / 2 };
+    if (a.x == null) { a.x = c.x + gauss() * 20; a.y = c.y + gauss() * 20; }
+    a.vx += (c.x - a.x) * .004; a.vy += (c.y - a.y) * .004;
+    a.vx += gauss() * .05; a.vy += gauss() * .05;
+  }
+  for (let i = 0; i < live.length; i++) for (let j = i + 1; j < live.length; j++) {
+    const a = live[i], b = live[j], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || .1, min = radiusOf(a, p) + radiusOf(b, p) + (a.lin === b.lin ? 4 : 18);
+    if (d < min) { const f = (min - d) / d * .06; a.vx -= dx * f; a.vy -= dy * f; b.vx += dx * f; b.vy += dy * f; }
+  }
+  for (const a of live) { a.vx *= .86; a.vy *= .86; a.x = clamp(a.x + a.vx, 20, W - 20); a.y = clamp(a.y + a.vy, 20, H - 20); }
+}
+
+function draw(now) {
+  const p = prices();
+  const g = hx.createRadialGradient(W / 2, H / 2, 10, W / 2, H / 2, Math.max(W, H) * .7);
+  g.addColorStop(0, T["habitat-a"]); g.addColorStop(1, T["habitat-b"]); hx.fillStyle = g; hx.fillRect(0, 0, W, H);
+  // mercati
+  hx.font = "500 11px " + getComputedStyle(document.body).fontFamily;
+  SYMBOLS.forEach(([s], i) => { const n = symNode(i), a = market.assets[s], pr = a.prices, ch = pr[pr.length - 1] / pr[Math.max(0, pr.length - 49)] - 1;
+    hx.fillStyle = T.market; hx.globalAlpha = .18; hx.beginPath(); hx.arc(n.x, n.y, 17, 0, 7); hx.fill(); hx.globalAlpha = 1;
+    hx.beginPath(); hx.arc(n.x, n.y, 6, 0, 7); hx.fill();
+    hx.fillStyle = T.fg; hx.textAlign = "center"; hx.fillText(s, n.x, n.y - 21);
+    hx.fillStyle = ch >= 0 ? T.gain : T.loss; hx.fillText((ch >= 0 ? "+" : "") + (ch * 100).toFixed(1) + "%", n.x, n.y + 29); });
+  // trade: lampi verso il mercato
+  C.flashes = C.flashes.filter(f => now - f.t < 900);
+  for (const f of C.flashes) { const a = C.agents.get(f.id); if (!a || a.x == null) continue; const n = symNode(SYMBOLS.findIndex(x => x[0] === f.s)), k = 1 - (now - f.t) / 900;
+    hx.strokeStyle = f.side === "buy" ? T.gain : T.loss; hx.globalAlpha = k * .8; hx.lineWidth = 1.5; hx.beginPath(); hx.moveTo(a.x, a.y); hx.lineTo(n.x, n.y); hx.stroke();
+    const t = 1 - k, px = f.side === "buy" ? n.x + (a.x - n.x) * t : a.x + (n.x - a.x) * t, py = f.side === "buy" ? n.y + (a.y - n.y) * t : a.y + (n.y - a.y) * t;
+    hx.fillStyle = hx.strokeStyle; hx.beginPath(); hx.arc(px, py, 2.5, 0, 7); hx.fill(); hx.globalAlpha = 1; }
+  // legami di sangue
+  hx.lineWidth = 1;
+  for (const a of alive()) { const par = a.parent && C.agents.get(a.parent); if (par && par.status === "alive") { hx.strokeStyle = linColor(a.lin, .35); hx.beginPath(); hx.moveTo(par.x, par.y); hx.lineTo(a.x, a.y); hx.stroke(); } }
+  // nomi delle famiglie
+  hx.textAlign = "center"; hx.font = "600 11px " + getComputedStyle(document.body).fontFamily;
+  for (const [lin, c] of centers) { const pop = alive().filter(a => a.lin === lin); if (!pop.length) { centers.delete(lin); continue; }
+    const top = Math.min(...pop.map(a => a.y - radiusOf(a, p))); hx.fillStyle = linColor(lin, .9); hx.fillText(C.lineages.get(lin).name + " · " + pop.length, c.x, Math.max(14, top - 8)); }
+  // morti recenti che svaniscono
+  for (const a of C.agents.values()) if (a.status === "dead" && now - a.deathAt < 2500 && a.x != null) {
+    const k = 1 - (now - a.deathAt) / 2500; hx.globalAlpha = k; hx.strokeStyle = T.loss; hx.lineWidth = 2;
+    const r = 6 + (1 - k) * 10; hx.beginPath(); hx.moveTo(a.x - r, a.y - r); hx.lineTo(a.x + r, a.y + r); hx.moveTo(a.x + r, a.y - r); hx.lineTo(a.x - r, a.y + r); hx.stroke(); hx.globalAlpha = 1; }
+  // gli agenti
+  for (const a of alive()) {
+    const born = clamp((now - a.bornAt) / 600, 0, 1), r = radiusOf(a, p) * (.3 + .7 * born), day = equity(a, p) - a.eqStart;
+    hx.fillStyle = linColor(a.lin, .85); hx.beginPath(); hx.arc(a.x, a.y, r, 0, 7); hx.fill();
+    hx.lineWidth = 2.2;
+    if (a.daysLived < CFG.trial) { hx.setLineDash([3, 3]); hx.strokeStyle = T.trial; hx.beginPath(); hx.arc(a.x, a.y, r + 3, 0, 7); hx.stroke(); hx.setLineDash([]); }
+    if (Math.abs(day) > .01) { hx.strokeStyle = day > 0 ? T.gain : T.loss; hx.beginPath(); hx.arc(a.x, a.y, r + (a.daysLived < CFG.trial ? 6 : 2.5), -Math.PI / 2, -Math.PI / 2 + Math.min(1, Math.abs(day) / (a.eqStart * .02)) * Math.PI * 2); hx.stroke(); }
+    if (Object.keys(a.pos).length) { hx.fillStyle = T.bg; hx.beginPath(); hx.arc(a.x, a.y, Math.max(1.5, r * .28), 0, 7); hx.fill(); }
+    if (a.id === selected) { hx.strokeStyle = T.fg; hx.lineWidth = 1.5; hx.beginPath(); hx.arc(a.x, a.y, r + 10, 0, 7); hx.stroke(); }
+    if (born < 1) { hx.strokeStyle = T.gain; hx.globalAlpha = 1 - born; hx.beginPath(); hx.arc(a.x, a.y, r + 16 * born, 0, 7); hx.stroke(); hx.globalAlpha = 1; }
+  }
+}
+hab.addEventListener("click", ev => {
+  const r = hab.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top, p = prices();
+  let best = null, bd = 1e9; for (const a of alive()) { const d = Math.hypot(a.x - x, a.y - y) - radiusOf(a, p); if (d < bd) { bd = d; best = a; } }
+  if (best && bd < 14) { selected = best.id; selSym = null; renderAgent(); }
+});
+
+// ───────────────────────── pannelli ─────────────────────────
+function renderStats() {
+  const eq = cityEquity(), perf = (eq / CFG.capital - 1) * 100, live = alive();
+  const rows = [
+    ["Giorno", C.day, `<div class="daybar"><i style="width:${C.tickInDay / CFG.dayTicks * 100}%"></i></div>`],
+    ["Patrimonio €", eur(eq), `<span class="${cls(perf)}">${perf >= 0 ? "+" : ""}${perf.toFixed(2)}%</span> dall'inizio`],
+    ["Tesoreria €", eur(C.treasury), "riserva per non morire"],
+    ["Abitanti", live.length, `${live.filter(a => a.daysLived < CFG.trial).length} in prova`],
+    ["Famiglie vive", new Set(live.map(a => a.lin)).size, `${C.lineages.size} fondate`],
+    ["Nati", C.stats.born, `${C.stats.splits} da sdoppiamento`],
+    ["Morti", C.stats.dead, "non tornano più"],
+    ["Strategie bandite", C.blacklist.length, "lista nera"],
+  ];
+  document.getElementById("stats").innerHTML = rows.map(([l, v, s]) => `<div class="stat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+function renderFamilies() {
+  const p = prices(), rows = [...C.lineages.values()].map(l => { const pop = alive().filter(a => a.lin === l.id);
+    return { l, n: pop.length, eq: pop.reduce((t, a) => t + equity(a, p), 0), gens: Math.max(0, ...[...C.agents.values()].filter(a => a.lin === l.id).map(a => a.gen)) }; })
+    .sort((a, b) => b.n - a.n || b.eq - a.eq).slice(0, 40);
+  document.getElementById("fams").innerHTML = rows.map(r => `<div class="famrow ${r.n ? "" : "ext"}" data-lin="${r.l.id}"><i class="sw" style="background:${linColor(r.l.id)}"></i>
+    <span class="n">${esc(r.l.name)} <span class="mut">${r.n ? `${r.gens} gen.` : "estinta"}</span></span><span class="num">${r.n}</span><span class="num">${r.n ? eur(r.eq) : "—"}</span></div>`).join("");
+}
+document.getElementById("fams").addEventListener("click", e => { const row = e.target.closest(".famrow"); if (!row) return;
+  const pop = alive().filter(a => a.lin === +row.dataset.lin); if (pop.length) { selected = pop.sort((a, b) => b.gen - a.gen)[0].id; selSym = null; renderAgent(); } });
+function renderLog() {
+  document.getElementById("log").innerHTML = C.log.slice(0, 80).map(e => `<div class="e-${e.kind}"><span class="d">G${e.day}</span>${esc(e.text)}</div>`).join("");
+}
+const sigBar = v => { const w = Math.abs(v) * 50; return `<span class="sig"><i style="left:${v >= 0 ? 50 : 50 - w}%;width:${w}%;background:${v >= 0 ? "var(--gain)" : "var(--loss)"}"></i></span>`; };
+function renderAgent() {
+  const el = document.getElementById("agentPanel");
+  let a = selected && C.agents.get(selected);
+  if (!a) { const live = alive(); a = live.sort((x, y) => y.trades - x.trades)[0]; if (!a) { el.innerHTML = '<h2>Agente</h2><div class="empty">Nessun agente vivo.</div>'; return; } selected = a.id; }
+  const p = prices(), eq = equity(a, p), day = a.status === "alive" ? eq - a.eqStart : null, life = eq + a.given - a.capBirth;
+  const syms = a.g.symbols; if (!selSym || !syms.includes(selSym)) selSym = a.lastSym && syms.includes(a.lastSym) ? a.lastSym : syms[0];
+  const d = a.last[selSym], lin = C.lineages.get(a.lin), par = a.parent && C.agents.get(a.parent);
+  const status = a.status === "dead" ? `<span class="pill p-dead">morto · ${esc(a.cause)}</span>` : a.daysLived < CFG.trial ? `<span class="pill p-trial">in prova · giorno ${a.daysLived + 1} di ${CFG.trial}</span>` : `<span class="pill p-alive">vivo · ${a.judged} giudizi superati</span>`;
+  const dna = [["mercato", "wMarket"], ["sentiment", "wSent"], ["news", "wNews"], ["fondamentali", "wFund"], ["rischio", "appetite"], ["soglia", "entry"], ["quota", "size"], ["stop", "sl"]];
+  const by = ph => d ? d.steps.filter(s => s.phase === ph) : [];
+  const stepHtml = (s, extra = "") => `<div class="step ${extra}"><div class="who"><span>${s.agent}</span><span>${s.phase === "analisti" || s.agent === "Research Manager" ? sigBar(s.signal) + s.signal.toFixed(2) : ""}</span></div>${esc(s.text)}</div>`;
+  el.innerHTML = `
+    <div class="agent-head"><span class="agent-name" style="color:${linColor(a.lin)}">${esc(a.name)}</span>${status}</div>
+    <div class="mut" style="font-size:12.5px">Famiglia ${esc(lin.name)} · generazione ${a.gen} · ${par ? `figlio di <a href="#" data-sel="${par.id}">${esc(par.short)}</a>` : "fondatore"}${a.children.length ? ` · ${a.children.length} figli` : ""}</div>
+    <div style="margin-top:4px">${esc(describe(a.g))} · segue ${a.g.symbols.join(", ")}</div>
+    <div class="kv"><div><span>Capitale €</span><b>${eur(eq)}</b></div><div><span>Oggi €</span><b class="${cls(day)}">${day == null ? "—" : eur(day)}</b></div><div><span>Dalla nascita €</span><b class="${cls(life)}">${eur(life)}</b></div></div>
+    <div class="dna">${dna.map(([l, k]) => `<div><span>${l}</span><i><b style="width:${(a.g[k] - BOUNDS[k][0]) / (BOUNDS[k][1] - BOUNDS[k][0]) * 100}%"></b></i></div>`).join("")}</div>
+    <h2 style="margin-top:12px">Come ragiona <span class="mut" style="text-transform:none;letter-spacing:0">${a.g.debate} round Bull/Bear · ${a.g.riskRounds} di rischio</span></h2>
+    <div class="tabs">${syms.map(s => `<button type="button" class="${s === selSym ? "on" : ""}" data-sym="${s}">${s}</button>`).join("")}</div>
+    ${!d ? '<div class="empty">Non ha ancora deliberato su questo strumento.</div>' : `
+    <div class="mut" style="font-size:12px">tick ${d.tick} · prezzo ${f4(d.price)}</div>
+    <div class="phase" style="border-color:var(--trial)"><h3>1 · Analisti</h3>${by("analisti").map(s => stepHtml(s)).join("")}</div>
+    <div class="phase" style="border-color:var(--market)"><h3>2 · Dibattito Bull ⇄ Bear</h3>${by("ricerca").map(s => stepHtml(s, s.agent.startsWith("Bull") ? "bull" : s.agent.startsWith("Bear") ? "bear" : "")).join("")}</div>
+    <div class="phase" style="border-color:var(--accent)"><h3>3 · Trader</h3>${by("trader").map(s => stepHtml(s)).join("")}</div>
+    <div class="phase" style="border-color:var(--loss)"><h3>4 · Rischio</h3>${by("rischio").slice(0, 3).map(s => stepHtml(s)).join("")}</div>
+    <div class="phase" style="border-color:var(--gain)"><h3>5 · Portfolio Manager · <span class="rating">${RIT[d.rating]}</span></h3>${by("decisione").map(s => stepHtml(s)).join("")}</div>`}`;
+}
+document.getElementById("agentPanel").addEventListener("click", e => {
+  const b = e.target.closest("[data-sym]"); if (b) { selSym = b.dataset.sym; renderAgent(); return; }
+  const l = e.target.closest("[data-sel]"); if (l) { e.preventDefault(); selected = +l.dataset.sel; selSym = null; renderAgent(); }
+});
+
+const pc = document.getElementById("popChart"), px = pc.getContext("2d"); let PW = 0, PH = 0;
+new ResizeObserver(() => { [PW, PH] = sizeCanvas(pc, px); drawPop(); }).observe(pc);
+function drawPop() {
+  if (!C || !PW) return;
+  px.clearRect(0, 0, PW, PH);
+  const hist = C.popHistory, maxP = Math.max(CFG.minPop, ...hist.map(h => Object.values(h.by).reduce((a, b) => a + b, 0)));
+  const L = 26, colW = (PW - L) / Math.max(hist.length, 12), font = getComputedStyle(document.body).fontFamily;
+  px.font = "11px " + font; px.fillStyle = T.muted; px.strokeStyle = T.line; px.lineWidth = 1;
+  for (const v of [0, Math.round(maxP / 2), maxP]) { const y = PH - 16 - v / maxP * (PH - 26); px.beginPath(); px.moveTo(L, y); px.lineTo(PW, y); px.stroke(); px.textAlign = "right"; px.fillText(v, L - 5, y + 3); }
+  hist.forEach((h, i) => { let y = PH - 16; const x = L + i * colW + 1;
+    for (const [lin, n] of Object.entries(h.by).sort((a, b) => a[0] - b[0])) { const hh = n / maxP * (PH - 26); px.fillStyle = linColor(+lin, .85); px.fillRect(x, y - hh, Math.max(1, colW - 2), hh); y -= hh; }
+    if (hist.length < 20 || i % 5 === 0) { px.fillStyle = T.muted; px.textAlign = "center"; px.fillText(h.day === 0 ? "inizio" : h.day, x + colW / 2, PH - 3); } });
+}
+
+// ───────────────────────── ciclo ─────────────────────────
+let running = true, speed = 1, acc = 0, last = performance.now(), uiT = 0;
+const playBtn = document.getElementById("play");
+playBtn.onclick = () => { running = !running; playBtn.textContent = running ? "Pausa" : "Riprendi"; };
+document.querySelectorAll("[data-speed]").forEach(b => b.onclick = () => { speed = +b.dataset.speed; document.querySelectorAll("[data-speed]").forEach(x => x.classList.toggle("on", x === b)); });
+document.querySelector('[data-speed="1"]').classList.add("on");
+document.getElementById("judge").onclick = () => { judge(); refreshUI(); };
+document.getElementById("reset").onclick = () => { newCity(Math.floor(Math.random() * 1e9)); centers.clear(); selected = null; refreshUI(); };
+function refreshUI() { renderStats(); renderFamilies(); renderLog(); renderAgent(); drawPop(); }
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function frame(now) {
+  const dt = Math.min(250, now - last); last = now;
+  if (running && W) { acc += dt * speed * 8 / 1000; let n = 0; while (acc >= 1 && n < 60) { step(); acc--; n++; } if (n === 60) acc = 0; }
+  if (W) { const p = prices(); physics(p); draw(now); }
+  if (now - uiT > 700) { uiT = now; refreshUI(); }
+  requestAnimationFrame(frame);
+}
+
+newCity(20261011);
+// un po' di storia già vissuta, così l'ecosistema si vede subito
+for (let i = 0; i < CFG.dayTicks * 4 + 20; i++) step();
+[W, H] = sizeCanvas(hab, hx);
+for (let i = 0; i < 160; i++) physics(prices());
+refreshUI();
+requestAnimationFrame(frame);
+})();
+</script>
+</body></html>

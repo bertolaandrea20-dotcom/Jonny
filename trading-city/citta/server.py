@@ -26,6 +26,10 @@ def create_app(city: City) -> FastAPI:
     def index():
         return FileResponse(WEB / "index.html")
 
+    @app.get("/ecosistema")
+    def ecosystem():
+        return FileResponse(WEB / "ecosistema.html")
+
     @app.get("/api/state")
     def state():
         with city.lock:

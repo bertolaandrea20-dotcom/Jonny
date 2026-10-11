@@ -68,6 +68,10 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
 
 ## La dashboard
 
+**Vista ecosistema** (`web/ecosistema.html`, anche su `http://localhost:8000/ecosistema`): una pagina che si apre direttamente nel browser, senza installare nulla, e fa girare la città con le stesse regole su un mercato simulato. Ogni agente è un organismo colorato per famiglia, raggruppato con i suoi parenti attorno ai mercati che segue; si vedono le nascite, le morti, i trade che partono verso i mercati, la popolazione di ogni famiglia giorno per giorno e il ragionamento completo dell'agente selezionato.
+
+**Dashboard operativa** (`http://localhost:8000`), collegata al motore Python:
+
 - **La città**: ogni casa è un agente vivo. Altezza = capitale, colore = risultato di oggi, finestre accese = posizioni aperte, stelle = giorni sopravvissuti. ⏳ = in prova (con il giorno), ★ = giudizi superati. A sinistra il palazzo della tesoreria, in basso il cimitero. Clic su una casa per entrarci.
 - **Scheda dell'agente**: capitale, curva del patrimonio, genoma, posizioni, genitore e figli, e il **processo di ragionamento** per ciascuno strumento: rapporti degli analisti con barre di segnale, dibattito Bull/Bear a fumetti, Research Manager, Trader, team del rischio e decisione finale. Le decisioni che hanno generato un ordine restano consultabili.
 - **Trade in tempo reale**, **cronaca della città** (nascite, morti, sdoppiamenti, interventi del Guardiano), **albero genealogico** completo, prezzi di mercato.
