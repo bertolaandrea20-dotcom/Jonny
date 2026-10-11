@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import csv
 import logging
+import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -63,7 +64,13 @@ def load_csv(path: Path) -> list[tuple[int, float]]:
 def _download_crypto(symbol: str, start_ms: int, end_ms: int, exchange: str) -> list[tuple[int, float]]:
     import ccxt
 
-    ex = getattr(ccxt, exchange)({"enableRateLimit": True})
+    opts = {"enableRateLimit": True}
+    proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+    if proxy:  # ccxt non legge il proxy dall'ambiente da solo
+        opts["httpsProxy"] = proxy
+    ex = getattr(ccxt, exchange)(opts)
+    if os.environ.get("REQUESTS_CA_BUNDLE"):
+        ex.session.verify = os.environ["REQUESTS_CA_BUNDLE"]
     rows, since = [], start_ms
     while since < end_ms:
         batch = ex.fetch_ohlcv(symbol, timeframe="1h", since=since, limit=1000)
