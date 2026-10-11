@@ -1,0 +1,12 @@
+=== 2026-10-11T01:47:01Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 0.00026924629 BTC/EUR per 19.95 € (sopra la media 50g)
+COMPRA 0.0089150523 ETH/EUR per 19.95 € (sopra la media 50g)
+COMPRA 15.934178 XRP/EUR per 19.95 € (sopra la media 50g)
+COMPRA 89.788408 ADA/EUR per 19.95 € (sopra la media 50g)
+COMPRA 0.34909016 LTC/EUR per 19.95 € (sopra la media 50g)
+COMPRA 1.7159312 LINK/EUR per 19.95 € (sopra la media 50g)
+COMPRA 67.523281 TRX/EUR per 19.95 € (sopra la media 50g)
+COMPRA 113.61711 XLM/EUR per 19.95 € (sopra la media 50g)
+COMPRA 0.20297262 SOL/EUR per 19.95 € (sopra la media 50g)
+2026-10-10 20:00:00+00:00: valore del bot 199.46 € (capitale iniziale 200.00 €)
