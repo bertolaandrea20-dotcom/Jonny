@@ -4,6 +4,8 @@ Un sistema di trading multi-agente in cui ogni abitante della città è un **age
 
 > **Chi guadagna sopravvive e si sdoppia. Chi perde muore, e né lui né la sua strategia tornano più. La città non può morire.**
 
+![Dashboard](dashboard-preview.png)
+
 Una dashboard web mostra la città dal vivo: le case degli agenti, i trade, la cronaca di nascite e morti, l'albero genealogico e **tutto il ragionamento di ogni agente, passo per passo**.
 
 ```bash
