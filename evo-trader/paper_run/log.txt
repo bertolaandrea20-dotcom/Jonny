@@ -10,3 +10,5 @@ COMPRA 67.523281 TRX/EUR per 19.95 € (sopra la media 50g)
 COMPRA 113.61711 XLM/EUR per 19.95 € (sopra la media 50g)
 COMPRA 0.20297262 SOL/EUR per 19.95 € (sopra la media 50g)
 2026-10-10 20:00:00+00:00: valore del bot 199.46 € (capitale iniziale 200.00 €)
+=== 2026-10-11T03:08:26Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
