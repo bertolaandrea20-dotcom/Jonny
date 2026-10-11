@@ -26,10 +26,11 @@ class Citizen:
     cash: float
     capital_at_birth: float
     equity_day_start: float = 0.0
-    status: str = "alive"  # alive | dead | retired
+    status: str = "alive"  # alive | dead
     death_day: int | None = None
     death_cause: str = ""
-    days_survived: int = 0
+    days_survived: int = 0  # giudizi superati
+    days_lived: int = 0  # giornate concluse da vivo
     children: list[int] = field(default_factory=list)
     positions: dict[str, Position] = field(default_factory=dict)
     curve: list[tuple[int, float]] = field(default_factory=list)
@@ -45,9 +46,8 @@ class Citizen:
     def alive(self) -> bool:
         return self.status == "alive"
 
-    @property
-    def age_days(self) -> int:
-        return self.days_survived
+    def in_trial(self, trial_days: int) -> bool:
+        return self.alive and self.days_lived < trial_days
 
     def equity(self, prices: dict[str, float]) -> float:
         if self.final_equity is not None and not self.alive:
@@ -63,6 +63,7 @@ class Citizen:
             "id": self.id, "name": self.name, "generation": self.generation, "parent_id": self.parent_id,
             "status": self.status, "born_day": self.born_day, "death_day": self.death_day,
             "death_cause": self.death_cause, "days_survived": self.days_survived,
+            "days_lived": self.days_lived,
             "equity": round(eq, 2), "cash": round(self.cash, 2),
             "capital_at_birth": round(self.capital_at_birth, 2),
             "day_pnl": round(eq - self.equity_day_start, 2) if self.alive else None,

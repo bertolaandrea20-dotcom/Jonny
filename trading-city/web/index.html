@@ -35,7 +35,7 @@ canvas{width:100%;display:block}
 .stack{display:grid;gap:12px;align-content:start;min-width:0}
 .feed{max-height:300px;overflow:auto;font-size:13px}
 .feed div{padding:4px 0;border-bottom:1px dashed var(--line)}
-.k-morte{color:var(--red)} .k-sdoppiamento,.k-nascita,.k-eredità{color:var(--green)} .k-pensione{color:var(--amber)}
+.k-morte{color:var(--red)} .k-sdoppiamento,.k-nascita{color:var(--green)} .k-sopravvive{color:var(--amber)}
 .k-guardiano,.k-fondazione{color:var(--violet)} .k-giudizio{color:var(--blue);font-weight:600} .k-errore{color:var(--red)}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 th,td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
@@ -66,7 +66,7 @@ td.r{text-align:right}
 .tree ul{list-style:none;margin:0;padding-left:16px;border-left:1px dotted var(--line)}
 .tree>ul{padding-left:0;border:0}
 .tree li{padding:1px 0;cursor:pointer}
-.st-alive{color:var(--green)} .st-dead{color:var(--red);opacity:.75} .st-retired{color:var(--amber)}
+.st-alive{color:var(--green)} .st-dead{color:var(--red);opacity:.75} .st-trial{color:var(--blue)}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 .decrow{cursor:pointer} .decrow:hover td{background:var(--panel2)}
@@ -93,7 +93,7 @@ td.r{text-align:right}
       <h2>La città <span class="legend">
         <span><i class="dot" style="background:var(--green)"></i>in profitto oggi</span>
         <span><i class="dot" style="background:var(--red)"></i>in perdita oggi</span>
-        <span><i class="dot" style="background:var(--amber)"></i>pensione</span>
+        <span>⏳ in prova</span><span style="color:var(--amber)">★ giudizi superati</span>
         <span>altezza = capitale · clic per entrare</span></span></h2>
       <canvas id="cityCanvas"></canvas>
     </div>
@@ -106,7 +106,7 @@ td.r{text-align:right}
       <div class="feed" style="max-height:260px"><table><thead><tr><th>Ora</th><th>Cittadino</th><th>Strumento</th><th>Lato</th><th class="r">Prezzo</th><th class="r">Valore €</th><th class="r">P&L €</th><th>Motivo</th></tr></thead><tbody id="trades"></tbody></table></div>
     </div>
     <div class="card">
-      <h2>Albero genealogico <span class="legend"><span class="st-alive">● vivo</span><span class="st-retired">★ pensione</span><span class="st-dead">✝ morto</span></span></h2>
+      <h2>Albero genealogico <span class="legend"><span class="st-alive">● vivo</span><span class="st-trial">⏳ in prova</span><span class="st-dead">✝ morto</span></span></h2>
       <div class="tree" id="tree"></div>
     </div>
   </div>
@@ -158,7 +158,7 @@ async function refresh(){
     ['Abitanti', S.citizens.length, `min ${S.rules.min_population} · max ${S.rules.max_population}`],
     ['Nati', S.stats.born, `${S.stats.splits} sdoppiamenti · ${S.stats.founded} fondati`],
     ['Morti', S.stats.dead, 'non tornano più'],
-    ['Pensionati', S.stats.retired, `vita max ${S.rules.lifespan_days} giorni`],
+    ['In prova', S.citizens.filter(c=>c.in_trial).length, `${S.rules.trial_days} giorni senza giudizio`],
     ['Strategie bandite', S.blacklist, 'lista nera'],
   ];
   $('#kpis').innerHTML = kp.map(([a,b,c])=>`<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join('');
@@ -199,7 +199,8 @@ function drawCity(){
       g.fillStyle=(r+k+c.id)%3<open?'#ffd866':'rgba(255,255,255,.08)';
       g.fillRect(x+3+k*(w/2-1), y+8+r*12, Math.max(2,w/2-6), 5);
     }
-    if(c.days_survived>0){ g.fillStyle='#d29922'; g.fillText('★'.repeat(c.days_survived), x+w/2, y-4); }
+    if(c.in_trial){ g.fillStyle='#58a6ff'; g.fillText('⏳'+(c.days_lived+1), x+w/2, y-4); }
+    else if(c.days_survived>0){ g.fillStyle='#d29922'; g.fillText(c.days_survived>4?'★'+c.days_survived:'★'.repeat(c.days_survived), x+w/2, y-4); }
     if(selected===c.id){ g.strokeStyle='#58a6ff'; g.lineWidth=2; g.strokeRect(x-2,y-2,w+4,h+4); }
     if(slot>30){ g.fillStyle='#c9d1d9'; g.save(); g.translate(x+w/2,ground+8); g.rotate(Math.PI/5); g.textAlign='left'; g.fillText(c.name,0,0); g.restore(); }
     houses.push({id:c.id,x,y,w,h});
@@ -209,11 +210,10 @@ function drawCity(){
   g.textAlign='center';
   fallen.forEach((c,i)=>{
     const x=x0+i*14, y=H-14;
-    if(c.status==='retired'){ g.fillStyle='#d29922'; g.fillText('★',x,y); }
-    else { g.fillStyle='#4b5563'; g.fillRect(x-4,y-10,8,10); g.beginPath(); g.arc(x,y-10,4,Math.PI,0); g.fill(); }
+    g.fillStyle='#4b5563'; g.fillRect(x-4,y-10,8,10); g.beginPath(); g.arc(x,y-10,4,Math.PI,0); g.fill();
     houses.push({id:c.id,x:x-6,y:y-16,w:12,h:16});
   });
-  g.fillStyle='#8b98a9'; g.textAlign='left'; g.fillText('cimitero e pensionati ↓', x0, H-30);
+  g.fillStyle='#8b98a9'; g.textAlign='left'; g.fillText('cimitero ↓', x0, H-30);
 }
 $('#cityCanvas').addEventListener('click',ev=>{
   const r=ev.target.getBoundingClientRect(), x=ev.clientX-r.left, y=ev.clientY-r.top;
@@ -243,7 +243,7 @@ async function loadCitizen(){
   let c; try{ c=await api('/api/citizen/'+selected); }catch(e){ return; }
   const syms=c.genome.symbols; if(!selSym||!syms.includes(selSym)) selSym=syms[0];
   const dec = pinnedDecision || c.last_decisions[selSym];
-  const st = {alive:'<span class="st-alive">● vivo</span>',dead:'<span class="st-dead">✝ morto</span>',retired:'<span class="st-retired">★ in pensione</span>'}[c.status];
+  const st = c.status==='dead'?'<span class="st-dead">✝ morto</span>':c.in_trial?`<span class="st-trial">⏳ in prova · giorno ${c.days_lived+1} di ${c.trial_days}</span>`:`<span class="st-alive">● vivo · ${c.days_survived} giudizi superati</span>`;
   const genes=['w_market','w_sentiment','w_news','w_fundamentals','risk_appetite','entry_threshold','position_size','stop_loss','take_profit'];
   const bounds={w_market:[0,1],w_sentiment:[0,1],w_news:[0,1],w_fundamentals:[0,1],risk_appetite:[0,1],entry_threshold:[.05,.6],position_size:[.05,.6],stop_loss:[.005,.08],take_profit:[.005,.15]};
   const label={w_market:'peso mercato',w_sentiment:'peso sentiment',w_news:'peso news',w_fundamentals:'peso fondamentali',risk_appetite:'appetito rischio',entry_threshold:'soglia ingresso',position_size:'quota posizione',stop_loss:'stop loss',take_profit:'take profit'};
@@ -306,8 +306,8 @@ function drawCurve(curve){
 async function refreshTree(){
   let t; try{ t=await api('/api/tree'); }catch(e){ return; }
   const kids={}; t.forEach(c=>{(kids[c.parent_id??'root']??=[]).push(c)});
-  const icon={alive:'●',dead:'✝',retired:'★'};
-  const node=c=>`<li class="st-${c.status}" onclick="event.stopPropagation();select(${c.id})">${icon[c.status]} ${esc(c.name)} <span class="mut">g${c.born_day}${c.death_day?'–'+c.death_day:''} · ${c.fingerprint}${c.life_pnl!=null?' · '+eur(c.life_pnl)+' €':''}</span>${kids[c.id]?'<ul>'+kids[c.id].map(node).join('')+'</ul>':''}</li>`;
+  const icon={alive:'●',dead:'✝'};
+  const node=c=>`<li class="st-${c.in_trial?'trial':c.status}" onclick="event.stopPropagation();select(${c.id})">${c.in_trial?'⏳':icon[c.status]} ${esc(c.name)} <span class="mut">g${c.born_day}${c.death_day?'–'+c.death_day:''} · ${c.fingerprint}${c.life_pnl!=null?' · '+eur(c.life_pnl)+' €':''}</span>${kids[c.id]?'<ul>'+kids[c.id].map(node).join('')+'</ul>':''}</li>`;
   const roots=(kids.root||[]).sort((a,b)=>b.id-a.id);
   $('#tree').innerHTML='<ul>'+roots.map(node).join('')+'</ul>';
 }

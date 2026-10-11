@@ -30,7 +30,7 @@ def create_app(city: City) -> FastAPI:
     def state():
         with city.lock:
             p = city.prices
-            alive = [c.summary(p) for c in city.alive()]
+            alive = [{**c.summary(p), "in_trial": c.in_trial(city.cfg.trial_days)} for c in city.alive()]
             recent_dead = sorted((c for c in city.citizens.values() if not c.alive),
                                  key=lambda c: -(c.death_day or 0))[:40]
             eq = city.city_equity()
@@ -42,7 +42,7 @@ def create_app(city: City) -> FastAPI:
                 "paused": city.paused, "speed": city.speed, "alert": city.alert,
                 "equity": round(eq, 2), "treasury": round(city.treasury, 2),
                 "reserve_floor": round(city.reserve_floor, 2), "initial": city.cfg.city_capital,
-                "rules": {"lifespan_days": city.cfg.lifespan_days, "min_population": city.cfg.min_population,
+                "rules": {"trial_days": city.cfg.trial_days, "min_population": city.cfg.min_population,
                           "max_population": city.cfg.max_population, "profit_tax": city.cfg.profit_tax},
                 "stats": city.stats, "blacklist": len(city.blacklist),
                 "prices": {s: round(v, 6) for s, v in p.items()},
@@ -61,6 +61,8 @@ def create_app(city: City) -> FastAPI:
             if not c:
                 raise HTTPException(404, "cittadino sconosciuto")
             d = c.summary(city.prices)
+            d["in_trial"] = c.in_trial(city.cfg.trial_days)
+            d["trial_days"] = city.cfg.trial_days
             d["genome"] = c.genome.to_dict()
             d["curve"] = c.curve[-500:]
             d["last_decisions"] = c.last_decisions
@@ -82,7 +84,8 @@ def create_app(city: City) -> FastAPI:
         with city.lock:
             p = city.prices
             return [{"id": c.id, "name": c.name, "parent_id": c.parent_id, "status": c.status,
-                     "generation": c.generation, "born_day": c.born_day, "death_day": c.death_day,
+                     "generation": c.generation, "born_day": c.born_day,
+                     "in_trial": c.in_trial(city.cfg.trial_days), "death_day": c.death_day,
                      "life_pnl": round(c.equity(p) - c.capital_at_birth, 2) if c.alive else None,
                      "fingerprint": c.genome.fingerprint()} for c in city.citizens.values()]
 

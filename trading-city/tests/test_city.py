@@ -38,18 +38,39 @@ def test_pipeline_follows_tradingagents_graph():
     assert d.rating in ("Buy", "Overweight", "Hold", "Underweight", "Sell")
 
 
-def test_losers_die_and_are_blacklisted_winners_split():
+def test_trial_period_then_daily_judgment():
     city = make_city()
+    for day in range(1, city.cfg.trial_days):
+        for _ in range(24):
+            city.step()
+        assert city.stats["dead"] == 0 and city.stats["splits"] == 0, f"giudizio durante la prova (giorno {day})"
+    start = {c.id: c.capital_at_birth for c in city.alive()}
     for _ in range(24):
         city.step()
-    assert city.day == 2
-    dead = [c for c in city.citizens.values() if c.status == "dead"]
-    for c in dead:
-        assert c.genome.fingerprint() in city.blacklist
-        assert c.cash == 0 and not c.positions
+    assert city.day == city.cfg.trial_days + 1
+    for cid, cap in start.items():
+        c = city.citizens[cid]
+        # il primo giudizio guarda l'intero periodo di prova
+        if c.status == "dead":
+            assert c.genome.fingerprint() in city.blacklist
+            assert c.cash == 0 and not c.positions
+        else:
+            assert c.days_survived == 1
     for c in city.citizens.values():
         if c.parent_id is not None:
-            assert city.citizens[c.parent_id].day_results[-1] > 0  # solo chi guadagna si riproduce
+            assert city.citizens[c.parent_id].days_survived >= 1  # solo chi guadagna si riproduce
+            assert c.days_lived == 0 and c.in_trial(city.cfg.trial_days)
+
+
+def test_newborns_get_their_own_trial():
+    city = make_city(seed=3)
+    for _ in range(24 * (city.cfg.trial_days + 5)):
+        city.step()
+    children = [c for c in city.citizens.values() if c.parent_id is not None]
+    assert children
+    for c in children:
+        if c.status == "dead":
+            assert c.days_lived >= city.cfg.trial_days
 
 
 def test_blacklisted_strategies_never_reborn():
@@ -67,20 +88,13 @@ def test_blacklisted_strategies_never_reborn():
 
 def test_city_never_dies_even_if_everyone_loses():
     city = make_city(seed=9)
-    for day in range(6):
-        for c in city.alive():  # catastrofe: ogni cittadino perde metà del capitale
-            c.equity_day_start = c.equity(city.prices) * 2 + 1
+    for day in range(10):
+        for c in city.alive():  # catastrofe: ogni cittadino risulta in perdita
+            c.capital_at_birth = c.equity_day_start = c.equity(city.prices) * 2 + 1
         city.end_of_day()
         assert len(city.alive()) >= city.cfg.min_population
         assert city.treasury > 0
-
-
-def test_lifespan_is_respected():
-    city = make_city(seed=4)
-    for _ in range(24 * 6):
-        city.step()
-    for c in city.alive():
-        assert c.days_survived < city.cfg.lifespan_days
+    assert city.stats["dead"] > 0
 
 
 def test_money_is_conserved_without_fees():
@@ -88,7 +102,9 @@ def test_money_is_conserved_without_fees():
     city.broker.fee_rate = 0.0
     city.broker.slippage = 0.0
     start = city.city_equity()
-    city.end_of_day()  # nessun trade: tutti a zero → tutti muoiono, il guardiano rifonda
+    for _ in range(city.cfg.trial_days):  # nessun trade: tutti a zero → muoiono, il guardiano rifonda
+        city.end_of_day()
+    assert city.stats["dead"] > 0
     assert abs(city.city_equity() - start) < 1e-6
 
 

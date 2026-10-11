@@ -2,7 +2,7 @@
 
 Leggi della città
 -----------------
-1. Ogni giorno, a fine giornata, ogni cittadino viene giudicato sul proprio
+1. Dopo il periodo di prova, ogni giorno a fine giornata il cittadino viene giudicato sul proprio
    risultato del giorno (valore del portafoglio ai prezzi correnti).
 2. In profitto → sopravvive, versa una tassa sul profitto alla tesoreria e si
    sdoppia: un figlio con il genoma leggermente mutato riceve metà del suo
@@ -10,8 +10,9 @@ Leggi della città
 3. In perdita (o fermo a zero) → muore. Le sue posizioni vengono chiuse, il
    capitale torna alla tesoreria e il suo genoma finisce in lista nera:
    né lui né strategie troppo simili possono più nascere.
-4. Nessuno vive più di ``LIFESPAN_DAYS`` giorni: al termine, se ha guadagnato,
-   si divide in due eredi e va in pensione.
+4. Periodo di prova: ogni nuovo cittadino (fondatore o figlio) ha
+   ``TRIAL_DAYS`` giorni (default 3) senza giudizio. Al primo giudizio conta
+   il risultato dell'intero periodo di prova; da lì in poi, quello di ogni giorno.
 5. La città non può morire: la tesoreria non va mai a zero e, se la
    popolazione scende sotto ``MIN_POPULATION``, il Guardiano fonda nuovi
    cittadini (incroci dei sopravvissuti migliori o genomi nuovi, mai in lista nera).
@@ -70,7 +71,7 @@ class City:
         self.trades: deque[dict] = deque(maxlen=300)
         self.curve: deque[tuple[int, float, float, int]] = deque(maxlen=3000)
         self.days: list[dict] = []
-        self.stats = {"born": 0, "dead": 0, "retired": 0, "splits": 0, "founded": 0}
+        self.stats = {"born": 0, "dead": 0, "splits": 0, "founded": 0}
         self._calendar_day = datetime.now(ROME).date()
         self._thread: threading.Thread | None = None
         self._stop = threading.Event()
@@ -267,30 +268,31 @@ class City:
     def end_of_day(self) -> None:
         with self.lock:
             prices = self.prices
-            judged = sorted(self.alive(), key=lambda c: -(c.equity(prices) / c.equity_day_start - 1))
-            survivors, dead = [], []
-            for c in judged:
+            survivors, dead, in_trial = [], [], []
+            for c in self.alive():
                 eq = c.equity(prices)
-                pnl = eq - c.equity_day_start
-                c.day_results.append(round(pnl, 2))
-                if pnl > EPS:
-                    survivors.append((c, pnl))
-                else:
-                    dead.append((c, pnl))
+                c.days_lived += 1
+                c.day_results.append(round(eq - c.equity_day_start, 2))
+                if c.days_lived < self.cfg.trial_days:
+                    in_trial.append(c)
+                    continue
+                # al primo giudizio conta tutto il periodo di prova, poi solo il giorno
+                base = c.capital_at_birth if c.days_lived == self.cfg.trial_days else c.equity_day_start
+                pnl = eq - base
+                (survivors if pnl > EPS else dead).append((c, pnl, base))
 
-            for c, pnl in dead:
+            for c, pnl, _ in dead:
                 self._kill(c, pnl)
 
-            room = self.cfg.max_population - len(survivors)
-            for c, pnl in survivors:
+            survivors.sort(key=lambda x: -x[1] / x[2])
+            room = self.cfg.max_population - len(self.alive())
+            for c, pnl, base in survivors:
                 tax = min(c.cash, pnl * self.cfg.profit_tax)
                 c.cash -= tax
                 self.treasury += tax
                 c.days_survived += 1
-                self.hall_of_fame.append((pnl / c.equity_day_start, c.genome))
-                if c.days_survived >= self.cfg.lifespan_days:
-                    room -= self._retire(c, pnl, max(0, room + 1))
-                elif room > 0 and self._split(c, pnl):
+                self.hall_of_fame.append((pnl / base, c.genome))
+                if room > 0 and self._split(c, pnl):
                     room -= 1
                 else:
                     self._event("sopravvive", f"{c.name} sopravvive (+{pnl:.2f} €) ma non si sdoppia "
@@ -299,10 +301,11 @@ class City:
 
             self._guardian()
             eq = self.city_equity()
-            summary = {"day": self.day, "survivors": len(survivors), "dead": len(dead),
+            summary = {"day": self.day, "survivors": len(survivors), "dead": len(dead), "in_trial": len(in_trial),
                        "population": len(self.alive()), "equity": round(eq, 2), "treasury": round(self.treasury, 2)}
             self.days.append(summary)
-            self._event("giudizio", f"Fine del giorno {self.day}: {len(survivors)} sopravvissuti, {len(dead)} morti. "
+            self._event("giudizio", f"Fine del giorno {self.day}: {len(survivors)} sopravvissuti, {len(dead)} morti, "
+                                    f"{len(in_trial)} ancora in prova. "
                                     f"Popolazione {summary['population']}, patrimonio {eq:.0f} €.")
             self.day += 1
             self.tick_in_day = 0
@@ -321,8 +324,9 @@ class City:
         c.cash = 0.0
         c.status = "dead"
         c.death_day = self.day
-        c.death_cause = (f"in perdita a fine giorno {self.day} ({pnl:+.2f} €)" if pnl < -0.005
-                         else f"nessun profitto nel giorno {self.day}: chi non guadagna non sopravvive")
+        when = "nel periodo di prova" if c.days_survived == 0 else f"nel giorno {self.day}"
+        c.death_cause = (f"in perdita {when} ({pnl:+.2f} €)" if pnl < -0.005
+                         else f"nessun profitto {when}: chi non guadagna non sopravvive")
         fp = c.genome.fingerprint()
         self.blacklist[fp] = c.genome
         self.store.blacklist(fp, self.day, c.id, c.genome.to_dict())
@@ -346,32 +350,9 @@ class City:
         cash, pos = self._take_half(c)
         child = self._spawn(self._new_genome(c.genome), cash, c, pos)
         self.stats["splits"] += 1
-        self._event("sdoppiamento", f"{c.name} chiude il giorno a +{pnl:.2f} € e si sdoppia: nasce {child.name} "
+        self._event("sdoppiamento", f"{c.name} è in profitto (+{pnl:.2f} €) e si sdoppia: nasce {child.name} "
                                     f"({child.genome.describe()})", child.id)
         return True
-
-    def _retire(self, c: Citizen, pnl: float, room: int) -> int:
-        """Fine vita naturale: il cittadino si divide in due eredi e va in pensione."""
-        heirs = 2 if room >= 2 and c.equity(self.prices) / 2 >= self.cfg.min_citizen_capital else 1
-        born = 0
-        for i in range(heirs):
-            if i == heirs - 1:
-                cash, pos = c.cash, dict(c.positions)
-                c.cash, c.positions = 0.0, {}
-            else:
-                cash, pos = self._take_half(c)
-            h = self._spawn(self._new_genome(c.genome), cash, c, pos)
-            born += 1
-            self._event("eredità", f"{c.name} lascia in eredità a {h.name}", h.id)
-        c.status = "retired"
-        c.death_day = self.day
-        c.final_equity = 0.0
-        c.death_cause = f"pensione dopo {c.days_survived} giorni sempre in profitto"
-        self.stats["retired"] += 1
-        self._event("pensione", f"★ {c.name} ha vissuto {c.days_survived} giorni in profitto e va in pensione "
-                                f"lasciando {born} {'erede' if born == 1 else 'eredi'}.", c.id)
-        self._persist(c)
-        return born - 1  # il pensionato libera il suo posto
 
     def _guardian(self) -> None:
         """La città non può morire."""

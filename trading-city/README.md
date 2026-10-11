@@ -51,10 +51,12 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
 
 ## Le leggi della città
 
-1. **Giudizio quotidiano.** A fine giornata (in simulazione ogni `DAY_TICKS` tick; con dati reali a mezzanotte ora di Roma) ogni agente è giudicato sul risultato del giorno, ai prezzi correnti.
-2. **In profitto → sopravvive e si sdoppia.** Versa il `PROFIT_TAX` (10%) del profitto alla tesoreria; un figlio con il genoma leggermente mutato riceve metà del suo portafoglio.
-3. **In perdita (o fermo a zero) → muore.** Le sue posizioni vengono chiuse, il capitale torna alla tesoreria, e il genoma finisce in **lista nera**: né quella strategia né una troppo simile (distanza < 0,05 nello spazio dei geni) potranno più nascere, nemmeno come mutazione di un altro.
-4. **Vita massima: 3 giorni** (`LIFESPAN_DAYS`). Chi arriva al terzo giorno sempre in profitto si divide in due eredi e va in pensione: la strategia continua nei figli, mutata.
+1. **3 giorni di prova.** Ogni nuovo agente — fondatore o figlio — ha `TRIAL_DAYS` giorni (default 3) in cui fa trading senza essere giudicato: non può morire e non può sdoppiarsi.
+2. **Il primo giudizio** arriva alla fine del terzo giorno e guarda **tutto il periodo di prova** (patrimonio rispetto al capitale ricevuto alla nascita).
+3. **Poi giudizio ogni giorno** (in simulazione ogni `DAY_TICKS` tick; con dati reali a mezzanotte ora di Roma), sul risultato della giornata ai prezzi correnti:
+   - **in profitto → sopravvive e si sdoppia.** Versa il `PROFIT_TAX` (10%) del profitto alla tesoreria; un figlio con il genoma leggermente mutato riceve metà del suo portafoglio e inizia i suoi 3 giorni di prova;
+   - **in perdita (o fermo a zero) → muore.** Le sue posizioni vengono chiuse, il capitale torna alla tesoreria e il genoma finisce in **lista nera**: né quella strategia né una troppo simile (distanza < 0,05 nello spazio dei geni) potranno più nascere, nemmeno come mutazione di un altro.
+4. **Non c'è un limite di età**: un agente vive finché continua a guadagnare ogni giorno.
 5. **La città non può morire.**
    - Il 30% del capitale (`TREASURY_SHARE`) sta in tesoreria e non fa trading; metà è una **riserva inviolabile**.
    - Se gli abitanti scendono sotto `MIN_POPULATION`, il **Guardiano** fonda nuovi agenti: incroci dei migliori sopravvissuti o genomi nuovi, mai in lista nera.
@@ -62,13 +64,13 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
    - Il capitale dei morti non resta fermo: l'eccesso di tesoreria finanzia nuovi agenti.
    - Se la città scende oltre il 20% dal suo massimo scatta l'**allerta**: i nuovi nati rischiano metà.
 
-> **Nota sull'interpretazione.** "Hanno 3 giorni per vivere" l'ho tradotto come *vita massima di 3 giorni con giudizio ogni giorno*. Se intendevi invece "3 giorni di prova prima del primo giudizio", o regole diverse sul pareggio, si cambiano in `citta/city/city.py` (`end_of_day`) e nelle variabili d'ambiente.
+> Le regole si trovano in `citta/city/city.py` (`end_of_day`); la durata della prova si cambia con `TRIAL_DAYS`.
 
 ## La dashboard
 
-- **La città**: ogni casa è un agente vivo. Altezza = capitale, colore = risultato di oggi, finestre accese = posizioni aperte, stelle = giorni sopravvissuti. A sinistra il palazzo della tesoreria, in basso il cimitero e i pensionati. Clic su una casa per entrarci.
+- **La città**: ogni casa è un agente vivo. Altezza = capitale, colore = risultato di oggi, finestre accese = posizioni aperte, stelle = giorni sopravvissuti. ⏳ = in prova (con il giorno), ★ = giudizi superati. A sinistra il palazzo della tesoreria, in basso il cimitero. Clic su una casa per entrarci.
 - **Scheda dell'agente**: capitale, curva del patrimonio, genoma, posizioni, genitore e figli, e il **processo di ragionamento** per ciascuno strumento: rapporti degli analisti con barre di segnale, dibattito Bull/Bear a fumetti, Research Manager, Trader, team del rischio e decisione finale. Le decisioni che hanno generato un ordine restano consultabili.
-- **Trade in tempo reale**, **cronaca della città** (nascite, morti, sdoppiamenti, pensioni, interventi del Guardiano), **albero genealogico** completo, prezzi di mercato.
+- **Trade in tempo reale**, **cronaca della città** (nascite, morti, sdoppiamenti, interventi del Guardiano), **albero genealogico** completo, prezzi di mercato.
 - Controlli (solo in simulazione): pausa, velocità ×1/×4/×10, "Giudica ora".
 
 ## Modalità: dalla simulazione al denaro reale

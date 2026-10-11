@@ -44,7 +44,7 @@ class Config:
     initial_citizens: int = 12
     min_population: int = 6
     max_population: int = 64
-    lifespan_days: int = 3
+    trial_days: int = 3
     profit_tax: float = 0.10
     min_citizen_capital: float = 50.0
     fee_rate: float = 0.0026  # commissione taker tipica (Kraken ~0.26%)
@@ -89,7 +89,7 @@ class Config:
             initial_citizens=int(_env("INITIAL_CITIZENS", "12")),
             min_population=int(_env("MIN_POPULATION", "6")),
             max_population=int(_env("MAX_POPULATION", "64")),
-            lifespan_days=int(_env("LIFESPAN_DAYS", "3")),
+            trial_days=int(_env("TRIAL_DAYS", "3")),
             profit_tax=float(_env("PROFIT_TAX", "0.10")),
             min_citizen_capital=float(_env("MIN_CITIZEN_CAPITAL", "50")),
             fee_rate=float(_env("FEE_RATE", "0.0026")),
