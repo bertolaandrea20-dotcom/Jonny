@@ -12,3 +12,7 @@ COMPRA 0.20297262 SOL/EUR per 19.95 € (sopra la media 50g)
 2026-10-10 20:00:00+00:00: valore del bot 199.46 € (capitale iniziale 200.00 €)
 === 2026-10-11T03:08:26Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+=== 2026-10-11T04:09:35Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 15.934178 XRP/EUR per 19.75 € (sotto la media 50g)
+2026-10-11 00:00:00+00:00: valore del bot 197.99 € (capitale iniziale 200.00 €)
