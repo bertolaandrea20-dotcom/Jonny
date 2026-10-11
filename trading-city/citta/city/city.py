@@ -124,6 +124,7 @@ class City:
             parent_id=parent.id if parent else None, born_day=self.day, born_tick=self.tick,
             cash=cash, capital_at_birth=0.0, positions=positions or {},
         )
+        c.lineage = parent.lineage if parent else c.id
         self.next_id += 1
         eq = c.equity(self.prices)
         c.capital_at_birth = c.equity_day_start = eq

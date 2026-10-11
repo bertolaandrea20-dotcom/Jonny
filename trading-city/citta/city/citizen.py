@@ -41,6 +41,7 @@ class Citizen:
     fees: float = 0.0
     day_results: list[float] = field(default_factory=list)
     final_equity: float | None = None
+    lineage: int = 0  # id del fondatore della famiglia
 
     @property
     def alive(self) -> bool:
@@ -61,6 +62,7 @@ class Citizen:
         eq = self.equity(prices)
         return {
             "id": self.id, "name": self.name, "generation": self.generation, "parent_id": self.parent_id,
+            "lineage": self.lineage,
             "status": self.status, "born_day": self.born_day, "death_day": self.death_day,
             "death_cause": self.death_cause, "days_survived": self.days_survived,
             "days_lived": self.days_lived,

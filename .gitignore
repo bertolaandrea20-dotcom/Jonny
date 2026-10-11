@@ -19,3 +19,5 @@ trading-city/*.db
 trading-city/.env
 __pycache__/
 .pytest_cache/
+trading-city/data/
+trading-city/reports/

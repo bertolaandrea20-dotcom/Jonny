@@ -77,6 +77,24 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
 - **Trade in tempo reale**, **cronaca della città** (nascite, morti, sdoppiamenti, interventi del Guardiano), **albero genealogico** completo, prezzi di mercato.
 - Controlli (solo in simulazione): pausa, velocità ×1/×4/×10, "Giudica ora".
 
+## Backtest: come diventa l'ecosistema sui dati storici
+
+```bash
+pip install ccxt yfinance
+python backtest.py --start 2025-10-01 --end 2026-10-01            # tutti i simboli di default
+python backtest.py --symbols BTC/EUR,ETH/EUR,SOL/EUR --seed 7      # solo crypto, un'altra città
+python backtest.py --demo-days 90                                  # storico sintetico, per provare senza rete
+```
+
+Ogni ora storica è un tick e a mezzanotte UTC c'è il giudizio, con le stesse regole della città dal vivo. Lo storico viene scaricato una volta e salvato in `data/` (puoi anche metterci CSV tuoi con colonne `timestamp,close`): crypto da Binance via ccxt, azioni da Yahoo Finance (massimo ~2 anni di dati orari).
+
+In `reports/` trovi un file HTML da aprire nel browser con:
+- **l'ecosistema giorno per giorno**: uno slider e un tasto ▶ per riavvolgere la città, con le famiglie, chi è in prova e chi guadagna o perde;
+- patrimonio della città contro il buy & hold equipesato degli stessi strumenti, con il max drawdown;
+- popolazione per famiglia nel tempo, famiglie estinte e sopravvissute, le strategie migliori vive alla fine.
+
+Limiti da tenere presenti: nel backtest gli analisti **News** e **Fundamentals** restano muti (non abbiamo le notizie e i bilanci di allora, e usarli di oggi sarebbe barare), il 30% in tesoreria non è investito, e l'evoluzione è casuale: prova più valori di `--seed` prima di trarre conclusioni.
+
 ## Modalità: dalla simulazione al denaro reale
 
 | `CITY_MODE` | Dati | Ordini | Rischio |

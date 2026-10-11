@@ -129,3 +129,20 @@ def test_api():
     assert c["genome"]["symbols"]
     assert client.post("/api/control", json={"action": "end_day"}).json()["ok"]
     assert client.get("/api/tree").status_code == 200
+
+
+def test_backtest_on_history_without_lookahead():
+    from backtest import run
+    from citta.market.history import HistoricalFeed, align, synthetic_history
+
+    hist = synthetic_history(SYMS, days=8, seed=1)
+    grid, prices = align(hist)
+    feed = HistoricalFeed(grid, prices)
+    assert feed.news("BTC/EUR") == [] and feed.fundamentals("ENI.MI") == {}
+    i = feed.i
+    assert len(feed.closes("BTC/EUR", 50)) == 50 and feed.closes("BTC/EUR", 50)[-1] == prices["BTC/EUR"][i]
+    cfg = Config(symbols=SYMS, db_path=":memory:", seed=1, day_ticks=24, initial_citizens=8, min_population=4)
+    rep = run(cfg, feed, "test", SYMS)
+    assert rep["summary"]["days"] >= 5
+    assert all(len(d["agents"]) >= 4 for d in rep["days"])
+    assert rep["days"][0]["equity"] == cfg.city_capital or abs(rep["days"][0]["equity"] - cfg.city_capital) < 1

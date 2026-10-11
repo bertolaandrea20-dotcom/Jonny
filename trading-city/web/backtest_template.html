@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Backtest della Città</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sintesi in alto, poi l'ecosistema da riavvolgere giorno per giorno, poi grafici e tabelle. */
+:root{
+  --bg:#eef1ec; --surface:#f8faf6; --sunken:#e3e8e1; --line:#cdd5ca; --fg:#17211c; --muted:#5b6b62;
+  --accent:#b45f2a; --gain:#2d8a4e; --loss:#c23b31; --trial:#2f6fb3; --bench:#6b5aa6; --warn-bg:#f6e3cf;
+  --habitat-a:#e7ede4; --habitat-b:#d7e1d6; --agentL:40%;
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1714; --surface:#16211c; --sunken:#0b120f; --line:#26352d; --fg:#e4ece6; --muted:#8fa298;
+  --accent:#e08a4f; --gain:#4fc274; --loss:#f06a5e; --trial:#6aa7ec; --bench:#a796e6; --warn-bg:#3a2717;
+  --habitat-a:#13201a; --habitat-b:#0a110d; --agentL:62%; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1714; --surface:#16211c; --sunken:#0b120f; --line:#26352d; --fg:#e4ece6; --muted:#8fa298;
+  --accent:#e08a4f; --gain:#4fc274; --loss:#f06a5e; --trial:#6aa7ec; --bench:#a796e6; --warn-bg:#3a2717;
+  --habitat-a:#13201a; --habitat-b:#0a110d; --agentL:62%; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{margin:0;font:14px/1.5 var(--f-body);padding-inline:16px;padding-block:16px 40px}
+.wrap{max-width:1300px;margin:0 auto;display:grid;gap:14px}
+h1{font:700 clamp(24px,3vw,32px)/1.1 var(--f-display);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.warn{background:var(--warn-bg);border-radius:8px;padding:8px 12px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--surface);padding:9px 12px;min-width:0}
+.stat .l{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:500 20px var(--f-mono);font-variant-numeric:tabular-nums}
+.stat .s{font-size:12px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.panel h2{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px}
+@media (max-width:900px){.row{grid-template-columns:1fr}}
+canvas{display:block;width:100%}
+#hab{height:470px;border-radius:8px}
+@media (max-width:640px){#hab{height:360px}}
+#eqChart,#popChart{height:200px}
+.player{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.player input{flex:1;min-width:160px;accent-color:var(--accent)}
+button{font:500 13px var(--f-body);color:var(--fg);background:var(--sunken);border:1px solid var(--line);border-radius:7px;padding:6px 12px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.date{font:500 15px var(--f-mono);font-variant-numeric:tabular-nums}
+.dayinfo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dayinfo div{background:var(--sunken);border-radius:8px;padding:7px 9px}
+.dayinfo b{display:block;font:500 17px var(--f-mono);font-variant-numeric:tabular-nums}
+.dayinfo span{font-size:11.5px;color:var(--muted)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:12px}
+td.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.gain{color:var(--gain)} .loss{color:var(--loss)} .mut{color:var(--muted)}
+.famlist{display:grid;gap:3px;max-height:280px;overflow:auto;font-size:12.5px}
+.famlist div{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center}
+.notes{font-size:13px;color:var(--muted);display:grid;gap:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Backtest della Città</h1>
+    <p class="sub" id="period"></p>
+  </header>
+  <div class="warn" id="warn" hidden></div>
+  <section class="stats" id="stats"></section>
+
+  <div class="row">
+    <section class="panel">
+      <h2>L'ecosistema giorno per giorno <span class="legend"><span><i class="sw" style="border:2px dashed var(--trial)"></i>in prova</span><span>colore = famiglia · grandezza = capitale</span></span></h2>
+      <canvas id="hab" aria-label="Agenti vivi nel giorno selezionato"></canvas>
+      <div class="player">
+        <button id="play" type="button">▶ Riproduci</button>
+        <input id="slider" type="range" min="0" value="0" aria-label="Giorno">
+        <span class="date" id="date"></span>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Quel giorno</h2>
+      <div class="dayinfo" id="dayinfo"></div>
+      <h2 style="margin-top:14px">Famiglie vive quel giorno</h2>
+      <div class="famlist" id="dayfams"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Patrimonio della città e buy &amp; hold <span class="legend"><span><i class="sw" style="background:var(--accent)"></i>città</span><span><i class="sw" style="background:var(--bench)"></i>buy &amp; hold equipesato</span><span><i class="sw" style="background:var(--muted)"></i>capitale iniziale</span></span></h2>
+    <canvas id="eqChart"></canvas>
+  </section>
+
+  <section class="panel">
+    <h2>Popolazione per famiglia <span class="legend">ogni colonna è un giorno · il giudizio inizia dopo i giorni di prova</span></h2>
+    <canvas id="popChart"></canvas>
+  </section>
+
+  <div class="row">
+    <section class="panel">
+      <h2>Famiglie</h2>
+      <div class="tablewrap"><table><thead><tr><th>Famiglia</th><th>Stato</th><th class="n">Picco</th><th class="n">Membri</th><th class="n">Gen.</th><th class="n">Capitale €</th><th>Strategia del fondatore</th></tr></thead><tbody id="famTable"></tbody></table></div>
+    </section>
+    <section class="panel">
+      <h2>Migliori strategie vive alla fine</h2>
+      <div class="tablewrap"><table><thead><tr><th>Agente</th><th class="n">Dalla nascita</th><th class="n">Giudizi</th><th>Strategia</th></tr></thead><tbody id="bestTable"></tbody></table></div>
+    </section>
+  </div>
+
+  <section class="panel notes" id="notes"></section>
+</div>
+<script>
+const R = /*__REPORT__*/null;
+(() => {
+const $ = s => document.querySelector(s);
+const eur = v => v.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pct = v => (v >= 0 ? "+" : "") + (v * 100).toFixed(2) + "%";
+const cls = v => v > 0 ? "gain" : v < 0 ? "loss" : "mut";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+if (!R) { document.body.innerHTML = "<p style='padding:20px'>Nessun dato: questo è il modello del report. Esegui <code>python backtest.py</code>.</p>"; return; }
+let T = {};
+const readTheme = () => { const cs = getComputedStyle(document.documentElement); for (const k of ["fg","muted","line","accent","gain","loss","trial","bench","habitat-a","habitat-b","agentL","sunken"]) T[k] = cs.getPropertyValue("--" + k).trim(); };
+readTheme();
+const famName = Object.fromEntries(R.families.map(f => [f.id, f.name]));
+const hue = id => (id * 137.508 + 20) % 360;
+const col = (id, a = 1) => `hsla(${hue(id)},58%,${T.agentL},${a})`;
+const S = R.summary, D = R.days;
+
+$("#period").textContent = `${R.start} → ${R.end} · ${R.symbols.join(", ")} · seme ${R.rules.seed}`;
+if (/SINTETICI/.test(R.source)) { $("#warn").hidden = false; $("#warn").textContent = "Attenzione: " + R.source + "."; }
+const stats = [
+  ["Rendimento città", pct(S.return), `max drawdown ${pct(S.max_drawdown)}`, cls(S.return)],
+  ["Buy & hold", pct(S.bench_return), `max drawdown ${pct(S.bench_max_drawdown)}`, cls(S.bench_return)],
+  ["Giorni", S.days, `prova di ${R.rules.trial_days} giorni`],
+  ["Nati", S.born, `${S.splits} da sdoppiamento, ${S.founded} fondati`],
+  ["Morti", S.dead, `${S.blacklist} strategie bandite`],
+  ["Famiglie", S.families, `${S.families_alive} ancora vive`],
+  ["Abitanti finali", S.population, `max ${R.rules.max_population}`],
+  ["Trade", S.trades.toLocaleString("it-IT"), `commissioni ${eur(S.fees)} €`],
+];
+$("#stats").innerHTML = stats.map(([l, v, s, c]) => `<div class="stat"><div class="l">${l}</div><div class="v ${c || ""}">${v}</div><div class="s">${s}</div></div>`).join("");
+
+function fit(cv) { const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); return [g, w, h]; }
+let cur = 0;
+
+function drawHabitat() {
+  const [g, W, H] = fit($("#hab")), d = D[cur];
+  const bg = g.createRadialGradient(W / 2, H / 2, 10, W / 2, H / 2, Math.max(W, H) * .7);
+  bg.addColorStop(0, T["habitat-a"]); bg.addColorStop(1, T["habitat-b"]); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const byFam = {}; for (const a of d.agents) (byFam[a[1]] ??= []).push(a);
+  const fams = Object.keys(byFam).map(Number).sort((a, b) => a - b), n = fams.length;
+  const maxEq = Math.max(1, ...D.flatMap(x => x.agents.map(a => a[3])));
+  const unit = Math.min(W, H) / 22, pos = {};
+  fams.forEach((f, i) => {
+    const ang = i / Math.max(n, 1) * Math.PI * 2 - Math.PI / 2, rr = n <= 1 ? 0 : Math.min(W * .36, H * .34);
+    const cx = W / 2 + Math.cos(ang) * rr * (W / H > 1.3 ? 1.25 : 1), cy = H / 2 + Math.sin(ang) * rr;
+    const members = byFam[f].sort((a, b) => a[0] - b[0]);
+    members.forEach((a, k) => { const t = k * 2.39996, r = unit * .9 * Math.sqrt(k); pos[a[0]] = [cx + Math.cos(t) * r, cy + Math.sin(t) * r]; });
+    g.fillStyle = col(f, .95); g.font = "600 11px " + getComputedStyle(document.body).fontFamily; g.textAlign = "center";
+    g.fillText(`${famName[f]} · ${members.length}`, cx, Math.max(12, cy - unit * .9 * Math.sqrt(members.length) - unit * .8));
+  });
+  g.lineWidth = 1;
+  for (const a of d.agents) { const p = pos[a[2]]; if (p) { g.strokeStyle = col(a[1], .35); g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(...pos[a[0]]); g.stroke(); } }
+  const prev = cur > 0 ? Object.fromEntries(D[cur - 1].agents.map(a => [a[0], a[3]])) : {};
+  for (const a of d.agents) {
+    const [x, y] = pos[a[0]], r = 2.5 + Math.sqrt(a[3] / maxEq) * unit * .75;
+    g.fillStyle = col(a[1], .85); g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    if (a[4]) { g.setLineDash([3, 3]); g.strokeStyle = T.trial; g.lineWidth = 1.6; g.beginPath(); g.arc(x, y, r + 2.5, 0, 7); g.stroke(); g.setLineDash([]); }
+    else if (prev[a[0]] != null && Math.abs(a[3] - prev[a[0]]) > .01) { g.strokeStyle = a[3] > prev[a[0]] ? T.gain : T.loss; g.lineWidth = 1.6; g.beginPath(); g.arc(x, y, r + 2, 0, 7); g.stroke(); }
+  }
+  if (!d.agents.length) { g.fillStyle = T.muted; g.textAlign = "center"; g.fillText("Nessun agente vivo", W / 2, H / 2); }
+}
+
+function lineChart() {
+  const [g, W, H] = fit($("#eqChart")), L = 52, B = 18;
+  const vals = D.flatMap(d => [d.equity, d.bench]).concat([R.rules.capital]);
+  const lo = Math.min(...vals) * .99, hi = Math.max(...vals) * 1.01;
+  const X = i => L + i / Math.max(1, D.length - 1) * (W - L - 6), Y = v => H - B - (v - lo) / (hi - lo) * (H - B - 8);
+  g.font = "11px " + getComputedStyle(document.body).fontFamily; g.strokeStyle = T.line; g.fillStyle = T.muted; g.lineWidth = 1;
+  for (let k = 0; k <= 4; k++) { const v = lo + (hi - lo) * k / 4; g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(W, Y(v)); g.stroke(); g.textAlign = "right"; g.fillText(Math.round(v).toLocaleString("it-IT"), L - 6, Y(v) + 4); }
+  g.textAlign = "center"; [0, Math.floor(D.length / 2), D.length - 1].forEach(i => g.fillText(D[i].date, Math.min(Math.max(X(i), L + 30), W - 34), H - 3));
+  g.setLineDash([4, 4]); g.strokeStyle = T.muted; g.beginPath(); g.moveTo(L, Y(R.rules.capital)); g.lineTo(W, Y(R.rules.capital)); g.stroke(); g.setLineDash([]);
+  const line = (k, c) => { g.strokeStyle = c; g.lineWidth = 1.8; g.beginPath(); D.forEach((d, i) => i ? g.lineTo(X(i), Y(d[k])) : g.moveTo(X(i), Y(d[k]))); g.stroke(); };
+  line("bench", T.bench); line("equity", T.accent);
+  g.strokeStyle = T.fg; g.globalAlpha = .4; g.beginPath(); g.moveTo(X(cur), 4); g.lineTo(X(cur), H - B); g.stroke(); g.globalAlpha = 1;
+  g.fillStyle = T.accent; g.beginPath(); g.arc(X(cur), Y(D[cur].equity), 3.5, 0, 7); g.fill();
+}
+
+function popChart() {
+  const [g, W, H] = fit($("#popChart")), L = 30, B = 18;
+  const maxP = Math.max(4, ...D.map(d => d.agents.length)), cw = (W - L) / D.length;
+  const Y = v => H - B - v / maxP * (H - B - 6);
+  g.font = "11px " + getComputedStyle(document.body).fontFamily; g.strokeStyle = T.line; g.fillStyle = T.muted;
+  for (const v of [0, Math.round(maxP / 2), maxP]) { g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(W, Y(v)); g.stroke(); g.textAlign = "right"; g.fillText(v, L - 5, Y(v) + 4); }
+  D.forEach((d, i) => { const by = {}; for (const a of d.agents) by[a[1]] = (by[a[1]] || 0) + 1; let base = 0;
+    for (const f of Object.keys(by).map(Number).sort((a, b) => a - b)) { g.fillStyle = col(f, i === cur ? 1 : .8); g.fillRect(L + i * cw, Y(base + by[f]), Math.max(1, cw - (cw > 4 ? 1 : 0)), Y(base) - Y(base + by[f])); base += by[f]; } });
+  g.fillStyle = T.muted; g.textAlign = "center"; [0, D.length - 1].forEach(i => g.fillText(D[i].date, Math.min(Math.max(L + i * cw, L + 30), W - 34), H - 3));
+  g.strokeStyle = T.fg; g.globalAlpha = .5; g.beginPath(); g.moveTo(L + (cur + .5) * cw, 2); g.lineTo(L + (cur + .5) * cw, H - B); g.stroke(); g.globalAlpha = 1;
+}
+
+function dayPanel() {
+  const d = D[cur], inTrial = d.agents.filter(a => a[4]).length;
+  $("#date").textContent = `giorno ${cur} · ${d.date}`;
+  $("#dayinfo").innerHTML = [
+    ["Patrimonio €", eur(d.equity), cls(d.equity - R.rules.capital)], ["Buy & hold €", eur(d.bench), cls(d.bench - R.rules.capital)],
+    ["Abitanti", d.agents.length + (inTrial ? ` (${inTrial} in prova)` : "")], ["Tesoreria €", eur(d.treasury)],
+    ["Sopravvissuti al giudizio", d.survivors], ["Morti nel giudizio", d.dead],
+  ].map(([l, v, c]) => `<div><span>${l}</span><b class="${c || ""}">${v}</b></div>`).join("");
+  const by = {}; for (const a of d.agents) { const f = by[a[1]] ??= { n: 0, eq: 0 }; f.n++; f.eq += a[3]; }
+  $("#dayfams").innerHTML = Object.entries(by).sort((a, b) => b[1].n - a[1].n).map(([f, v]) => `<div><i class="sw" style="background:${col(+f)}"></i><span>${esc(famName[f])} · ${v.n}</span><span class="mut">${eur(v.eq)} €</span></div>`).join("") || '<span class="mut">nessuna</span>';
+}
+
+$("#famTable").innerHTML = R.families.slice(0, 30).map(f => `<tr><td><i class="sw" style="background:${col(f.id)}"></i>${esc(f.name)}</td><td class="${f.alive ? "gain" : "mut"}">${f.alive ? `viva (${f.alive})` : `estinta il giorno ${f.extinct_day}`}</td><td class="n">${f.peak}</td><td class="n">${f.members}</td><td class="n">${f.generations}</td><td class="n">${f.alive ? eur(f.capital) : "—"}</td><td class="mut">${esc(f.founder)}</td></tr>`).join("");
+$("#bestTable").innerHTML = R.best.map(b => `<tr><td>${esc(b.name)} <span class="mut">${esc(b.family)} · gen. ${b.generation}</span></td><td class="n ${cls(b.life_return)}">${pct(b.life_return)}</td><td class="n">${b.judgments}</td><td class="mut">${esc(b.carattere)} · ${b.symbols.join(", ")}</td></tr>`).join("") || '<tr><td class="mut">nessuno</td></tr>';
+$("#notes").innerHTML = `<div><b style="color:var(--fg)">Come leggere questo backtest.</b> Fonte: ${esc(R.source)}. Ogni ora storica è un tick, a mezzanotte UTC c'è il giudizio. Commissioni ${(R.rules.fee_rate * 100).toFixed(2)}% per lato più slittamento simulato.</div>
+  <div>Il ${(R.rules.treasury_share * 100).toFixed(0)}% del capitale resta in tesoreria e non è investito, quindi il confronto con il buy &amp; hold (100% investito) non è alla pari nei mercati che salgono.</div>
+  <div>Le notizie e i bilanci di allora non sono disponibili: nel backtest gli analisti News e Fundamentals restano muti, il sentiment è il momentum delle ultime 24 ore. L'evoluzione è casuale: un seme diverso produce un'altra città, quindi confronta più semi prima di trarre conclusioni.</div>`;
+
+const slider = $("#slider"); slider.max = D.length - 1;
+function render() { slider.value = cur; drawHabitat(); lineChart(); popChart(); dayPanel(); }
+slider.oninput = () => { cur = +slider.value; render(); };
+let timer = null;
+$("#play").onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; $("#play").textContent = "▶ Riproduci"; return; }
+  if (cur >= D.length - 1) cur = 0;
+  $("#play").textContent = "⏸ Pausa";
+  timer = setInterval(() => { if (cur >= D.length - 1) { $("#play").click(); return; } cur++; render(); }, Math.max(60, 9000 / D.length));
+};
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readTheme(); render(); });
+new ResizeObserver(render).observe(document.querySelector(".wrap"));
+cur = D.length - 1; render();
+})();
+</script>
+</body>
+</html>
