@@ -163,3 +163,30 @@ def test_backtest_on_history_without_lookahead():
     assert rep["summary"]["days"] >= 5
     assert all(len(d["agents"]) >= 4 for d in rep["days"])
     assert rep["days"][0]["equity"] == cfg.city_capital or abs(rep["days"][0]["equity"] - cfg.city_capital) < 1
+
+
+def test_timeframe_view_daily_closes():
+    import numpy as np
+    from citta.market.data import TimeframeView
+    from citta.market.history import HistoricalFeed
+
+    grid = np.arange(0, 3_600_000 * 24 * 20, 3_600_000, dtype=np.int64)
+    feed = HistoricalFeed(grid, {"X": np.arange(len(grid), dtype=float)}, warmup=24 * 10)
+    daily = TimeframeView(feed, 24).closes("X", 5)
+    assert list(daily) == [feed.i - 24 * k for k in (4, 3, 2, 1, 0)]
+    assert daily[-1] == feed.price("X")
+
+
+def test_judge_vs_market_rewards_beating_own_markets():
+    city = make_city(seed=2, judge_vs_market=True)
+    c = city.alive()[0]
+    for s in list(c.positions):
+        c.positions.pop(s)
+    c.genome.symbols = ["BTC/EUR"]
+    for _ in range(city.cfg.cycle_days - 1):
+        city.end_of_day()
+    # il suo mercato è sceso del 10% e lui è rimasto in contanti: ha battuto il mercato
+    c.cycle_start_prices = {"BTC/EUR": city.prices["BTC/EUR"] * 1.1}
+    c.equity_cycle_start = c.equity(city.prices) + 1  # ha anche perso 1 €
+    city.end_of_day()
+    assert c.alive and c.days_survived == 1

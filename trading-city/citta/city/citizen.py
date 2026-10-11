@@ -27,6 +27,7 @@ class Citizen:
     capital_at_birth: float
     equity_day_start: float = 0.0
     equity_cycle_start: float = 0.0  # patrimonio all'inizio del ciclo di giudizio in corso
+    cycle_start_prices: dict[str, float] = field(default_factory=dict)  # prezzi all'inizio del ciclo
     status: str = "alive"  # alive | dead
     death_day: int | None = None
     death_cause: str = ""

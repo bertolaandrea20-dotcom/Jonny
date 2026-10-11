@@ -34,7 +34,7 @@ from ..brokers.base import BrokerError
 from ..brokers.factory import make_broker
 from ..config import Config
 from ..genome import Genome, citizen_name, crossover, mutate, random_genome
-from ..market.data import make_feed
+from ..market.data import TimeframeView, make_feed
 from .citizen import Citizen, Position
 from .storage import Storage
 
@@ -49,6 +49,8 @@ class City:
         self.cfg = cfg
         self.rng = random.Random(cfg.seed)
         self.feed = feed or make_feed(cfg)
+        # gli agenti ragionano su candele di `bar_hours` ore; stop e obiettivi restano orari
+        self.view = TimeframeView(self.feed, cfg.bar_hours) if cfg.bar_hours > 1 else self.feed
         self.broker = broker or make_broker(cfg)
         self.reasoner = make_reasoner(cfg)
         self.store = storage or Storage(cfg.db_path, fresh=(cfg.mode == "sim"))
@@ -141,6 +143,7 @@ class City:
         self.next_id += 1
         eq = c.equity(self.prices)
         c.capital_at_birth = c.equity_day_start = c.equity_cycle_start = eq
+        c.cycle_start_prices = dict(self.prices)
         c.curve.append((self.tick, round(eq, 2)))
         self.citizens[c.id] = c
         self.stats["born"] += 1
@@ -266,7 +269,7 @@ class City:
         dd = eq / c.equity_day_start - 1 if c.equity_day_start else 0.0
         for sym in c.genome.symbols:
             pos = c.held(sym)
-            d = deliberate(sym, self.feed, c.genome, pos.qty, pos.avg, dd, self.reasoner)
+            d = deliberate(sym, self.view, c.genome, pos.qty, pos.avg, dd, self.reasoner)
             dd_dict = d.to_dict()
             c.last_decisions[sym] = dd_dict
             if d.action == "buy" and pos.qty <= 0:
@@ -298,23 +301,30 @@ class City:
                 # si giudica il risultato degli ultimi `cycle_days` giorni
                 base = c.equity_cycle_start
                 pnl = eq - base
-                (survivors if pnl > EPS else dead).append((c, pnl, base))
+                # vantaggio: rendimento del ciclo, oppure rendimento meno quello dei suoi mercati
+                edge = pnl / base if base else 0.0
+                if self.cfg.judge_vs_market:
+                    edge -= self._market_return(c, prices)
+                    ok = edge > 1e-6
+                else:
+                    ok = pnl > EPS
+                (survivors if ok else dead).append((c, pnl, base, edge))
 
-            for c, pnl, _ in dead:
-                self._kill(c, pnl)
+            for c, pnl, _, edge in dead:
+                self._kill(c, pnl, edge)
 
-            survivors.sort(key=lambda x: -x[1] / x[2])
+            survivors.sort(key=lambda x: -x[3])
             room = self.cfg.max_population - len(self.alive())
-            for c, pnl, base in survivors:
-                tax = min(c.cash, pnl * self.cfg.profit_tax)
+            for c, pnl, base, edge in survivors:
+                tax = min(c.cash, max(0.0, pnl) * self.cfg.profit_tax)
                 c.cash -= tax
                 self.treasury += tax
                 c.days_survived += 1
-                self.hall_of_fame.append((pnl / base, c.genome))
-                if room > 0 and self._split(c, pnl):
+                self.hall_of_fame.append((edge, c.genome))
+                if room > 0 and self._split(c, pnl, edge):
                     room -= 1
                 else:
-                    self._event("sopravvive", f"{c.name} sopravvive (+{pnl:.2f} €) ma non si sdoppia "
+                    self._event("sopravvive", f"{c.name} sopravvive ({pnl:+.2f} €) ma non si sdoppia "
                                               f"(città piena o capitale troppo piccolo)", c.id)
             self.hall_of_fame = sorted(self.hall_of_fame, key=lambda x: -x[0])[:40]
 
@@ -333,15 +343,22 @@ class City:
             if self.reasoner:
                 self.reasoner.new_day()
             p = self.prices
-            judged = {c.id for c, _, _ in survivors}
+            judged = {x[0].id for x in survivors}
             for c in self.alive():
                 c.equity_day_start = c.equity(p)
                 if c.id in judged:  # nuovo ciclo dopo tassa e sdoppiamento
                     c.equity_cycle_start = c.equity_day_start
+                    c.cycle_start_prices = dict(p)
                 self._persist(c)
             self.store.commit()
 
-    def _kill(self, c: Citizen, pnl: float) -> None:
+    def _market_return(self, c: Citizen, prices: dict) -> float:
+        """Rendimento, nel ciclo, dei mercati che l'agente segue presi in parti uguali."""
+        rets = [prices[s] / c.cycle_start_prices[s] - 1 for s in c.genome.symbols
+                if c.cycle_start_prices.get(s)]
+        return sum(rets) / len(rets) if rets else 0.0
+
+    def _kill(self, c: Citizen, pnl: float, edge: float = 0.0) -> None:
         self._liquidate(c, "morte: chiusura posizioni")
         c.final_equity = c.cash
         self.treasury += c.cash
@@ -350,8 +367,11 @@ class City:
         c.death_day = self.day
         when = ("nei giorni di prova" if c.days_survived == 0
                 else f"negli ultimi {self.cfg.cycle_days} giorni")
-        c.death_cause = (f"in perdita {when} ({pnl:+.2f} €)" if pnl < -0.005
-                         else f"nessun profitto {when}: chi non guadagna non sopravvive")
+        if self.cfg.judge_vs_market:
+            c.death_cause = f"peggio dei suoi mercati {when} ({edge:+.2%}, {pnl:+.2f} €)"
+        else:
+            c.death_cause = (f"in perdita {when} ({pnl:+.2f} €)" if pnl < -0.005
+                             else f"nessun profitto {when}: chi non guadagna non sopravvive")
         fp = c.genome.fingerprint()
         self.blacklist[fp] = c.genome
         self.store.blacklist(fp, self.day, c.id, c.genome.to_dict())
@@ -369,13 +389,15 @@ class City:
             pos[s] = Position(half, p.avg, p.opened_tick)
         return cash, pos
 
-    def _split(self, c: Citizen, pnl: float) -> bool:
+    def _split(self, c: Citizen, pnl: float, edge: float = 0.0) -> bool:
         if c.equity(self.prices) / 2 < self.cfg.min_citizen_capital:
             return False
         cash, pos = self._take_half(c)
         child = self._spawn(self._new_genome(c.genome), cash, c, pos)
         self.stats["splits"] += 1
-        self._event("sdoppiamento", f"{c.name} è in profitto (+{pnl:.2f} €) e si sdoppia: nasce {child.name} "
+        why = (f"batte i suoi mercati di {edge:+.2%} ({pnl:+.2f} €)" if self.cfg.judge_vs_market
+               else f"è in profitto (+{pnl:.2f} €)")
+        self._event("sdoppiamento", f"{c.name} {why} e si sdoppia: nasce {child.name} "
                                     f"({child.genome.describe()})", child.id)
         return True
 

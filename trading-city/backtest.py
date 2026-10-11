@@ -17,6 +17,8 @@ import json
 import logging
 from pathlib import Path
 
+from datetime import datetime, timedelta
+
 import numpy as np
 
 from citta.brokers.paper import PaperBroker
@@ -30,6 +32,11 @@ SURNAMES = ["Rossi", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marin
             "Fontana", "Santoro", "Mariani", "Rinaldi", "Caruso", "Ferrara", "Galli", "Martini", "Leone",
             "Longo", "Gentile", "Martinelli", "Vitale"]
 WEB = Path(__file__).resolve().parent / "web"
+
+
+def warmup_hours(cfg: Config) -> int:
+    """Ore di storico da leggere prima del primo giorno: servono a indicatori e filtro di tendenza."""
+    return max(160, 110 * cfg.bar_hours, cfg.trend_filter_hours + 24)
 
 
 def family_name(i: int) -> str:
@@ -131,14 +138,6 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
     symbols = [s.strip() for s in args.symbols.split(",") if s.strip()]
-    if args.demo_days:
-        hist = synthetic_history(symbols, args.demo_days, seed=args.seed)
-        source = f"DATI SINTETICI ({args.demo_days} giorni): prova dello strumento, non è un risultato di mercato"
-    else:
-        hist = get_history(symbols, args.start, args.end, args.data_dir, args.exchange, args.refresh)
-        source = f"storico orario reale: crypto da {args.exchange}, azioni da Yahoo Finance"
-    grid, prices = align(hist)
-
     cfg = Config.from_env(args.env)
     cfg.mode, cfg.symbols, cfg.seed, cfg.day_ticks, cfg.llm_mode = "sim", symbols, args.seed, 24, "rules"
     overrides = {}
@@ -146,9 +145,20 @@ def main() -> None:
         key, value = item.split("=", 1)
         if not hasattr(cfg, key):
             raise SystemExit(f"parametro sconosciuto: {key}")
-        overrides[key] = type(getattr(cfg, key))(value)
+        cur = getattr(cfg, key)
+        overrides[key] = value.lower() in ("1", "true", "si", "sì", "yes") if isinstance(cur, bool) else type(cur)(value)
         setattr(cfg, key, overrides[key])
-    feed = HistoricalFeed(grid, prices)
+    warmup = warmup_hours(cfg)
+    if args.demo_days:
+        hist = synthetic_history(symbols, args.demo_days, seed=args.seed)
+        source = f"DATI SINTETICI ({args.demo_days} giorni): prova dello strumento, non è un risultato di mercato"
+    else:
+        fetch_start = (datetime.fromisoformat(args.start) - timedelta(hours=warmup + 48)).date().isoformat()
+        hist = get_history(symbols, fetch_start, args.end, args.data_dir, args.exchange, args.refresh)
+        source = f"storico orario reale: crypto da {args.exchange}, azioni da Yahoo Finance"
+    grid, prices = align(hist)
+
+    feed = HistoricalFeed(grid, prices, warmup=warmup)
     report = run(cfg, feed, source, symbols)
     report["rules"]["overrides"] = overrides
 

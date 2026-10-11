@@ -39,3 +39,45 @@ Metodo: taratura su **ottobre 2025 – marzo 2026** (3 semi), verifica finale su
 Le leve riducono molto le perdite (da −14/−21% a −1/−3%), ma nessuna configurazione è in profitto in modo stabile, nemmeno in un semestre in cui il mercato sale del 16,6%. Il ragionamento basato solo sui grafici orari, con selezione ogni 3 giorni, non mostra un vantaggio netto dopo le commissioni.
 
 Parametri (env o `--set` in backtest.py): `TREND_FILTER_HOURS`, `MIN_ORDER_EUR`, `MIN_ENTRY_THRESHOLD`, `DELIBERATE_EVERY`, `MIN_HOLD_HOURS`, `MIN_STOP_LOSS`, `MIN_TAKE_PROFIT`.
+
+---
+
+# Secondo giro: candele giornaliere e giudizio rispetto al mercato
+
+Novità nel motore:
+- `BAR_HOURS=24` + `DELIBERATE_EVERY=24`: gli agenti ragionano su candele giornaliere, una volta al giorno (stop loss e obiettivi restano controllati ogni ora).
+- `JUDGE_VS_MARKET=1`: al giudizio sopravvive chi, nei suoi 3 giorni, fa meglio dei mercati che segue presi in parti uguali (non basta chiudere in positivo, e perdere meno del mercato quando scende vale come vincere).
+- Il backtest ora scarica lo storico anche prima della data di inizio, per scaldare gli indicatori: il primo giorno simulato coincide con `--start`. Per questo le cifre del primo giro non sono confrontabili al decimale.
+
+Sigle: P = filtro tendenza 200 h + ordini ≥250 € + soglia 0,45 (la migliore del primo giro); D = candele giornaliere.
+
+## Taratura: ottobre 2025 – marzo 2026 (buy & hold −21,0%), 3 semi
+| Configurazione | Città | Intervallo | Operazioni | Commissioni € |
+|---|---|---|---|---|
+| P | −5,8% | −8,9% … −2,1% | 471 | 310 |
+| P + vs mercato | −1,4% | −3,0% … +0,1% | 103 | 71 |
+| D + P | −1,6% | −4,7% … −0,1% | 129 | 81 |
+| D + P + vs mercato | −0,2% | −0,4% … 0,0% | 9 | 7 |
+| D + vs mercato + T480 O250 S0,45 | +0,07% | −0,1% … +0,3% | 9 | 6 |
+| D + vs mercato + T200 O100 S0,35 | −0,5% | −0,7% … −0,2% | 110 | 40 |
+| solo vs mercato | −9,8% | −10,8% … −9,2% | 5.158 | 617 |
+
+## Verifica: aprile – settembre 2026 (buy & hold +20,8%), 5 semi
+| Configurazione | Città | Intervallo | Operazioni | Commissioni € |
+|---|---|---|---|---|
+| base | −11,9% | −15,6% … −8,9% | 5.714 | 1.287 |
+| P | −2,9% | −6,5% … −0,4% | 560 | 351 |
+| D + P | −0,8% | −2,5% … +0,3% | 121 | 72 |
+| D + P + vs mercato | −0,01% | −0,2% … +0,1% | 8 | 7 |
+| D + vs mercato + T480 O250 S0,45 | +0,11% | −0,2% … +0,6% | 9 | 8 |
+| **D + vs mercato + T200 O100 S0,35** | **+0,35%** | −1,0% … +1,9% | 138 | 56 |
+
+## Anno intero: ottobre 2025 – settembre 2026 (buy & hold −6,1%), 5 semi
+| Configurazione | Città | Intervallo | Operazioni | Commissioni € |
+|---|---|---|---|---|
+| base | −25,3% | −28,8% … −22,0% | 9.605 | 1.992 |
+| D + vs mercato + T200 O100 S0,35 | −0,6% | −0,9% … −0,4% | 209 | 82 |
+| D + vs mercato + T480 O250 S0,45 | +0,06% | −0,1% … +0,6% | 16 | 11 |
+
+## Conclusione del secondo giro
+Le perdite sono passate da circa −25% l'anno a circa zero, e nel semestre di verifica la configurazione più attiva chiude leggermente in positivo (+0,35% medio). Ma ci arriva soprattutto **operando pochissimo**: la città ha imparato a non perdere, non a guadagnare. Nel semestre in cui il mercato sale del 20,8% resta quasi tutta in contanti. Un guadagno vero richiede agenti con un vantaggio informativo reale.

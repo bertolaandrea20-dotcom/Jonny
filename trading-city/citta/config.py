@@ -57,6 +57,8 @@ class Config:
     min_entry_threshold: float = 0.0  # pavimenti applicati al DNA di ogni nuovo agente
     min_stop_loss: float = 0.0
     min_take_profit: float = 0.0
+    bar_hours: int = 1  # durata delle candele su cui ragionano gli agenti (24 = giornaliere)
+    judge_vs_market: bool = False  # sopravvive chi batte i suoi mercati, non solo chi chiude in positivo
 
     day_ticks: int = 48
     tick_seconds: float = 0.5
@@ -109,6 +111,8 @@ class Config:
             min_entry_threshold=float(_env("MIN_ENTRY_THRESHOLD", "0")),
             min_stop_loss=float(_env("MIN_STOP_LOSS", "0")),
             min_take_profit=float(_env("MIN_TAKE_PROFIT", "0")),
+            bar_hours=int(_env("BAR_HOURS", "1")),
+            judge_vs_market=_env("JUDGE_VS_MARKET", "0").lower() in ("1", "true", "si", "sì", "yes"),
             day_ticks=int(_env("DAY_TICKS", "48")),
             tick_seconds=float(_env("TICK_SECONDS", "0.5")),
             live_tick_seconds=float(_env("LIVE_TICK_SECONDS", "900")),

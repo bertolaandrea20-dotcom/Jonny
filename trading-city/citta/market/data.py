@@ -77,6 +77,34 @@ class MarketFeed:
     def fundamentals(self, symbol: str) -> dict: ...
 
 
+class TimeframeView(MarketFeed):
+    """Mostra un feed orario come candele di ``hours`` ore (es. 24 = giornaliere)."""
+
+    def __init__(self, feed: MarketFeed, hours: int):
+        self.feed, self.hours = feed, hours
+        self.symbols = feed.symbols
+
+    @property
+    def tick(self) -> int:
+        return self.feed.tick
+
+    def price(self, symbol: str) -> float:
+        return self.feed.price(symbol)
+
+    def closes(self, symbol: str, n: int = 120) -> np.ndarray:
+        c = self.feed.closes(symbol, n * self.hours)
+        return c[len(c) - 1::-self.hours][::-1]
+
+    def news(self, symbol: str, lookback: int = 24) -> list:
+        return self.feed.news(symbol, lookback * self.hours)
+
+    def social(self, symbol: str) -> dict:
+        return self.feed.social(symbol)
+
+    def fundamentals(self, symbol: str) -> dict:
+        return self.feed.fundamentals(symbol)
+
+
 # ─────────────────────────────────────────────────────────────
 class _SynthAsset:
     def __init__(self, symbol: str, rng: random.Random):
