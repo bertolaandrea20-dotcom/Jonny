@@ -1,0 +1,11 @@
+# Nucleo (obbligatorio)
+fastapi>=0.110
+uvicorn>=0.29
+numpy>=1.26
+pandas>=2.1
+
+# Opzionali — attivali in base a cosa usi
+# anthropic>=0.40        # ragionamento degli agenti con Claude (LLM_MODE=claude)
+# yfinance>=0.2.40       # dati reali azioni/ETF (Borsa Italiana: ENI.MI, ISP.MI, ...)
+# ccxt>=4.3              # crypto: dati e ordini su Kraken / Bitstamp / Bitpanda ecc.
+# ib_insync>=0.9.86      # Interactive Brokers (IBKR Ireland) per azioni/ETF dall'Italia

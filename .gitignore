@@ -15,3 +15,7 @@ apps/api/prisma/seed.js.map
 preview/
 screenshots.mjs
 screenshots-payments.mjs
+trading-city/*.db
+trading-city/.env
+__pycache__/
+.pytest_cache/
