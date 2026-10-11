@@ -4,8 +4,9 @@ Scarica candele orarie e le salva in CSV (``data/<simbolo>_1h.csv``), così le
 esecuzioni successive non riscaricano nulla. Puoi anche mettere nella cartella
 CSV tuoi, con colonne ``timestamp`` (ms UTC o data ISO) e ``close``.
 
-* Crypto (simboli con ``/``): ccxt, default Binance, che conserva anni di
-  storico orario in EUR (Kraken via API dà solo le ultime ~720 ore).
+* Crypto (simboli con ``/``): ccxt, default Bitstamp (exchange europeo con
+  anni di storico orario in EUR). Binance funziona dall'Italia ma blocca molti
+  server cloud; Kraken via API dà solo le ultime ~720 ore.
 * Azioni/ETF (es. ``ENI.MI``): yfinance, che dà al massimo ~730 giorni di
   dati orari.
 
@@ -77,17 +78,24 @@ def _download_crypto(symbol: str, start_ms: int, end_ms: int, exchange: str) -> 
     return rows
 
 
-def _download_stock(symbol: str, start_ms: int, end_ms: int) -> list[tuple[int, float]]:
+def _download_stock(symbol: str, start_ms: int, end_ms: int, attempts: int = 5) -> list[tuple[int, float]]:
     import yfinance as yf
 
     start = datetime.fromtimestamp(start_ms / 1000, timezone.utc)
     end = datetime.fromtimestamp(end_ms / 1000, timezone.utc)
-    df = yf.Ticker(symbol).history(start=start, end=end, interval="1h")
-    return [(int(ts.timestamp() * 1000), float(c)) for ts, c in zip(df.index, df["Close"])]
+    for i in range(attempts):  # Yahoo limita spesso le richieste (429): riprova con attese crescenti
+        try:
+            df = yf.Ticker(symbol).history(start=start, end=end, interval="1h")
+            if len(df):
+                return [(int(ts.timestamp() * 1000), float(c)) for ts, c in zip(df.index, df["Close"])]
+        except Exception as exc:
+            log.warning("Yahoo %s, tentativo %d: %s", symbol, i + 1, exc)
+        time.sleep(15 * (i + 1))
+    return []
 
 
 def get_history(symbols: list[str], start: str, end: str, data_dir: str = "data",
-                exchange: str = "binance", refresh: bool = False) -> dict[str, list[tuple[int, float]]]:
+                exchange: str = "bitstamp", refresh: bool = False) -> dict[str, list[tuple[int, float]]]:
     start_ms, end_ms = _to_ms(start), _to_ms(end)
     out = {}
     for s in symbols:

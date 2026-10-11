@@ -84,7 +84,7 @@ python backtest.py --symbols BTC/EUR,ETH/EUR,SOL/EUR --seed 7      # solo crypto
 python backtest.py --demo-days 90                                  # storico sintetico, per provare senza rete
 ```
 
-Ogni ora storica è un tick; ogni agente è giudicato ogni 3 giorni dalla nascita (a mezzanotte UTC), con le stesse regole della città dal vivo. Lo storico viene scaricato una volta e salvato in `data/` (puoi anche metterci CSV tuoi con colonne `timestamp,close`): crypto da Binance via ccxt, azioni da Yahoo Finance (massimo ~2 anni di dati orari).
+Ogni ora storica è un tick; ogni agente è giudicato ogni 3 giorni dalla nascita (a mezzanotte UTC), con le stesse regole della città dal vivo. Lo storico viene scaricato una volta e salvato in `data/` (puoi anche metterci CSV tuoi con colonne `timestamp,close`): crypto da Bitstamp via ccxt (con `--exchange binance` o altri exchange ccxt), azioni da Yahoo Finance (massimo ~2 anni di dati orari).
 
 In `reports/` trovi un file HTML da aprire nel browser con:
 - **l'ecosistema giorno per giorno**: uno slider e un tasto ▶ per riavvolgere la città, con le famiglie, chi è in prova e chi guadagna o perde;

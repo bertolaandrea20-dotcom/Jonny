@@ -119,7 +119,7 @@ def main() -> None:
     ap.add_argument("--start", default="2025-10-01")
     ap.add_argument("--end", default="2026-10-01")
     ap.add_argument("--data-dir", default="data")
-    ap.add_argument("--exchange", default="binance", help="exchange ccxt da cui scaricare lo storico crypto")
+    ap.add_argument("--exchange", default="bitstamp", help="exchange ccxt da cui scaricare lo storico crypto")
     ap.add_argument("--refresh", action="store_true", help="riscarica i dati anche se sono già in cache")
     ap.add_argument("--demo-days", type=int, default=0, help="usa N giorni di storico SINTETICO (prova senza rete)")
     ap.add_argument("--seed", type=int, default=42)
