@@ -125,6 +125,8 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", default="reports")
     ap.add_argument("--env", default=".env")
+    ap.add_argument("--set", action="append", default=[], metavar="CHIAVE=VALORE",
+                    help="sovrascrive un parametro della città, es. --set min_stop_loss=0.03")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -139,12 +141,21 @@ def main() -> None:
 
     cfg = Config.from_env(args.env)
     cfg.mode, cfg.symbols, cfg.seed, cfg.day_ticks, cfg.llm_mode = "sim", symbols, args.seed, 24, "rules"
+    overrides = {}
+    for item in args.set:
+        key, value = item.split("=", 1)
+        if not hasattr(cfg, key):
+            raise SystemExit(f"parametro sconosciuto: {key}")
+        overrides[key] = type(getattr(cfg, key))(value)
+        setattr(cfg, key, overrides[key])
     feed = HistoricalFeed(grid, prices)
     report = run(cfg, feed, source, symbols)
+    report["rules"]["overrides"] = overrides
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    name = f"backtest_{report['start']}_{report['end']}_seed{args.seed}"
+    tag = "_" + "_".join(f"{k}{v}" for k, v in overrides.items()) if overrides else ""
+    name = f"backtest_{report['start']}_{report['end']}_seed{args.seed}{tag}"
     (out / f"{name}.json").write_text(json.dumps(report), encoding="utf-8")
     html = (WEB / "backtest_template.html").read_text(encoding="utf-8")
     (out / f"{name}.html").write_text(html.replace("/*__REPORT__*/null", json.dumps(report)), encoding="utf-8")

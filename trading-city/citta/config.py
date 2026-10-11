@@ -49,6 +49,15 @@ class Config:
     min_citizen_capital: float = 50.0
     fee_rate: float = 0.0026  # commissione taker tipica (Kraken ~0.26%)
 
+    # disciplina di trading (0 = disattivata)
+    deliberate_every: int = 3  # ogni quanti tick un agente ragiona su ogni suo strumento
+    min_hold_hours: int = 0  # tenuta minima prima di vendere per un segnale (lo stop resta attivo)
+    trend_filter_hours: int = 0  # compra solo se il prezzo è sopra la sua media di N ore
+    min_order_eur: float = 0.0  # ordini più piccoli non valgono le commissioni
+    min_entry_threshold: float = 0.0  # pavimenti applicati al DNA di ogni nuovo agente
+    min_stop_loss: float = 0.0
+    min_take_profit: float = 0.0
+
     day_ticks: int = 48
     tick_seconds: float = 0.5
     live_tick_seconds: float = 900.0
@@ -93,6 +102,13 @@ class Config:
             profit_tax=float(_env("PROFIT_TAX", "0.10")),
             min_citizen_capital=float(_env("MIN_CITIZEN_CAPITAL", "50")),
             fee_rate=float(_env("FEE_RATE", "0.0026")),
+            deliberate_every=int(_env("DELIBERATE_EVERY", "3")),
+            min_hold_hours=int(_env("MIN_HOLD_HOURS", "0")),
+            trend_filter_hours=int(_env("TREND_FILTER_HOURS", "0")),
+            min_order_eur=float(_env("MIN_ORDER_EUR", "0")),
+            min_entry_threshold=float(_env("MIN_ENTRY_THRESHOLD", "0")),
+            min_stop_loss=float(_env("MIN_STOP_LOSS", "0")),
+            min_take_profit=float(_env("MIN_TAKE_PROFIT", "0")),
             day_ticks=int(_env("DAY_TICKS", "48")),
             tick_seconds=float(_env("TICK_SECONDS", "0.5")),
             live_tick_seconds=float(_env("LIVE_TICK_SECONDS", "900")),

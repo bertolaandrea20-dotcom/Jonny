@@ -41,7 +41,6 @@ from .storage import Storage
 log = logging.getLogger(__name__)
 ROME = ZoneInfo("Europe/Rome")
 BLACKLIST_RADIUS = 0.05
-DELIBERATE_EVERY = 3
 EPS = 1e-6
 
 
@@ -113,9 +112,23 @@ class City:
                 g = random_genome(self.rng, universe)
             if self.alert:
                 g.position_size = max(0.05, g.position_size * 0.5)
+            self._discipline(g)
             if not self._is_blacklisted(g):
                 return g
         return random_genome(self.rng, universe)  # praticamente impossibile arrivare qui
+
+    def _discipline(self, g: Genome) -> None:
+        """Pavimenti di configurazione sul DNA: niente stop e obiettivi dentro il rumore delle commissioni."""
+        g.entry_threshold = max(g.entry_threshold, self.cfg.min_entry_threshold)
+        g.stop_loss = max(g.stop_loss, self.cfg.min_stop_loss)
+        g.take_profit = max(g.take_profit, self.cfg.min_take_profit, g.stop_loss)
+
+    def _trend_ok(self, sym: str) -> bool:
+        n = self.cfg.trend_filter_hours
+        if not n:
+            return True
+        closes = self.feed.closes(sym, n)
+        return len(closes) < n or closes[-1] >= float(closes.mean())
 
     def _spawn(self, genome: Genome, cash: float, parent: Citizen | None, positions=None) -> Citizen:
         gen = parent.generation + 1 if parent else 1
@@ -166,12 +179,13 @@ class City:
             log.exception("ordine fallito")
             self._event("errore", f"{c.name}: ordine {side} {sym} fallito — {exc}", c.id)
             return False
-        pos = c.positions.setdefault(sym, Position())
         pnl = None
         if side == "buy":
             cost = fill.qty * fill.price + fill.fee
             if cost > c.cash + EPS:
                 return False
+        pos = c.positions.setdefault(sym, Position())  # creata solo se l'operazione viene registrata
+        if side == "buy":
             c.cash -= cost
             pos.avg = (pos.avg * pos.qty + fill.qty * fill.price) / (pos.qty + fill.qty)
             pos.qty += fill.qty
@@ -212,7 +226,7 @@ class City:
             prices = self.prices
             for c in self.alive():
                 self._protect(c, prices)
-                if (self.tick + c.id) % DELIBERATE_EVERY == 0:
+                if (self.tick + c.id) % self.cfg.deliberate_every == 0:
                     self._think(c, prices)
                 eq = c.equity(prices)
                 c.curve.append((self.tick, round(eq, 2)))
@@ -258,9 +272,13 @@ class City:
             if d.action == "buy" and pos.qty <= 0:
                 budget = min(c.cash, eq * d.fraction)
                 qty = budget / (d.price * (1 + self.cfg.fee_rate * 2))
-                if budget >= 1.0 and self._trade(c, sym, "buy", qty, d.price, f"{d.rating} (punteggio {d.score:+.2f})"):
+                if budget < max(1.0, self.cfg.min_order_eur) or not self._trend_ok(sym):
+                    continue
+                if self._trade(c, sym, "buy", qty, d.price, f"{d.rating} (punteggio {d.score:+.2f})"):
                     self.store.decision(self.tick, self.day, c.id, dd_dict)
             elif d.action == "sell" and pos.qty > 0:
+                if self.tick - pos.opened_tick < self.cfg.min_hold_hours:
+                    continue
                 if self._trade(c, sym, "sell", pos.qty * min(1.0, d.fraction), d.price,
                                f"{d.rating} (punteggio {d.score:+.2f})"):
                     self.store.decision(self.tick, self.day, c.id, dd_dict)
