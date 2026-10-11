@@ -4,8 +4,8 @@
     python backtest.py --symbols BTC/EUR,ETH/EUR,SOL/EUR --start 2024-01-01 --end 2025-01-01 --seed 7
     python backtest.py --demo-days 120          # storico sintetico, per provare lo strumento senza rete
 
-Ogni ora storica è un tick, ogni giorno (mezzanotte UTC) c'è il giudizio. Le
-regole sono le stesse della città dal vivo. Alla fine scrive ``report.html``
+Ogni ora storica è un tick; ogni agente è giudicato ogni 3 giorni dalla nascita
+(a mezzanotte UTC). Le regole sono le stesse della città dal vivo. Alla fine scrive ``report.html``
 (apribile nel browser, con la vista dell'ecosistema giorno per giorno) e
 ``report.json``.
 """
@@ -51,7 +51,7 @@ def run(cfg: Config, feed: HistoricalFeed, source: str, symbols: list[str]) -> d
         p = city.prices
         bench = cfg.city_capital * float(np.mean([p[s] / start_px[s] for s in symbols]))
         agents = [[c.id, fam(c.lineage), c.parent_id or 0, round(c.equity(p), 2),
-                   int(c.in_trial(cfg.trial_days)), c.days_survived, c.generation]
+                   int(c.in_trial(cfg.cycle_days)), c.days_survived, c.generation]
                   for c in city.alive()]
         days.append({"date": date, "equity": round(city.city_equity(), 2), "treasury": round(city.treasury, 2),
                      "bench": round(bench, 2), "survivors": info["survivors"] if info else 0,
@@ -90,7 +90,7 @@ def run(cfg: Config, feed: HistoricalFeed, source: str, symbols: list[str]) -> d
     bench_eq = np.array([d["bench"] for d in days])
     return {
         "source": source, "symbols": symbols, "start": days[0]["date"], "end": days[-1]["date"],
-        "rules": {"trial_days": cfg.trial_days, "min_population": cfg.min_population,
+        "rules": {"cycle_days": cfg.cycle_days, "min_population": cfg.min_population,
                   "max_population": cfg.max_population, "profit_tax": cfg.profit_tax,
                   "treasury_share": cfg.treasury_share, "fee_rate": cfg.fee_rate, "capital": cfg.city_capital,
                   "seed": cfg.seed},

@@ -82,7 +82,7 @@ td.r{text-align:right}
   <div class="daybar"><b id="day">Giorno 1</b><div class="prog"><i id="prog" style="width:0"></i></div><span id="tickinfo"></span></div>
   <button id="btnPause">⏸ Pausa</button>
   <span class="tabs" id="speeds"></span>
-  <button id="btnEnd" title="Esegue subito il giudizio di fine giornata (solo simulazione)">⚖ Giudica ora</button>
+  <button id="btnEnd" title="Chiude subito la giornata: vengono giudicati gli agenti che finiscono il loro ciclo (solo simulazione)">⏭ Fine giornata</button>
 </header>
 <div class="warn" id="alert">⚠ Allerta del Guardiano: la città è oltre il 20% sotto il suo massimo. I nuovi nati rischiano metà.</div>
 
@@ -146,7 +146,7 @@ async function refresh(){
   $('#broker').textContent = S.broker + (S.llm?' · ragionamento Claude attivo':' · ragionamento a regole');
   $('#day').textContent = 'Giorno '+S.day;
   $('#prog').style.width = S.day_ticks? (100*S.tick_in_day/S.day_ticks)+'%' : '0';
-  $('#tickinfo').textContent = S.day_ticks? `tick ${S.tick_in_day}/${S.day_ticks}` : `tick ${S.tick} · giudizio a mezzanotte (Roma)`;
+  $('#tickinfo').textContent = S.day_ticks? `tick ${S.tick_in_day}/${S.day_ticks}` : `tick ${S.tick} · i giudizi avvengono a mezzanotte (Roma)`;
   $('#btnPause').textContent = S.paused?'▶ Riprendi':'⏸ Pausa';
   $('#btnEnd').style.display = S.mode==='sim'?'':'none';
   $('#speeds').style.display = S.mode==='sim'?'':'none';
@@ -159,7 +159,7 @@ async function refresh(){
     ['Abitanti', S.citizens.length, `min ${S.rules.min_population} · max ${S.rules.max_population}`],
     ['Nati', S.stats.born, `${S.stats.splits} sdoppiamenti · ${S.stats.founded} fondati`],
     ['Morti', S.stats.dead, 'non tornano più'],
-    ['In prova', S.citizens.filter(c=>c.in_trial).length, `${S.rules.trial_days} giorni senza giudizio`],
+    ['In prova', S.citizens.filter(c=>c.in_trial).length, `giudizio ogni ${S.rules.cycle_days} giorni`],
     ['Strategie bandite', S.blacklist, 'lista nera'],
   ];
   $('#kpis').innerHTML = kp.map(([a,b,c])=>`<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join('');
@@ -244,7 +244,8 @@ async function loadCitizen(){
   let c; try{ c=await api('/api/citizen/'+selected); }catch(e){ return; }
   const syms=c.genome.symbols; if(!selSym||!syms.includes(selSym)) selSym=syms[0];
   const dec = pinnedDecision || c.last_decisions[selSym];
-  const st = c.status==='dead'?'<span class="st-dead">✝ morto</span>':c.in_trial?`<span class="st-trial">⏳ in prova · giorno ${c.days_lived+1} di ${c.trial_days}</span>`:`<span class="st-alive">● vivo · ${c.days_survived} giudizi superati</span>`;
+  const nextJ = c.days_to_judgment===1?'stasera':`tra ${c.days_to_judgment} giorni`;
+  const st = c.status==='dead'?'<span class="st-dead">✝ morto</span>':c.in_trial?`<span class="st-trial">⏳ in prova · giorno ${c.days_lived+1} di ${c.cycle_days} · giudizio ${nextJ}</span>`:`<span class="st-alive">● vivo · ${c.days_survived} giudizi superati · prossimo ${nextJ}</span>`;
   const genes=['w_market','w_sentiment','w_news','w_fundamentals','risk_appetite','entry_threshold','position_size','stop_loss','take_profit'];
   const bounds={w_market:[0,1],w_sentiment:[0,1],w_news:[0,1],w_fundamentals:[0,1],risk_appetite:[0,1],entry_threshold:[.05,.6],position_size:[.05,.6],stop_loss:[.005,.08],take_profit:[.005,.15]};
   const label={w_market:'peso mercato',w_sentiment:'peso sentiment',w_news:'peso news',w_fundamentals:'peso fondamentali',risk_appetite:'appetito rischio',entry_threshold:'soglia ingresso',position_size:'quota posizione',stop_loss:'stop loss',take_profit:'take profit'};
@@ -258,7 +259,7 @@ async function loadCitizen(){
     </div>
     <div class="kpis" style="padding:0;margin-bottom:8px;grid-template-columns:repeat(4,1fr)">
       <div class="kpi"><span>Capitale €</span><b>${eur(c.equity)}</b></div>
-      <div class="kpi"><span>Oggi €</span><b class="${cls(c.day_pnl)}">${c.day_pnl==null?'—':eur(c.day_pnl)}</b></div>
+      <div class="kpi"><span>Ciclo in corso €</span><b class="${cls(c.cycle_pnl)}">${c.cycle_pnl==null?'—':eur(c.cycle_pnl)}</b></div>
       <div class="kpi"><span>Vita €</span><b class="${cls(c.life_pnl)}">${eur(c.life_pnl)}</b></div>
       <div class="kpi"><span>Trade</span><b>${c.trades}</b><span>${c.wins} vinti</span></div>
     </div>

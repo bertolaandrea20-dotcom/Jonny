@@ -2,17 +2,17 @@
 
 Leggi della città
 -----------------
-1. Dopo il periodo di prova, ogni giorno a fine giornata il cittadino viene giudicato sul proprio
-   risultato del giorno (valore del portafoglio ai prezzi correnti).
+1. Ogni ``CYCLE_DAYS`` giorni (default 3), contati dalla sua nascita, il
+   cittadino viene giudicato sul risultato del ciclo appena concluso (valore
+   del portafoglio ai prezzi correnti rispetto all'inizio del ciclo).
+   Il primo ciclo di ogni nuovo cittadino, fondatore o figlio, è la sua prova.
 2. In profitto → sopravvive, versa una tassa sul profitto alla tesoreria e si
    sdoppia: un figlio con il genoma leggermente mutato riceve metà del suo
-   portafoglio.
+   portafoglio e inizia la propria prova.
 3. In perdita (o fermo a zero) → muore. Le sue posizioni vengono chiuse, il
    capitale torna alla tesoreria e il suo genoma finisce in lista nera:
    né lui né strategie troppo simili possono più nascere.
-4. Periodo di prova: ogni nuovo cittadino (fondatore o figlio) ha
-   ``TRIAL_DAYS`` giorni (default 3) senza giudizio. Al primo giudizio conta
-   il risultato dell'intero periodo di prova; da lì in poi, quello di ogni giorno.
+4. Tra un giudizio e l'altro nessuno muore e nessuno si sdoppia.
 5. La città non può morire: la tesoreria non va mai a zero e, se la
    popolazione scende sotto ``MIN_POPULATION``, il Guardiano fonda nuovi
    cittadini (incroci dei sopravvissuti migliori o genomi nuovi, mai in lista nera).
@@ -127,7 +127,7 @@ class City:
         c.lineage = parent.lineage if parent else c.id
         self.next_id += 1
         eq = c.equity(self.prices)
-        c.capital_at_birth = c.equity_day_start = eq
+        c.capital_at_birth = c.equity_day_start = c.equity_cycle_start = eq
         c.curve.append((self.tick, round(eq, 2)))
         self.citizens[c.id] = c
         self.stats["born"] += 1
@@ -269,16 +269,16 @@ class City:
     def end_of_day(self) -> None:
         with self.lock:
             prices = self.prices
-            survivors, dead, in_trial = [], [], []
+            survivors, dead, waiting = [], [], []
             for c in self.alive():
                 eq = c.equity(prices)
                 c.days_lived += 1
                 c.day_results.append(round(eq - c.equity_day_start, 2))
-                if c.days_lived < self.cfg.trial_days:
-                    in_trial.append(c)
+                if c.days_lived % self.cfg.cycle_days:
+                    waiting.append(c)  # in prova o a metà ciclo: stasera non tocca a lui
                     continue
-                # al primo giudizio conta tutto il periodo di prova, poi solo il giorno
-                base = c.capital_at_birth if c.days_lived == self.cfg.trial_days else c.equity_day_start
+                # si giudica il risultato degli ultimi `cycle_days` giorni
+                base = c.equity_cycle_start
                 pnl = eq - base
                 (survivors if pnl > EPS else dead).append((c, pnl, base))
 
@@ -302,19 +302,24 @@ class City:
 
             self._guardian()
             eq = self.city_equity()
+            in_trial = [c for c in waiting if c.days_lived < self.cfg.cycle_days]
             summary = {"day": self.day, "survivors": len(survivors), "dead": len(dead), "in_trial": len(in_trial),
+                       "waiting": len(waiting),
                        "population": len(self.alive()), "equity": round(eq, 2), "treasury": round(self.treasury, 2)}
             self.days.append(summary)
             self._event("giudizio", f"Fine del giorno {self.day}: {len(survivors)} sopravvissuti, {len(dead)} morti, "
-                                    f"{len(in_trial)} ancora in prova. "
+                                    f"{len(waiting)} non giudicati stasera ({len(in_trial)} in prova). "
                                     f"Popolazione {summary['population']}, patrimonio {eq:.0f} €.")
             self.day += 1
             self.tick_in_day = 0
             if self.reasoner:
                 self.reasoner.new_day()
             p = self.prices
+            judged = {c.id for c, _, _ in survivors}
             for c in self.alive():
                 c.equity_day_start = c.equity(p)
+                if c.id in judged:  # nuovo ciclo dopo tassa e sdoppiamento
+                    c.equity_cycle_start = c.equity_day_start
                 self._persist(c)
             self.store.commit()
 
@@ -325,7 +330,8 @@ class City:
         c.cash = 0.0
         c.status = "dead"
         c.death_day = self.day
-        when = "nel periodo di prova" if c.days_survived == 0 else f"nel giorno {self.day}"
+        when = ("nei giorni di prova" if c.days_survived == 0
+                else f"negli ultimi {self.cfg.cycle_days} giorni")
         c.death_cause = (f"in perdita {when} ({pnl:+.2f} €)" if pnl < -0.005
                          else f"nessun profitto {when}: chi non guadagna non sopravvive")
         fp = c.genome.fingerprint()

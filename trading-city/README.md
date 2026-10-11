@@ -51,12 +51,10 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
 
 ## Le leggi della città
 
-1. **3 giorni di prova.** Ogni nuovo agente — fondatore o figlio — ha `TRIAL_DAYS` giorni (default 3) in cui fa trading senza essere giudicato: non può morire e non può sdoppiarsi.
-2. **Il primo giudizio** arriva alla fine del terzo giorno e guarda **tutto il periodo di prova** (patrimonio rispetto al capitale ricevuto alla nascita).
-3. **Poi giudizio ogni giorno** (in simulazione ogni `DAY_TICKS` tick; con dati reali a mezzanotte ora di Roma), sul risultato della giornata ai prezzi correnti:
-   - **in profitto → sopravvive e si sdoppia.** Versa il `PROFIT_TAX` (10%) del profitto alla tesoreria; un figlio con il genoma leggermente mutato riceve metà del suo portafoglio e inizia i suoi 3 giorni di prova;
-   - **in perdita (o fermo a zero) → muore.** Le sue posizioni vengono chiuse, il capitale torna alla tesoreria e il genoma finisce in **lista nera**: né quella strategia né una troppo simile (distanza < 0,05 nello spazio dei geni) potranno più nascere, nemmeno come mutazione di un altro.
-4. **Non c'è un limite di età**: un agente vive finché continua a guadagnare ogni giorno.
+1. **Giudizio ogni 3 giorni.** Ogni agente viene giudicato ogni `CYCLE_DAYS` giorni (default 3), contati dalla sua nascita: al 3°, al 6°, al 9° giorno e così via. Il giudizio guarda il risultato dei 3 giorni appena conclusi (patrimonio ai prezzi correnti rispetto all'inizio del ciclo). Il primo ciclo è la **prova**.
+2. **In profitto → sopravvive e si sdoppia.** Versa il `PROFIT_TAX` (10%) del profitto alla tesoreria; un figlio con il genoma leggermente mutato riceve metà del suo portafoglio e inizia la propria prova. Poi parte un nuovo ciclo di 3 giorni.
+3. **In perdita (o fermo a zero) → muore.** Le sue posizioni vengono chiuse, il capitale torna alla tesoreria e il genoma finisce in **lista nera**: né quella strategia né una troppo simile (distanza < 0,05 nello spazio dei geni) potranno più nascere, nemmeno come mutazione di un altro.
+4. **Tra un giudizio e l'altro** nessuno muore e nessuno si sdoppia, e non c'è un limite di età: un agente vive finché ogni ciclo chiude in profitto.
 5. **La città non può morire.**
    - Il 30% del capitale (`TREASURY_SHARE`) sta in tesoreria e non fa trading; metà è una **riserva inviolabile**.
    - Se gli abitanti scendono sotto `MIN_POPULATION`, il **Guardiano** fonda nuovi agenti: incroci dei migliori sopravvissuti o genomi nuovi, mai in lista nera.
@@ -64,7 +62,7 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
    - Il capitale dei morti non resta fermo: l'eccesso di tesoreria finanzia nuovi agenti.
    - Se la città scende oltre il 20% dal suo massimo scatta l'**allerta**: i nuovi nati rischiano metà.
 
-> Le regole si trovano in `citta/city/city.py` (`end_of_day`); la durata della prova si cambia con `TRIAL_DAYS`.
+> Le regole si trovano in `citta/city/city.py` (`end_of_day`); la durata del ciclo si cambia con `CYCLE_DAYS`.
 
 ## La dashboard
 
@@ -75,7 +73,7 @@ Di default il ragionamento è **a regole** (deterministico, gratuito, veloce). C
 - **La città**: ogni casa è un agente vivo. Altezza = capitale, colore = risultato di oggi, finestre accese = posizioni aperte, stelle = giorni sopravvissuti. ⏳ = in prova (con il giorno), ★ = giudizi superati. A sinistra il palazzo della tesoreria, in basso il cimitero. Clic su una casa per entrarci.
 - **Scheda dell'agente**: capitale, curva del patrimonio, genoma, posizioni, genitore e figli, e il **processo di ragionamento** per ciascuno strumento: rapporti degli analisti con barre di segnale, dibattito Bull/Bear a fumetti, Research Manager, Trader, team del rischio e decisione finale. Le decisioni che hanno generato un ordine restano consultabili.
 - **Trade in tempo reale**, **cronaca della città** (nascite, morti, sdoppiamenti, interventi del Guardiano), **albero genealogico** completo, prezzi di mercato.
-- Controlli (solo in simulazione): pausa, velocità ×1/×4/×10, "Giudica ora".
+- Controlli (solo in simulazione): pausa, velocità ×1/×4/×10, "Fine giornata".
 
 ## Backtest: come diventa l'ecosistema sui dati storici
 
@@ -86,7 +84,7 @@ python backtest.py --symbols BTC/EUR,ETH/EUR,SOL/EUR --seed 7      # solo crypto
 python backtest.py --demo-days 90                                  # storico sintetico, per provare senza rete
 ```
 
-Ogni ora storica è un tick e a mezzanotte UTC c'è il giudizio, con le stesse regole della città dal vivo. Lo storico viene scaricato una volta e salvato in `data/` (puoi anche metterci CSV tuoi con colonne `timestamp,close`): crypto da Binance via ccxt, azioni da Yahoo Finance (massimo ~2 anni di dati orari).
+Ogni ora storica è un tick; ogni agente è giudicato ogni 3 giorni dalla nascita (a mezzanotte UTC), con le stesse regole della città dal vivo. Lo storico viene scaricato una volta e salvato in `data/` (puoi anche metterci CSV tuoi con colonne `timestamp,close`): crypto da Binance via ccxt, azioni da Yahoo Finance (massimo ~2 anni di dati orari).
 
 In `reports/` trovi un file HTML da aprire nel browser con:
 - **l'ecosistema giorno per giorno**: uno slider e un tasto ▶ per riavvolgere la città, con le famiglie, chi è in prova e chi guadagna o perde;

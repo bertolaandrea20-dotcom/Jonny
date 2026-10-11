@@ -98,7 +98,7 @@ td.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-num
   </section>
 
   <section class="panel">
-    <h2>Popolazione per famiglia <span class="legend">ogni colonna è un giorno · il giudizio inizia dopo i giorni di prova</span></h2>
+    <h2>Popolazione per famiglia <span class="legend">ogni colonna è un giorno · ogni agente è giudicato ogni 3 giorni dalla nascita</span></h2>
     <canvas id="popChart"></canvas>
   </section>
 
@@ -137,7 +137,7 @@ if (/SINTETICI/.test(R.source)) { $("#warn").hidden = false; $("#warn").textCont
 const stats = [
   ["Rendimento città", pct(S.return), `max drawdown ${pct(S.max_drawdown)}`, cls(S.return)],
   ["Buy & hold", pct(S.bench_return), `max drawdown ${pct(S.bench_max_drawdown)}`, cls(S.bench_return)],
-  ["Giorni", S.days, `prova di ${R.rules.trial_days} giorni`],
+  ["Giorni", S.days, `giudizio ogni ${R.rules.cycle_days} giorni`],
   ["Nati", S.born, `${S.splits} da sdoppiamento, ${S.founded} fondati`],
   ["Morti", S.dead, `${S.blacklist} strategie bandite`],
   ["Famiglie", S.families, `${S.families_alive} ancora vive`],
@@ -210,7 +210,7 @@ function dayPanel() {
   $("#dayinfo").innerHTML = [
     ["Patrimonio €", eur(d.equity), cls(d.equity - R.rules.capital)], ["Buy & hold €", eur(d.bench), cls(d.bench - R.rules.capital)],
     ["Abitanti", d.agents.length + (inTrial ? ` (${inTrial} in prova)` : "")], ["Tesoreria €", eur(d.treasury)],
-    ["Sopravvissuti al giudizio", d.survivors], ["Morti nel giudizio", d.dead],
+    ["Sopravvissuti ai giudizi", d.survivors], ["Morti nei giudizi", d.dead],
   ].map(([l, v, c]) => `<div><span>${l}</span><b class="${c || ""}">${v}</b></div>`).join("");
   const by = {}; for (const a of d.agents) { const f = by[a[1]] ??= { n: 0, eq: 0 }; f.n++; f.eq += a[3]; }
   $("#dayfams").innerHTML = Object.entries(by).sort((a, b) => b[1].n - a[1].n).map(([f, v]) => `<div><i class="sw" style="background:${col(+f)}"></i><span>${esc(famName[f])} · ${v.n}</span><span class="mut">${eur(v.eq)} €</span></div>`).join("") || '<span class="mut">nessuna</span>';
@@ -218,7 +218,7 @@ function dayPanel() {
 
 $("#famTable").innerHTML = R.families.slice(0, 30).map(f => `<tr><td><i class="sw" style="background:${col(f.id)}"></i>${esc(f.name)}</td><td class="${f.alive ? "gain" : "mut"}">${f.alive ? `viva (${f.alive})` : `estinta il giorno ${f.extinct_day}`}</td><td class="n">${f.peak}</td><td class="n">${f.members}</td><td class="n">${f.generations}</td><td class="n">${f.alive ? eur(f.capital) : "—"}</td><td class="mut">${esc(f.founder)}</td></tr>`).join("");
 $("#bestTable").innerHTML = R.best.map(b => `<tr><td>${esc(b.name)} <span class="mut">${esc(b.family)} · gen. ${b.generation}</span></td><td class="n ${cls(b.life_return)}">${pct(b.life_return)}</td><td class="n">${b.judgments}</td><td class="mut">${esc(b.carattere)} · ${b.symbols.join(", ")}</td></tr>`).join("") || '<tr><td class="mut">nessuno</td></tr>';
-$("#notes").innerHTML = `<div><b style="color:var(--fg)">Come leggere questo backtest.</b> Fonte: ${esc(R.source)}. Ogni ora storica è un tick, a mezzanotte UTC c'è il giudizio. Commissioni ${(R.rules.fee_rate * 100).toFixed(2)}% per lato più slittamento simulato.</div>
+$("#notes").innerHTML = `<div><b style="color:var(--fg)">Come leggere questo backtest.</b> Fonte: ${esc(R.source)}. Ogni ora storica è un tick; ogni agente è giudicato ogni ${R.rules.cycle_days} giorni dalla sua nascita, a mezzanotte UTC, sul risultato del ciclo. Commissioni ${(R.rules.fee_rate * 100).toFixed(2)}% per lato più slittamento simulato.</div>
   <div>Il ${(R.rules.treasury_share * 100).toFixed(0)}% del capitale resta in tesoreria e non è investito, quindi il confronto con il buy &amp; hold (100% investito) non è alla pari nei mercati che salgono.</div>
   <div>Le notizie e i bilanci di allora non sono disponibili: nel backtest gli analisti News e Fundamentals restano muti, il sentiment è il momentum delle ultime 24 ore. L'evoluzione è casuale: un seme diverso produce un'altra città, quindi confronta più semi prima di trarre conclusioni.</div>`;
 

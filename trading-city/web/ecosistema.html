@@ -99,14 +99,14 @@ button.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
   <header class="top">
     <div>
       <h1>Ecosistema degli Agenti</h1>
-      <p class="sub">Ogni cerchio è un agente di trading che ragiona come TradingAgents. I colori sono le famiglie: chi guadagna si sdoppia, chi perde muore e la sua strategia sparisce per sempre. Mercato simulato, nessun denaro reale.</p>
+      <p class="sub">Ogni cerchio è un agente di trading che ragiona come TradingAgents. I colori sono le famiglie. Ogni 3 giorni ogni agente è giudicato: chi ha guadagnato si sdoppia, chi ha perso muore e la sua strategia sparisce per sempre. Mercato simulato, nessun denaro reale.</p>
     </div>
     <div class="controls" role="group" aria-label="Controlli della simulazione">
       <button id="play" type="button">Pausa</button>
       <button type="button" data-speed="1">×1</button>
       <button type="button" data-speed="4">×4</button>
       <button type="button" data-speed="12">×12</button>
-      <button id="judge" type="button" title="Esegue subito il giudizio di fine giornata">Giudica ora</button>
+      <button id="judge" type="button" title="Chiude subito la giornata: vengono giudicati gli agenti che finiscono il loro ciclo di 3 giorni">Fine giornata</button>
       <button id="reset" type="button">Nuova città</button>
     </div>
   </header>
@@ -119,8 +119,9 @@ button.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
         <div class="bar">
           <div class="legend">
             <span><i class="sw" style="border:2px dashed var(--trial)"></i>in prova (3 giorni)</span>
-            <span><i class="sw" style="box-shadow:0 0 0 2px var(--gain)"></i>in profitto oggi</span>
-            <span><i class="sw" style="box-shadow:0 0 0 2px var(--loss)"></i>in perdita oggi</span>
+            <span><i class="sw" style="box-shadow:0 0 0 2px var(--gain)"></i>in profitto nel ciclo</span>
+            <span><i class="sw" style="box-shadow:0 0 0 2px var(--loss)"></i>in perdita nel ciclo</span>
+            <span><i class="sw" style="box-shadow:0 0 0 1px var(--fg)"></i>giudizio stasera</span>
             <span><i class="sw" style="background:var(--market)"></i>mercati</span>
           </div>
           <span>grandezza = capitale · linee = genitore → figlio · tocca un agente</span>
@@ -136,8 +137,8 @@ button.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
       <section class="panel">
         <h2>Leggi dell'ecosistema</h2>
         <div class="laws">
-          <div><b>3 giorni di prova</b>Ogni nuovo agente fa trading per 3 giorni senza essere giudicato. Il primo giudizio guarda tutto il periodo.</div>
-          <div><b>Profitto: si sdoppia</b>Poi ogni sera, chi è in profitto versa il 10% alla tesoreria e genera un figlio con il DNA mutato e metà del portafoglio.</div>
+          <div><b>Giudizio ogni 3 giorni</b>Ogni agente è giudicato ogni 3 giorni dalla nascita, sul risultato di quei 3 giorni. I primi 3 sono la sua prova.</div>
+          <div><b>Profitto: si sdoppia</b>Chi è in profitto versa il 10% alla tesoreria, genera un figlio con il DNA mutato e metà del portafoglio, e inizia un nuovo ciclo.</div>
           <div><b>Perdita: muore</b>Le posizioni vengono chiuse e la strategia entra nella lista nera: né lei né una troppo simile potranno rinascere.</div>
           <div><b>La città non muore</b>Il 30% resta in tesoreria. Se gli abitanti sono meno di 6, il Guardiano fonda nuove famiglie.</div>
         </div>
@@ -383,7 +384,7 @@ function spawn(g, cash, parent, pos = {}) {
     g, cash, pos, status: "alive", daysLived: 0, judged: 0, born: C.day, trades: 0, wins: 0, given: 0, last: {}, lastSym: null, children: [],
     x: parent ? parent.x : null, y: parent ? parent.y : null, vx: 0, vy: 0, bornAt: performance.now(), deathAt: 0 };
   a.short = a.name.split(" ")[0] + " " + ROMAN(gen);
-  a.capBirth = a.eqStart = equity(a);
+  a.capBirth = a.eqStart = a.eqCycle = equity(a);
   C.agents.set(a.id, a); C.stats.born++;
   if (parent) parent.children.push(a.id);
   return a;
@@ -439,14 +440,15 @@ function judge() {
   const p = prices(), survivors = [], dead = [], trial = [];
   for (const a of alive()) {
     a.daysLived++;
-    if (a.daysLived < CFG.trial) { trial.push(a); continue; }
-    const base = a.daysLived === CFG.trial ? a.capBirth : a.eqStart, pnl = equity(a, p) - base;
+    if (a.daysLived % CFG.trial) { trial.push(a); continue; }  // in prova o a metà ciclo
+    const base = a.eqCycle, pnl = equity(a, p) - base;
     (pnl > 1e-6 ? survivors : dead).push({ a, pnl, base });
   }
   for (const { a, pnl } of dead) {
     for (const [s, pos] of Object.entries(a.pos)) if (!trade(a, s, "sell", pos.qty, p[s], "morte")) { a.cash += pos.qty * p[s]; delete a.pos[s]; }
     a.finalEq = a.cash; C.treasury += a.cash; a.cash = 0; a.status = "dead"; a.died = C.day; a.deathAt = performance.now();
-    a.cause = Math.abs(pnl) < .005 ? (a.judged ? `nessun profitto nel giorno ${C.day}` : "nessun profitto nel periodo di prova") : `${a.judged ? `in perdita nel giorno ${C.day}` : "in perdita nel periodo di prova"} (${eur(pnl)} €)`;
+    const when = a.judged ? "negli ultimi 3 giorni" : "nei giorni di prova";
+    a.cause = Math.abs(pnl) < .005 ? `nessun profitto ${when}` : `in perdita ${when} (${eur(pnl)} €)`;
     C.blacklist.push({ fp: fingerprint(a.g), g: a.g }); C.stats.dead++;
     event("morte", `${a.name} muore (${eur(pnl)} €). La sua strategia è bandita.`, a.id);
   }
@@ -475,10 +477,11 @@ function judge() {
   const excess = C.treasury - Math.max(cityEquity() * CFG.treasuryShare, C.floor);
   const n = Math.min(CFG.maxPop - alive().length, Math.floor(excess / base));
   for (let i = 0; i < n; i++) found(base, "è finanziato dalla tesoreria");
-  event("giudizio", `Fine del giorno ${C.day}: ${survivors.length} sopravvissuti, ${dead.length} morti, ${trial.length} in prova.`);
+  event("giudizio", `Fine del giorno ${C.day}: ${survivors.length} sopravvissuti, ${dead.length} morti, ${trial.length} non giudicati stasera.`);
   snapshotPop(C.day);
   C.day++; C.tickInDay = 0;
-  for (const a of alive()) a.eqStart = equity(a, p);
+  const judged = new Set(survivors.map(x => x.a.id));
+  for (const a of alive()) { a.eqStart = equity(a, p); if (judged.has(a.id)) a.eqCycle = a.eqStart; }
 }
 function snapshotPop(label) {
   const by = {}; for (const a of alive()) by[a.lin] = (by[a.lin] || 0) + 1;
@@ -561,12 +564,13 @@ function draw(now) {
     const r = 6 + (1 - k) * 10; hx.beginPath(); hx.moveTo(a.x - r, a.y - r); hx.lineTo(a.x + r, a.y + r); hx.moveTo(a.x + r, a.y - r); hx.lineTo(a.x - r, a.y + r); hx.stroke(); hx.globalAlpha = 1; }
   // gli agenti
   for (const a of alive()) {
-    const born = clamp((now - a.bornAt) / 600, 0, 1), r = radiusOf(a, p) * (.3 + .7 * born), day = equity(a, p) - a.eqStart;
+    const born = clamp((now - a.bornAt) / 600, 0, 1), r = radiusOf(a, p) * (.3 + .7 * born), day = equity(a, p) - a.eqCycle;
     hx.fillStyle = linColor(a.lin, .85); hx.beginPath(); hx.arc(a.x, a.y, r, 0, 7); hx.fill();
     hx.lineWidth = 2.2;
     if (a.daysLived < CFG.trial) { hx.setLineDash([3, 3]); hx.strokeStyle = T.trial; hx.beginPath(); hx.arc(a.x, a.y, r + 3, 0, 7); hx.stroke(); hx.setLineDash([]); }
-    if (Math.abs(day) > .01) { hx.strokeStyle = day > 0 ? T.gain : T.loss; hx.beginPath(); hx.arc(a.x, a.y, r + (a.daysLived < CFG.trial ? 6 : 2.5), -Math.PI / 2, -Math.PI / 2 + Math.min(1, Math.abs(day) / (a.eqStart * .02)) * Math.PI * 2); hx.stroke(); }
+    if (Math.abs(day) > .01) { hx.strokeStyle = day > 0 ? T.gain : T.loss; hx.beginPath(); hx.arc(a.x, a.y, r + (a.daysLived < CFG.trial ? 6 : 2.5), -Math.PI / 2, -Math.PI / 2 + Math.min(1, Math.abs(day) / (a.eqCycle * .03)) * Math.PI * 2); hx.stroke(); }
     if (Object.keys(a.pos).length) { hx.fillStyle = T.bg; hx.beginPath(); hx.arc(a.x, a.y, Math.max(1.5, r * .28), 0, 7); hx.fill(); }
+    if (a.daysLived % CFG.trial === CFG.trial - 1) { hx.strokeStyle = T.fg; hx.globalAlpha = .55; hx.lineWidth = 1; hx.beginPath(); hx.arc(a.x, a.y, r + 9, 0, 7); hx.stroke(); hx.globalAlpha = 1; }
     if (a.id === selected) { hx.strokeStyle = T.fg; hx.lineWidth = 1.5; hx.beginPath(); hx.arc(a.x, a.y, r + 10, 0, 7); hx.stroke(); }
     if (born < 1) { hx.strokeStyle = T.gain; hx.globalAlpha = 1 - born; hx.beginPath(); hx.arc(a.x, a.y, r + 16 * born, 0, 7); hx.stroke(); hx.globalAlpha = 1; }
   }
@@ -605,14 +609,15 @@ function renderLog() {
   document.getElementById("log").innerHTML = C.log.slice(0, 80).map(e => `<div class="e-${e.kind}"><span class="d">G${e.day}</span>${esc(e.text)}</div>`).join("");
 }
 const sigBar = v => { const w = Math.abs(v) * 50; return `<span class="sig"><i style="left:${v >= 0 ? 50 : 50 - w}%;width:${w}%;background:${v >= 0 ? "var(--gain)" : "var(--loss)"}"></i></span>`; };
+const nextJ = a => { const d = CFG.trial - a.daysLived % CFG.trial; return d === 1 ? "stasera" : `tra ${d} giorni`; };
 function renderAgent() {
   const el = document.getElementById("agentPanel");
   let a = selected && C.agents.get(selected);
   if (!a) { const live = alive(); a = live.sort((x, y) => y.trades - x.trades)[0]; if (!a) { el.innerHTML = '<h2>Agente</h2><div class="empty">Nessun agente vivo.</div>'; return; } selected = a.id; }
-  const p = prices(), eq = equity(a, p), day = a.status === "alive" ? eq - a.eqStart : null, life = eq + a.given - a.capBirth;
+  const p = prices(), eq = equity(a, p), day = a.status === "alive" ? eq - a.eqCycle : null, life = eq + a.given - a.capBirth;
   const syms = a.g.symbols; if (!selSym || !syms.includes(selSym)) selSym = a.lastSym && syms.includes(a.lastSym) ? a.lastSym : syms[0];
   const d = a.last[selSym], lin = C.lineages.get(a.lin), par = a.parent && C.agents.get(a.parent);
-  const status = a.status === "dead" ? `<span class="pill p-dead">morto · ${esc(a.cause)}</span>` : a.daysLived < CFG.trial ? `<span class="pill p-trial">in prova · giorno ${a.daysLived + 1} di ${CFG.trial}</span>` : `<span class="pill p-alive">vivo · ${a.judged} giudizi superati</span>`;
+  const status = a.status === "dead" ? `<span class="pill p-dead">morto · ${esc(a.cause)}</span>` : a.daysLived < CFG.trial ? `<span class="pill p-trial">in prova · giorno ${a.daysLived + 1} di ${CFG.trial} · giudizio ${nextJ(a)}</span>` : `<span class="pill p-alive">vivo · ${a.judged} giudizi superati · prossimo ${nextJ(a)}</span>`;
   const dna = [["mercato", "wMarket"], ["sentiment", "wSent"], ["news", "wNews"], ["fondamentali", "wFund"], ["rischio", "appetite"], ["soglia", "entry"], ["quota", "size"], ["stop", "sl"]];
   const by = ph => d ? d.steps.filter(s => s.phase === ph) : [];
   const stepHtml = (s, extra = "") => `<div class="step ${extra}"><div class="who"><span>${s.agent}</span><span>${s.phase === "analisti" || s.agent === "Research Manager" ? sigBar(s.signal) + s.signal.toFixed(2) : ""}</span></div>${esc(s.text)}</div>`;
@@ -620,7 +625,7 @@ function renderAgent() {
     <div class="agent-head"><span class="agent-name" style="color:${linColor(a.lin)}">${esc(a.name)}</span>${status}</div>
     <div class="mut" style="font-size:12.5px">Famiglia ${esc(lin.name)} · generazione ${a.gen} · ${par ? `figlio di <a href="#" data-sel="${par.id}">${esc(par.short)}</a>` : "fondatore"}${a.children.length ? ` · ${a.children.length} figli` : ""}</div>
     <div style="margin-top:4px">${esc(describe(a.g))} · segue ${a.g.symbols.join(", ")}</div>
-    <div class="kv"><div><span>Capitale €</span><b>${eur(eq)}</b></div><div><span>Oggi €</span><b class="${cls(day)}">${day == null ? "—" : eur(day)}</b></div><div><span>Dalla nascita €</span><b class="${cls(life)}">${eur(life)}</b></div></div>
+    <div class="kv"><div><span>Capitale €</span><b>${eur(eq)}</b></div><div><span>Ciclo in corso €</span><b class="${cls(day)}">${day == null ? "—" : eur(day)}</b></div><div><span>Dalla nascita €</span><b class="${cls(life)}">${eur(life)}</b></div></div>
     <div class="dna">${dna.map(([l, k]) => `<div><span>${l}</span><i><b style="width:${(a.g[k] - BOUNDS[k][0]) / (BOUNDS[k][1] - BOUNDS[k][0]) * 100}%"></b></i></div>`).join("")}</div>
     <h2 style="margin-top:12px">Come ragiona <span class="mut" style="text-transform:none;letter-spacing:0">${a.g.debate} round Bull/Bear · ${a.g.riskRounds} di rischio</span></h2>
     <div class="tabs">${syms.map(s => `<button type="button" class="${s === selSym ? "on" : ""}" data-sym="${s}">${s}</button>`).join("")}</div>

@@ -26,6 +26,7 @@ class Citizen:
     cash: float
     capital_at_birth: float
     equity_day_start: float = 0.0
+    equity_cycle_start: float = 0.0  # patrimonio all'inizio del ciclo di giudizio in corso
     status: str = "alive"  # alive | dead
     death_day: int | None = None
     death_cause: str = ""
@@ -47,8 +48,13 @@ class Citizen:
     def alive(self) -> bool:
         return self.status == "alive"
 
-    def in_trial(self, trial_days: int) -> bool:
-        return self.alive and self.days_lived < trial_days
+    def in_trial(self, cycle_days: int) -> bool:
+        """Primo ciclo di vita: non ha ancora affrontato un giudizio."""
+        return self.alive and self.days_lived < cycle_days
+
+    def days_to_judgment(self, cycle_days: int) -> int:
+        """Giorni che mancano al prossimo giudizio (1 = stasera)."""
+        return cycle_days - self.days_lived % cycle_days
 
     def equity(self, prices: dict[str, float]) -> float:
         if self.final_equity is not None and not self.alive:
@@ -66,6 +72,7 @@ class Citizen:
             "status": self.status, "born_day": self.born_day, "death_day": self.death_day,
             "death_cause": self.death_cause, "days_survived": self.days_survived,
             "days_lived": self.days_lived,
+            "cycle_pnl": round(eq - self.equity_cycle_start, 2) if self.alive else None,
             "equity": round(eq, 2), "cash": round(self.cash, 2),
             "capital_at_birth": round(self.capital_at_birth, 2),
             "day_pnl": round(eq - self.equity_day_start, 2) if self.alive else None,
