@@ -1,0 +1,211 @@
+{
+ "generated": "2026-10-11T14:59:59Z",
+ "last_check": "2026-10-11T12:10:13Z",
+ "checks": 5,
+ "last_bar": "2026-10-11 08:00:00+00:00",
+ "capital": 200.0,
+ "value": 198.75,
+ "fees": 0.4994,
+ "history": [
+  {
+   "bar": "2026-10-10T20:00:00+00:00",
+   "value": 199.46
+  },
+  {
+   "bar": "2026-10-11T00:00:00+00:00",
+   "value": 197.99
+  },
+  {
+   "bar": "2026-10-11T04:00:00+00:00",
+   "value": 198.49
+  },
+  {
+   "bar": "2026-10-11T08:00:00+00:00",
+   "value": 198.75
+  }
+ ],
+ "trades": [
+  {
+   "side": "buy",
+   "qty": 0.00026924629,
+   "symbol": "BTC/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.0089150523,
+   "symbol": "ETH/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 15.934178,
+   "symbol": "XRP/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 89.788408,
+   "symbol": "ADA/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.34909016,
+   "symbol": "LTC/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 1.7159312,
+   "symbol": "LINK/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 67.523281,
+   "symbol": "TRX/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 113.61711,
+   "symbol": "XLM/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.20297262,
+   "symbol": "SOL/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "sell",
+   "qty": 15.934178,
+   "symbol": "XRP/EUR",
+   "eur": 19.75,
+   "why": "sotto la media 50g",
+   "run": "2026-10-11T04:09:35Z",
+   "bar": "2026-10-11T00:00:00+00:00"
+  }
+ ],
+ "sleeves": [
+  {
+   "symbol": "BTC/EUR",
+   "qty": 0.0002692462868644399,
+   "cash": 0.0,
+   "value": 19.9783,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "ETH/EUR",
+   "qty": 0.008915052280849432,
+   "cash": 0.0,
+   "value": 19.939,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "XRP/EUR",
+   "qty": 0.0,
+   "cash": 19.6996,
+   "value": 19.6996,
+   "trades": 2,
+   "fees": 0.0994,
+   "in_position": false
+  },
+  {
+   "symbol": "ADA/EUR",
+   "qty": 89.78840760907202,
+   "cash": 0.0,
+   "value": 19.7847,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "LTC/EUR",
+   "qty": 0.349090160801952,
+   "cash": 0.0,
+   "value": 19.7829,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "LINK/EUR",
+   "qty": 1.7159311997824107,
+   "cash": 0.0,
+   "value": 19.7449,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "TRX/EUR",
+   "qty": 67.52328088493799,
+   "cash": 0.0,
+   "value": 19.9237,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "DOGE/EUR",
+   "qty": 0.0,
+   "cash": 20.0,
+   "value": 20.0,
+   "trades": 0,
+   "fees": 0.0,
+   "in_position": false
+  },
+  {
+   "symbol": "XLM/EUR",
+   "qty": 113.61710969110037,
+   "cash": 0.0,
+   "value": 20.0389,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "SOL/EUR",
+   "qty": 0.20297261792556492,
+   "cash": 0.0,
+   "value": 19.8568,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  }
+ ]
+}

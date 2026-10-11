@@ -1,0 +1,407 @@
+<title>Bot Kraken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: registro di bordo del bot. In alto lo stato e il valore, poi la curva del capitale,
+   sotto le 10 quote del paniere accanto al registro dei trade. Tutto in una colonna su telefono. */
+:root{
+  --bg:#f2f3f0; --surface:#fbfbf9; --sunken:#e8eae5; --line:#d3d7cf; --fg:#1c2127; --muted:#5d6670;
+  --accent:#3457a4; --gain:#23824a; --loss:#c03a2e; --paper:#8a5a12;
+  --f-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Public Sans","Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12161b; --surface:#191e24; --sunken:#0e1216; --line:#2a313a; --fg:#e6e9ec; --muted:#97a1ab;
+  --accent:#7d9be0; --gain:#4cc27a; --loss:#ef6b5f; --paper:#e0a94f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161b; --surface:#191e24; --sunken:#0e1216; --line:#2a313a; --fg:#e6e9ec; --muted:#97a1ab;
+  --accent:#7d9be0; --gain:#4cc27a; --loss:#ef6b5f; --paper:#e0a94f; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font:15px/1.55 var(--f-body);padding-inline:16px;padding-block:18px 40px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+h1{font:700 clamp(26px,4vw,38px)/1.05 var(--f-display);margin:0;letter-spacing:-.015em;text-wrap:balance}
+.sub{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.pill{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--f-body);padding:3px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.pill.paper{color:var(--paper)}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.meta{color:var(--muted);font-size:13px;text-align:right}
+.meta b{color:var(--fg);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:720px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--surface);padding:12px 14px;min-width:0}
+.kpi .l{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font:500 24px/1.2 var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.kpi .s{font-size:13px;color:var(--muted)}
+.gain{color:var(--gain)} .loss{color:var(--loss)} .mut{color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+h2{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+h2 span{text-transform:none;letter-spacing:0;font-weight:400}
+#chart{display:block;width:100%;height:240px}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:600 11.5px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sym{font:600 14px var(--f-display)}
+.state{display:inline-block;font:600 11.5px var(--f-body);padding:2px 8px;border-radius:5px;white-space:nowrap}
+.state.in{background:color-mix(in srgb,var(--gain) 16%,transparent);color:var(--gain)}
+.state.out{background:var(--sunken);color:var(--muted)}
+.bar{height:5px;background:var(--sunken);border-radius:3px;position:relative;min-width:60px}
+.bar i{position:absolute;top:0;bottom:0;border-radius:3px}
+.log{display:grid;gap:0;max-height:430px;overflow:auto}
+.log .row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.log .row:last-child{border-bottom:0}
+.tag{font:600 11px var(--f-body);letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.tag.buy{color:var(--gain);background:color-mix(in srgb,var(--gain) 14%,transparent)}
+.tag.sell{color:var(--loss);background:color-mix(in srgb,var(--loss) 14%,transparent)}
+.when{font:12px var(--f-mono);color:var(--muted);white-space:nowrap}
+.why{color:var(--muted);font-size:13px}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;font-size:14px}
+.notes b{display:block;font:700 15px var(--f-display);margin-bottom:3px}
+.notes p{margin:0;max-width:60ch}
+.empty{color:var(--muted);padding:10px 0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Bot Kraken</h1>
+      <p class="sub">10 crypto in euro, 1/10 del capitale ciascuna. Compra quando il prezzo è sopra la media degli ultimi 50 giorni, vende quando scende sotto. Controllo automatico ogni 4 ore sui prezzi reali di Kraken.</p>
+    </div>
+    <div class="meta">
+      <span class="pill paper"><i></i>Simulazione · nessun soldo vero</span>
+      <div style="margin-top:6px">Ultima candela <b id="lastBar">—</b><br>Ultimo controllo <b id="lastCheck">—</b></div>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Riepilogo"></section>
+
+  <section class="panel">
+    <h2>Valore del bot <span id="chartNote"></span></h2>
+    <svg id="chart" role="img" aria-label="Andamento del valore del bot nel tempo"></svg>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>Il paniere <span>quota iniziale 20 € per moneta</span></h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Moneta</th><th>Stato</th><th class="num">Quantità</th><th class="num">Valore</th><th class="num">Sulla quota</th><th></th></tr></thead>
+        <tbody id="sleeves"></tbody>
+      </table></div>
+    </section>
+    <section class="panel">
+      <h2>Registro dei trade <span id="tradeCount"></span></h2>
+      <div class="log" id="trades"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Come leggere questi numeri</h2>
+    <div class="notes">
+      <div><b>È una prova</b><p>Gli ordini sono simulati con la commissione di Kraken per gli ordini limite (0,25%) e un piccolo slippage. Nessun soldo vero viene usato.</p></div>
+      <div><b>Si giudica sui mesi</b><p>La strategia segue trend di settimane. Nei primi giorni pesano soprattutto le commissioni d'ingresso e qualche piccola uscita in perdita.</p></div>
+      <div><b>Cosa dice il passato</b><p>Su 2019–2026 la stessa regola ha fatto meglio che tenere le monete, ma ha avuto anni negativi (2022, 2025) e cali fino al 75%. Non è una garanzia.</p></div>
+    </div>
+  </section>
+</div>
+
+<!--SEED--><script id="seed" type="application/json">{
+ "generated": "2026-10-11T14:59:59Z",
+ "last_check": "2026-10-11T12:10:13Z",
+ "checks": 5,
+ "last_bar": "2026-10-11 08:00:00+00:00",
+ "capital": 200.0,
+ "value": 198.75,
+ "fees": 0.4994,
+ "history": [
+  {
+   "bar": "2026-10-10T20:00:00+00:00",
+   "value": 199.46
+  },
+  {
+   "bar": "2026-10-11T00:00:00+00:00",
+   "value": 197.99
+  },
+  {
+   "bar": "2026-10-11T04:00:00+00:00",
+   "value": 198.49
+  },
+  {
+   "bar": "2026-10-11T08:00:00+00:00",
+   "value": 198.75
+  }
+ ],
+ "trades": [
+  {
+   "side": "buy",
+   "qty": 0.00026924629,
+   "symbol": "BTC/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.0089150523,
+   "symbol": "ETH/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 15.934178,
+   "symbol": "XRP/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 89.788408,
+   "symbol": "ADA/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.34909016,
+   "symbol": "LTC/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 1.7159312,
+   "symbol": "LINK/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 67.523281,
+   "symbol": "TRX/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 113.61711,
+   "symbol": "XLM/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "buy",
+   "qty": 0.20297262,
+   "symbol": "SOL/EUR",
+   "eur": 19.95,
+   "why": "sopra la media 50g",
+   "run": "2026-10-11T01:47:01Z",
+   "bar": "2026-10-10T20:00:00+00:00"
+  },
+  {
+   "side": "sell",
+   "qty": 15.934178,
+   "symbol": "XRP/EUR",
+   "eur": 19.75,
+   "why": "sotto la media 50g",
+   "run": "2026-10-11T04:09:35Z",
+   "bar": "2026-10-11T00:00:00+00:00"
+  }
+ ],
+ "sleeves": [
+  {
+   "symbol": "BTC/EUR",
+   "qty": 0.0002692462868644399,
+   "cash": 0.0,
+   "value": 19.9783,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "ETH/EUR",
+   "qty": 0.008915052280849432,
+   "cash": 0.0,
+   "value": 19.939,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "XRP/EUR",
+   "qty": 0.0,
+   "cash": 19.6996,
+   "value": 19.6996,
+   "trades": 2,
+   "fees": 0.0994,
+   "in_position": false
+  },
+  {
+   "symbol": "ADA/EUR",
+   "qty": 89.78840760907202,
+   "cash": 0.0,
+   "value": 19.7847,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "LTC/EUR",
+   "qty": 0.349090160801952,
+   "cash": 0.0,
+   "value": 19.7829,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "LINK/EUR",
+   "qty": 1.7159311997824107,
+   "cash": 0.0,
+   "value": 19.7449,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "TRX/EUR",
+   "qty": 67.52328088493799,
+   "cash": 0.0,
+   "value": 19.9237,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "DOGE/EUR",
+   "qty": 0.0,
+   "cash": 20.0,
+   "value": 20.0,
+   "trades": 0,
+   "fees": 0.0,
+   "in_position": false
+  },
+  {
+   "symbol": "XLM/EUR",
+   "qty": 113.61710969110037,
+   "cash": 0.0,
+   "value": 20.0389,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  },
+  {
+   "symbol": "SOL/EUR",
+   "qty": 0.20297261792556492,
+   "cash": 0.0,
+   "value": 19.8568,
+   "trades": 1,
+   "fees": 0.05,
+   "in_position": true
+  }
+ ]
+}</script><!--/SEED-->
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const eur = v => (v ?? 0).toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const sgn = v => (v > 0 ? "+" : v < 0 ? "−" : "") + eur(Math.abs(v));
+const cls = v => v > 0.004 ? "gain" : v < -0.004 ? "loss" : "mut";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const when = iso => { if (!iso) return "—"; const d = new Date(iso.replace(" ", "T"));
+  return isNaN(d) ? iso : d.toLocaleString("it-IT", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }); };
+const qty = q => q === 0 ? "—" : q >= 100 ? q.toFixed(2) : q >= 1 ? q.toFixed(4) : q.toPrecision(4);
+
+function render(D) {
+  if (!D || !D.sleeves) { $("kpis").innerHTML = '<div class="kpi"><div class="empty">Dati non ancora disponibili.</div></div>'; return; }
+  const pnl = D.value - D.capital, pct = pnl / D.capital * 100, inPos = D.sleeves.filter(s => s.in_position).length;
+  $("lastBar").textContent = when(D.last_bar);
+  $("lastCheck").textContent = when(D.last_check);
+  $("kpis").innerHTML = [
+    ["Valore", eur(D.value) + " €", `capitale iniziale ${eur(D.capital)} €`],
+    ["Risultato", `<span class="${cls(pnl)}">${sgn(pnl)} €</span>`, `<span class="${cls(pnl)}">${pct >= 0 ? "+" : "−"}${Math.abs(pct).toFixed(2)}%</span> dall'inizio`],
+    ["Monete in posizione", `${inPos} / ${D.sleeves.length}`, `${D.sleeves.length - inPos} in euro, sotto la media`],
+    ["Trade", D.trades.length, `commissioni ${eur(D.fees)} € · ${D.checks} controlli`],
+  ].map(([l, v, s]) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+
+  const per = D.capital / D.sleeves.length;
+  const maxDev = Math.max(0.5, ...D.sleeves.map(s => Math.abs(s.value - per)));
+  $("sleeves").innerHTML = [...D.sleeves].sort((a, b) => (b.in_position - a.in_position) || (b.value - a.value)).map(s => {
+    const d = s.value - per, w = Math.abs(d) / maxDev * 50;
+    return `<tr><td class="sym">${esc(s.symbol.replace("/EUR", ""))}</td>
+      <td><span class="state ${s.in_position ? "in" : "out"}">${s.in_position ? "in posizione" : "in euro"}</span></td>
+      <td class="num">${qty(s.qty)}</td><td class="num">${eur(s.value)} €</td>
+      <td class="num ${cls(d)}">${sgn(d)} €</td>
+      <td style="width:22%"><div class="bar"><i style="left:${d >= 0 ? 50 : 50 - w}%;width:${w}%;background:var(--${d >= 0 ? "gain" : "loss"})"></i></div></td></tr>`;
+  }).join("");
+
+  $("tradeCount").textContent = D.trades.length ? `${D.trades.length} in totale, i più recenti in alto` : "";
+  $("trades").innerHTML = D.trades.length ? [...D.trades].reverse().map(t => `<div class="row">
+      <span class="tag ${t.side}">${t.side === "buy" ? "compra" : "vende"}</span>
+      <span><b>${esc(t.symbol.replace("/EUR", ""))}</b> · ${eur(t.eur)} € <span class="why">— ${esc(t.why)}</span></span>
+      <span class="when">${when(t.bar)}</span></div>`).join("")
+    : '<div class="empty">Ancora nessun trade.</div>';
+
+  drawChart(D);
+}
+
+function drawChart(D) {
+  const svg = $("chart"), W = svg.clientWidth || 600, H = svg.clientHeight || 240;
+  const pts = [{ bar: null, value: D.capital }, ...D.history];
+  const cs = getComputedStyle(document.documentElement), col = k => cs.getPropertyValue("--" + k).trim();
+  const L = 52, R = 14, T = 14, B = 26;
+  const vals = pts.map(p => p.value), lo = Math.min(...vals, D.capital), hi = Math.max(...vals, D.capital);
+  const pad = Math.max((hi - lo) * .25, D.capital * .005), y0 = lo - pad, y1 = hi + pad;
+  const x = i => L + (pts.length === 1 ? (W - L - R) / 2 : i / (pts.length - 1) * (W - L - R));
+  const y = v => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
+  const ticks = [y0 + (y1 - y0) * .1, D.capital, y1 - (y1 - y0) * .1];
+  const last = pts[pts.length - 1], up = last.value >= D.capital, lc = col(up ? "gain" : "loss");
+  const line = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join("");
+  const area = `${line}L${x(pts.length - 1).toFixed(1)},${y(D.capital).toFixed(1)}L${x(0).toFixed(1)},${y(D.capital).toFixed(1)}Z`;
+  const labelIdx = pts.length <= 6 ? pts.map((_, i) => i) : [0, Math.floor((pts.length - 1) / 2), pts.length - 1];
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    ${ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${col("line")}" ${Math.abs(v - D.capital) < 1e-9 ? 'stroke-dasharray="4 4"' : ""}/>
+      <text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" font-family='${col("f-mono")}' fill="${col("muted")}">${eur(v)}</text>`).join("")}
+    <path d="${area}" fill="${lc}" fill-opacity=".12"/>
+    <path d="${line}" fill="none" stroke="${lc}" stroke-width="2" stroke-linejoin="round"/>
+    ${pts.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.value)}" r="${i === pts.length - 1 ? 4.5 : 2.5}" fill="${i === pts.length - 1 ? lc : col("surface")}" stroke="${lc}" stroke-width="1.5"><title>${p.bar ? when(p.bar) : "partenza"}: ${eur(p.value)} €</title></circle>`).join("")}
+    ${labelIdx.map(i => `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === 0 ? "start" : i === pts.length - 1 ? "end" : "middle"}" font-size="11" font-family='${col("f-body")}' fill="${col("muted")}">${pts[i].bar ? when(pts[i].bar) : "partenza"}</text>`).join("")}`;
+  $("chartNote").textContent = `linea tratteggiata = capitale iniziale (${eur(D.capital)} €) · un punto per candela da 4 ore`;
+}
+
+let data = null;
+try { data = JSON.parse($("seed").textContent); } catch (e) { data = null; }
+render(data);
+new ResizeObserver(() => data && data.sleeves && drawChart(data)).observe($("chart"));
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => data && data.sleeves && drawChart(data));
+// Dati più recenti pubblicati accanto alla pagina (aggiornati dal bot a ogni controllo).
+fetch("data.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(d => {
+  if (d && d.sleeves && (!data || !data.generated || d.generated >= data.generated)) { data = d; render(d); }
+}).catch(() => {});
+})();
+</script>
