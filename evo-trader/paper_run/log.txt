@@ -19,3 +19,6 @@ VENDE 15.934178 XRP/EUR per 19.75 € (sotto la media 50g)
 === 2026-10-11T08:09:45Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-11 04:00:00+00:00: valore del bot 198.49 € (capitale iniziale 200.00 €)
+=== 2026-10-11T12:10:13Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-11 08:00:00+00:00: valore del bot 198.75 € (capitale iniziale 200.00 €)
