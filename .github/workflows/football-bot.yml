@@ -19,7 +19,7 @@ on:
         required: true
         default: daily
         type: choice
-        options: [daily, backtest]
+        options: [daily, backtest, study]
 
 permissions:
   contents: write
@@ -63,6 +63,8 @@ jobs:
             if [ "${{ github.event.schedule }}" = "40 5 * * 1" ]; then MODE=backtest; else MODE=daily; fi
           fi
           if [ "$MODE" = daily ] && [ ! -f data/backtest.json ]; then python -m bot.run backtest; fi
+          if [ "$MODE" = daily ] && [ ! -f data/study.json ]; then python -m bot.run study; fi
+          if [ "$MODE" = backtest ]; then python -m bot.run study; fi
           python -m bot.run "$MODE"
 
       - name: Commit data

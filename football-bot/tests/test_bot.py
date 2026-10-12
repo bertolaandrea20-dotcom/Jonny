@@ -123,3 +123,13 @@ def test_parse_football_data_csv():
     assert up.kickoff == datetime(2026, 10, 18, 18, 45, tzinfo=timezone.utc)  # BST -> UTC
     assert done.played and done.home_goals == 2
     assert season_code(NOW) == "2627"
+
+
+def test_play_leagues_limits_slip():
+    cfg = load_config()
+    cands = [leg("a", "1", 1.40, 0.75), leg("b", "1", 1.45, 0.72)]
+    cands[1]["league"] = "E0"
+    cfg["slip"]["play_leagues"] = ["I1"]
+    assert best_slip(cands, cfg) is None
+    cfg["slip"]["play_leagues"] = ["I1", "E0"]
+    assert best_slip(cands, cfg) is not None

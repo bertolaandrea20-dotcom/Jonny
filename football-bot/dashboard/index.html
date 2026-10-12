@@ -165,6 +165,15 @@ tr.dim td { color: var(--muted); }
     </div>
   </section>
 
+  <section class="card">
+    <h2>Studio mix campionati</h2>
+    <div class="sub" id="stsub" style="margin-bottom:10px">Studio non ancora eseguito.</div>
+    <h2 style="font-size:15px">Singoli eventi selezionabili, per campionato</h2>
+    <div class="table-wrap"><table id="stleague"></table></div>
+    <h2 style="font-size:15px;margin-top:16px">Migliori mix: scelti sulle stagioni vecchie, verificati sull'ultima</h2>
+    <div class="table-wrap"><table id="sttop"></table></div>
+  </section>
+
   <div class="grid two">
     <section class="card">
       <h2>Regole fisse</h2>
@@ -450,7 +459,8 @@ function render(ledger, latest, bt, cfg) {
       `Escluso l'evento se la squadra su cui puntiamo ha ${c.leg.max_absences_backed_team} o più assenti (infortuni/squalifiche).`,
       `Probabilità = ${Math.round(c.model.blend_model_weight * 100)}% modello Poisson (gol, ultime ${c.model.history_seasons} stagioni) + ${Math.round((1 - c.model.blend_model_weight) * 100)}% quote di mercato senza margine.`,
       `Giocata bloccata almeno ${c.timing.min_hours_before_kickoff}h prima del fischio d'inizio; partite rinviate annullate dopo ${c.timing.void_after_days} giorni.`,
-      `Campionati: ${Object.values(c.leagues).map(l => l.name).join(", ")}.`,
+      `Campionati analizzati: ${Object.values(c.leagues).map(l => l.name).join(", ")}.`,
+      c.slip.play_leagues && c.slip.play_leagues.length ? `Schedine solo con: ${c.slip.play_leagues.map(k => (c.leagues[k] || {}).name || k).join(", ")}.` : `Schedine con tutti i campionati.`,
     ].forEach(t => r.append(el("li", {}, t)));
   }
 
@@ -463,8 +473,39 @@ function render(ledger, latest, bt, cfg) {
   });
 }
 
-Promise.all([load("ledger.json"), load("latest.json"), load("backtest.json"), load("config.json")])
-  .then(([ledger, latest, bt, cfg]) => render(ledger, latest, bt, cfg));
+function renderStudy(st, cfg) {
+  if (!st) return;
+  const leagues = (cfg && cfg.leagues) || {};
+  const name = k => (leagues[k] ? leagues[k].name : k);
+  const yrs = s => "20" + s.slice(0, 2) + "/" + s.slice(2);
+  document.getElementById("stsub").textContent =
+    `Scelta su ${st.train_seasons.map(yrs).join(" e ")}, verifica su ${yrs(st.test_season)} (stagione mai vista). ` +
+    `${st.n_configs} combinazioni con almeno ${st.min_train_slips} schedine. Conta la colonna "verifica": scegliere il migliore fra centinaia di mix gonfia sempre il risultato.`;
+  const wrCell = (r, extra = "") => el("td", { class: "num", style: `color:${r.win_rate == null ? "" : r.win_rate > 0.5 ? "var(--good-text)" : "var(--critical)"}` }, r.win_rate == null ? "—" : `${pct(r.win_rate, 1)} su ${r.slips}${extra}`);
+  const lt = document.getElementById("stleague"); lt.textContent = "";
+  lt.append(el("thead", {}, el("tr", {}, ["Campionato", "Eventi (scelta)", "Vinti (scelta)", "Stimati", "ROI evento", "Eventi (verifica)", "Vinti (verifica)", "ROI evento"].map((h, i) => el("th", { class: i ? "num" : "" }, h)))));
+  const lb = el("tbody");
+  Object.entries(st.per_league.stats).sort((a, b) => ((b[1].test.roi ?? -9) - (a[1].test.roi ?? -9))).forEach(([k, v]) => {
+    const roi = x => el("td", { class: "num", style: `color:${x == null ? "" : x > 0 ? "var(--good-text)" : "var(--critical)"}` }, x == null ? "—" : (x > 0 ? "+" : "") + pct(x, 1));
+    lb.append(el("tr", {}, el("td", {}, name(k)),
+      el("td", { class: "num" }, v.train.legs), el("td", { class: "num" }, pct(v.train.hit_rate, 1)), el("td", { class: "num" }, pct(v.train.pred, 1)), roi(v.train.roi),
+      el("td", { class: "num" }, v.test.legs), el("td", { class: "num" }, pct(v.test.hit_rate, 1)), roi(v.test.roi)));
+  });
+  lt.append(lb);
+  const tt = document.getElementById("sttop"); tt.textContent = "";
+  tt.append(el("thead", {}, el("tr", {}, ["Campionati", "Peso modello", "Mercati", "Win rate (scelta)", "Win rate (verifica)", "Profitto verifica"].map((h, i) => el("th", { class: i >= 3 ? "num" : "" }, h)))));
+  const tb = el("tbody");
+  const row = (r, label) => tb.append(el("tr", {},
+    el("td", { style: "white-space:normal;min-width:220px" }, label || r.leagues.map(name).join(", ")),
+    el("td", {}, Math.round(r.weight * 100) + "%"), el("td", {}, r.markets),
+    wrCell(r.train), wrCell(r.test), el("td", { class: "num" }, eur(r.test.profit))));
+  st.top.forEach(r => row(r));
+  st.baselines.forEach(r => row(r, "Tutti i campionati (riferimento)"));
+  tt.append(tb);
+}
+
+Promise.all([load("ledger.json"), load("latest.json"), load("backtest.json"), load("config.json"), load("study.json")])
+  .then(([ledger, latest, bt, cfg, st]) => { render(ledger, latest, bt, cfg); renderStudy(st, cfg); });
 </script>
 </body>
 </html>

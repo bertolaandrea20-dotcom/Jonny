@@ -26,7 +26,9 @@ def eligible_legs(candidates, rules):
 def best_slip(candidates, rules, exclude_matches=(), top_n=30):
     """Highest-probability combination that satisfies every slip rule, or None."""
     slip_r = rules["slip"]
-    legs = [c for c in eligible_legs(candidates, rules) if c["match_id"] not in exclude_matches]
+    play = slip_r.get("play_leagues")  # None = every league; otherwise only these feed the slip
+    legs = [c for c in eligible_legs(candidates, rules)
+            if c["match_id"] not in exclude_matches and (not play or c["league"] in play)]
     if slip_r.get("one_leg_per_match", True):
         best = {}
         for c in legs:

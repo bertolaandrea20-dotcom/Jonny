@@ -73,14 +73,14 @@ def replay(days, models_by_day, cfg, weight):
     }
 
 
-def run_backtest(args):
-    cfg = load_config()
-    now = utcnow()
+def prepare(cfg, n_test_seasons, now):
+    """Walk-forward inputs: matches grouped by day and a model per (league, day) fitted
+    only on matches played before that day."""
     hist_n = cfg["model"]["history_seasons"]
-    all_seasons = football_data.previous_seasons(now, hist_n + args.seasons + 1)[:-1]  # skip current season
-    test_seasons = all_seasons[-args.seasons:]
+    all_seasons = football_data.previous_seasons(now, hist_n + n_test_seasons + 1)[:-1]  # skip current season
+    test_seasons = all_seasons[-n_test_seasons:]
     leagues = [k for k, v in cfg["leagues"].items() if v["source"] == "football-data"]
-    log(f"backtest stagioni {test_seasons}, leghe {leagues}")
+    log(f"stagioni {test_seasons}, leghe {leagues}")
 
     by_day = defaultdict(list)
     models_by_day = {}
@@ -98,7 +98,13 @@ def run_backtest(args):
                     model, cache_week = fit(hist, cutoff, cfg), week
                 models_by_day[(league, day)] = model
             by_day[day].append(m)
-    days = sorted(by_day.items())
+    return sorted(by_day.items()), models_by_day, test_seasons, leagues
+
+
+def run_backtest(args):
+    cfg = load_config()
+    now = utcnow()
+    days, models_by_day, test_seasons, leagues = prepare(cfg, args.seasons, now)
 
     variants = [replay(days, models_by_day, cfg, w) for w in WEIGHTS]
     for v in variants:

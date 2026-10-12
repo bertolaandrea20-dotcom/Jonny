@@ -154,9 +154,14 @@ def main():
     sub.add_parser("daily")
     b = sub.add_parser("backtest")
     b.add_argument("--seasons", type=int, default=2, help="stagioni completate da rigiocare")
+    st = sub.add_parser("study")
+    st.add_argument("--seasons", type=int, default=3, help="stagioni: tutte tranne l'ultima per scegliere, l'ultima per verificare")
     args = p.parse_args()
     if args.cmd == "daily":
         daily(args)
+    elif args.cmd == "study":
+        from .study import run_study
+        run_study(args)
     else:
         from .backtest import run_backtest
         run_backtest(args)
