@@ -31,3 +31,6 @@ COMPRA 256.13365 DOGE/EUR per 19.95 € (sopra la media 50g)
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 VENDE 256.13365 DOGE/EUR per 19.83 € (sotto la media 50g)
 2026-10-11 16:00:00+00:00: valore del bot 200.97 € (capitale iniziale 200.00 €)
+=== 2026-10-12T00:10:18Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-11 20:00:00+00:00: valore del bot 200.90 € (capitale iniziale 200.00 €)
