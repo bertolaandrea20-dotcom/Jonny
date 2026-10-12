@@ -49,6 +49,10 @@ jobs:
       - name: Test
         run: python -m pytest -q tests
 
+      - name: Sync latest data
+        # a run triggered by an older commit must still play on the current ledger
+        run: git pull --ff-only origin "${GITHUB_REF_NAME}"
+
       - name: Run bot
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
@@ -69,7 +73,11 @@ jobs:
           if git diff --cached --quiet; then echo "nessuna modifica"; exit 0; fi
           git commit -m "football-bot: aggiornamento dati $(date -u +%Y-%m-%dT%H:%MZ)"
           for i in 1 2 3 4; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            if git pull --rebase origin "${GITHUB_REF_NAME}"; then
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            else
+              git rebase --abort; echo "conflitto sui dati: un altro giro ha scritto il registro"; exit 1
+            fi
             sleep $((2 ** i))
           done
           exit 1
