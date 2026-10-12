@@ -96,6 +96,7 @@ def league_leg_stats(elig_by_period, leagues):
 def run_study(args):
     cfg = load_config()
     cfg["slip"]["play_leagues"] = None  # the study chooses the leagues itself
+    cfg["slip"]["always_play"] = False  # strict rules only
     now = utcnow()
     days, models_by_day, seasons, leagues = prepare(cfg, args.seasons, now)
     train_seasons, test_season = seasons[:-1], seasons[-1]

@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 
 from .analysis import candidate_legs, fit
 from .common import iso, load_config, utcnow, write_json
-from .selection import best_slip, leg_outcome
+from .selection import daily_slip, leg_outcome
 from .sources import football_data
 
 ROME = ZoneInfo("Europe/Rome")
@@ -39,7 +39,7 @@ def replay(days, models_by_day, cfg, weight):
             hit = leg_outcome(l["pick"], f.home_goals, f.away_goals)
             b = min(int(l["prob"] * 10), 9)
             calib[b][0] += 1; calib[b][1] += hit; calib[b][2] += l["prob"]
-        slip = best_slip(legs, cfg)
+        slip = daily_slip(legs, cfg)
         if not slip:
             continue
         results = {f.id: f for f in fixtures}
@@ -50,7 +50,7 @@ def replay(days, models_by_day, cfg, weight):
             eliminated_on = day
         curve.append({"t": day, "bankroll": round(bank, 2)})
         slips.append({
-            "day": day, "won": won, "odds": slip["total_odds"], "prob": slip["prob"],
+            "day": day, "won": won, "odds": slip["total_odds"], "prob": slip["prob"], "tier": slip["tier"],
             "legs": [f"{l['home']}-{l['away']} {l['pick']} @{l['odds']}" for l in slip["legs"]],
         })
     n, w = len(slips), sum(s["won"] for s in slips)
@@ -62,6 +62,9 @@ def replay(days, models_by_day, cfg, weight):
         "avg_odds": sum(s["odds"] for s in slips) / n if n else None,
         "avg_pred_prob": sum(s["prob"] for s in slips) / n if n else None,
         "profit": round(bank - start, 2),
+        "by_tier": {t: {"slips": len(x), "won": sum(s["won"] for s in x),
+                        "win_rate": sum(s["won"] for s in x) / len(x) if x else None}
+                    for t in ("valore", "proposta") for x in [[s for s in slips if s["tier"] == t]]},
         "roi": (bank - start) / (n * stake) if n else None,
         "eliminated_on": eliminated_on,
         "curve": curve,

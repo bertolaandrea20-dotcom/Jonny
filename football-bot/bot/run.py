@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 from . import ledger as L
 from .analysis import candidate_legs, fit
 from .common import ROOT, DATA_DIR, iso, load_config, read_json, utcnow, write_json
-from .selection import best_slip, eligible_legs
+from .selection import daily_slip, eligible_legs, fallback_rules
 from .sources import api_football, football_data, odds_api
 
 ROME = ZoneInfo("Europe/Rome")
@@ -46,12 +46,13 @@ def settle_pending(ledger, cfg, now, status):
 
 def gather_candidates(cfg, now, status):
     t = cfg["timing"]
-    lo, hi = now + timedelta(hours=t["min_hours_before_kickoff"]), now + timedelta(hours=t["max_hours_ahead"])
+    lo = now + timedelta(hours=t["min_hours_before_kickoff"])
+    hi = now + timedelta(days=t.get("plan_days", 0), hours=t["max_hours_ahead"])
     domestic = [k for k, v in cfg["leagues"].items() if v["source"] == "football-data"]
     fixtures = []
     try:
         fixtures = [f for f in football_data.load_fixtures(domestic) if lo <= f.kickoff <= hi]
-        status["football-data.co.uk"] = f"ok ({len(fixtures)} partite nella finestra)"
+        status["football-data.co.uk"] = f"ok ({len(fixtures)} partite nei prossimi giorni)"
     except Exception as e:
         status["football-data.co.uk"] = f"errore: {e}"
 
@@ -85,7 +86,8 @@ def attach_absences(legs, cfg, status):
     if not api_football.api_key():
         status["api-football (assenti)"] = "API_FOOTBALL_KEY mancante: regola assenti non applicata"
         return {}
-    wanted = {(l["league"], l["kickoff"][:10]) for l in eligible_legs(legs, cfg)}
+    rules = fallback_rules(cfg) if cfg["slip"].get("always_play") else cfg
+    wanted = {(l["league"], l["kickoff"][:10]) for l in eligible_legs(legs, rules)}
     absences = {}
     for league, day in sorted(wanted):
         found, msg = api_football.load_absences(league, datetime.strptime(day, "%Y-%m-%d"))
@@ -122,24 +124,38 @@ def daily(args):
     elif len(placed_today) >= cfg["slip"]["max_slips_per_day"]:
         decision = f"Limite di {cfg['slip']['max_slips_per_day']} schedina/e al giorno già raggiunto."
     else:
-        slip = best_slip(legs, cfg, exclude_matches=in_play)
+        horizon = now + timedelta(hours=cfg["timing"]["max_hours_ahead"])
+        playable = [l for l in legs if L.parse_iso(l["kickoff"]) <= horizon]
+        slip = daily_slip(playable, cfg, exclude_matches=in_play)
         if slip:
             entry = L.place(ledger, slip, now)
-            decision = f"Giocata {entry['id']}: {len(slip['legs'])} eventi @ {slip['total_odds']} (prob. stimata {slip['prob']:.0%})."
+            kind = "di valore (regole rigide)" if slip["tier"] == "valore" else "proposta del giorno (regole larghe)"
+            decision = f"Giocata {entry['id']} {kind}: {len(slip['legs'])} eventi @ {slip['total_odds']} (prob. stimata {slip['prob']:.0%})."
+        elif not playable:
+            decision = "Nessuna partita dei campionati seguiti nelle prossime ore: oggi non si gioca."
         else:
-            decision = "Nessuna combinazione rispetta tutte le regole: oggi non si gioca (nessuna giocata forzata)."
+            decision = "Nessuna combinazione da 2-3 eventi arriva a quota ~2 con le regole: oggi non si gioca."
     log(decision)
 
     elig = {(l["match_id"], l["pick"]) for l in eligible_legs(legs, cfg)}
     for l in legs:
         l["eligible"] = (l["match_id"], l["pick"]) in elig
     legs.sort(key=lambda l: (not l["eligible"], -l["prob"]))
+    proposals = []
+    by_date = {}
+    for l in legs:
+        by_date.setdefault(L.parse_iso(l["kickoff"]).astimezone(ROME).date().isoformat(), []).append(l)
+    for day in sorted(by_date):
+        p = daily_slip(by_date[day], cfg, exclude_matches=in_play)
+        proposals.append({"date": day, "matches": len({l["match_id"] for l in by_date[day]}),
+                          **({"tier": p["tier"], "total_odds": p["total_odds"], "prob": p["prob"], "legs": p["legs"]} if p else {"tier": None})})
     write_json("ledger.json", ledger)
     write_json("latest.json", {
         "run_at": iso(now),
         "decision": decision,
         "sources": status,
-        "candidates": legs[:120],
+        "proposals": proposals,
+        "candidates": legs[:250],
         "n_candidates": len(legs),
         "n_eligible": len(elig),
         "stats": L.stats(ledger),

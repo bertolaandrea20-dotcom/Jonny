@@ -61,6 +61,7 @@ def place(ledger, slip, now):
         "stake": stake,
         "total_odds": slip["total_odds"],
         "prob": slip["prob"],
+        "tier": slip.get("tier", "valore"),
         "status": "pending",
         "legs": [{**l, "status": "pending"} for l in slip["legs"]],
     }

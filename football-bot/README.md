@@ -16,6 +16,8 @@ Il bankroll cresce solo se vince più del 50% delle schedine.
 | Mercati | 1X2, Over/Under 2.5 |
 | Assenti | si scarta la squadra su cui puntiamo se ha ≥ 3 assenti (serve `API_FOOTBALL_KEY`) |
 | Schedine al giorno | massimo 1 |
+| Gioca sempre (`always_play`) | se nessuna schedina passa le regole rigide, gioca la "proposta": la combinazione più probabile a quota ~2 (eventi con prob. ≥ 50% e valore atteso ≥ 0,85) |
+| Proposte | una schedina per ognuno dei prossimi 7 giorni, visibile in dashboard |
 
 Le regole vanno fissate **prima** di partire: cambiarle a metà rende il tracciamento inutile.
 

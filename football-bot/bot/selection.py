@@ -1,4 +1,5 @@
 """Fixed rules that turn candidate legs into a 2-3 leg slip at total odds ~2.0."""
+import copy
 from itertools import combinations
 from math import prod
 
@@ -73,3 +74,27 @@ def leg_outcome(pick, home_goals, away_goals):
     if pick == "U25":
         return home_goals + away_goals <= 2
     raise ValueError(pick)
+
+
+def fallback_rules(rules):
+    """Same slip shape (2-3 legs, total odds ~2), looser value filters: used to still
+    propose a slip on days when nothing passes the strict rules."""
+    r = copy.deepcopy(rules)
+    fb = rules.get("fallback", {})
+    r["leg"]["min_prob"] = fb.get("min_leg_prob", 0.5)
+    r["leg"]["min_ev"] = fb.get("min_leg_ev", 0.85)
+    r["slip"]["min_slip_prob"] = fb.get("min_slip_prob", 0.0)
+    return r
+
+
+def daily_slip(candidates, rules, exclude_matches=()):
+    """Strict slip ("valore") if one exists, else the most likely slip under the looser
+    rules ("proposta") when always_play is on. Returns None if neither exists."""
+    slip = best_slip(candidates, rules, exclude_matches)
+    if slip:
+        return {**slip, "tier": "valore"}
+    if rules["slip"].get("always_play"):
+        slip = best_slip(candidates, fallback_rules(rules), exclude_matches)
+        if slip:
+            return {**slip, "tier": "proposta"}
+    return None

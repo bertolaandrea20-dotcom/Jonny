@@ -133,3 +133,16 @@ def test_play_leagues_limits_slip():
     assert best_slip(cands, cfg) is None
     cfg["slip"]["play_leagues"] = ["I1", "E0"]
     assert best_slip(cands, cfg) is not None
+
+
+def test_daily_slip_falls_back_to_proposal():
+    from bot.selection import daily_slip
+    cfg = load_config()
+    weak = [leg("a", "1", 1.40, 0.66), leg("b", "1", 1.45, 0.64)]  # EV < 1: no strict slip
+    cfg["slip"]["always_play"] = False
+    assert daily_slip(weak, cfg) is None
+    cfg["slip"]["always_play"] = True
+    s = daily_slip(weak, cfg)
+    assert s["tier"] == "proposta" and 1.90 <= s["total_odds"] <= 2.30
+    strong = [leg("a", "1", 1.40, 0.75), leg("b", "1", 1.45, 0.72)]
+    assert daily_slip(strong, cfg)["tier"] == "valore"

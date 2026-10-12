@@ -136,6 +136,12 @@ tr.dim td { color: var(--muted); }
   </div>
 
   <section class="card">
+    <h2>Proposte dei prossimi giorni</h2>
+    <div class="sub" style="margin-bottom:10px">Una schedina per giorno. <b>Valore</b> = passa le regole rigide (probabilità ≥ 50%). <b>Proposta</b> = la combinazione più probabile a quota ~2 quando nessuna passa le regole rigide. La schedina del giorno viene giocata in automatico; quelle dei giorni dopo possono ancora cambiare.</div>
+    <div class="grid" id="proposals" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))"></div>
+  </section>
+
+  <section class="card">
     <h2>Analisi partite in arrivo</h2>
     <div class="sub" style="margin-bottom:10px" id="candsub"></div>
     <div class="tabs" id="candtabs"></div>
@@ -188,6 +194,8 @@ tr.dim td { color: var(--muted); }
 
 <script>
 const PICK = { "1": "1", "X": "X", "2": "2", "O25": "Over 2.5", "U25": "Under 2.5" };
+const TIER = { valore: "Valore", proposta: "Proposta" };
+const tierPill = t => t ? el("span", { class: "pill", style: `font-size:11px;padding:1px 8px;${t === "valore" ? "border-color:var(--good);color:var(--good-text)" : ""}` }, TIER[t] || t) : null;
 const STATUS = { won: ["Vinta", "✓", "s-won"], lost: ["Persa", "✕", "s-lost"], pending: ["In corso", "◷", "s-pending"], void: ["Annullata", "–", "s-void"] };
 const eur = v => (v == null ? "—" : v.toLocaleString("it-IT", { style: "currency", currency: "EUR" }));
 const pct = (v, d = 0) => (v == null ? "—" : (v * 100).toFixed(d).replace(".", ",") + "%");
@@ -381,8 +389,22 @@ function render(ledger, latest, bt, cfg) {
   const open = ledger ? ledger.slips.filter(s => s.status === "pending") : [];
   if (!open.length) pend.append(el("div", { class: "empty" }, "Nessuna schedina aperta."));
   open.forEach(s => pend.append(el("div", { class: "slip" },
-    el("div", { class: "slip-head" }, el("span", {}, `${s.id} · quota ${s.total_odds.toFixed(2)}`), el("span", {}, `${eur(s.stake)} → ${eur(s.stake * s.total_odds)}`)),
+    el("div", { class: "slip-head" }, el("span", {}, `${s.id} · quota ${s.total_odds.toFixed(2)} `, tierPill(s.tier)), el("span", {}, `${eur(s.stake)} → ${eur(s.stake * s.total_odds)}`)),
     s.legs.map(l => legRow(l, leagues)))));
+
+  // proposals per day
+  const pr = document.getElementById("proposals"); pr.textContent = "";
+  const props = (latest && latest.proposals) || [];
+  if (!props.length) pr.append(el("div", { class: "empty" }, "Nessuna partita dei campionati seguiti nei prossimi 7 giorni (es. pausa per le nazionali)."));
+  props.forEach(p => {
+    const day = new Date(p.date + "T12:00:00").toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
+    const card = el("div", { class: "slip" },
+      el("div", { class: "slip-head" }, el("span", { style: "text-transform:capitalize" }, day, " ", tierPill(p.tier)),
+        el("span", {}, p.tier ? `quota ${p.total_odds.toFixed(2)} · prob. ${pct(p.prob)}` : "")));
+    if (p.tier) p.legs.forEach(l => card.append(legRow(l, leagues)));
+    else card.append(el("div", { class: "empty" }, `${p.matches} partite, ma nessuna combinazione da 2-3 eventi arriva a quota ~2.`));
+    pr.append(card);
+  });
 
   // candidates
   const cands = (latest && latest.candidates) || [];
@@ -419,7 +441,7 @@ function render(ledger, latest, bt, cfg) {
   const hb = el("tbody");
   if (!done.length) hb.append(el("tr", {}, el("td", { colspan: 7, class: "empty" }, "Ancora nessuna schedina.")));
   done.forEach(s => hb.append(el("tr", {},
-    el("td", {}, s.id), el("td", {}, fmtDate(s.created_at)),
+    el("td", {}, s.id, " ", tierPill(s.tier)), el("td", {}, fmtDate(s.created_at)),
     el("td", { style: "white-space:normal;min-width:260px" }, s.legs.map(l => el("div", {}, `${l.home} – ${l.away}: ${PICK[l.pick]} @${l.odds.toFixed(2)} `, statusBadge(l.status), l.score ? ` (${l.score})` : ""))),
     el("td", { class: "num" }, s.total_odds.toFixed(2)), el("td", { class: "num" }, pct(s.prob)),
     el("td", {}, statusBadge(s.status)), el("td", { class: "num" }, s.payout != null ? eur(s.payout) : "—"))));
@@ -431,11 +453,12 @@ function render(ledger, latest, bt, cfg) {
     document.getElementById("btsub").textContent = "Backtest non ancora eseguito.";
   } else {
     document.getElementById("btsub").textContent = `Stagioni ${bt.seasons.map(s => "20" + s.slice(0, 2) + "/" + s.slice(2)).join(", ")} · ${bt.leagues.length} campionati · modello allenato solo sui dati precedenti a ogni giornata.`;
-    btt.append(el("thead", {}, el("tr", {}, ["Peso modello vs mercato", "Schedine", "Win rate", "Quota media", "Prob. stimata", "Profitto (5€ fissi)", "ROI", "Vite finite il"].map((h, i) => el("th", { class: i && i < 7 ? "num" : "" }, h)))));
+    btt.append(el("thead", {}, el("tr", {}, ["Peso modello vs mercato", "Schedine", "Win rate", "Valore", "Proposte", "Quota media", "Prob. stimata", "Profitto (5€ fissi)", "ROI", "Vite finite il"].map((h, i) => el("th", { class: i && i < 9 ? "num" : "" }, h)))));
     const tb = el("tbody");
     bt.variants.forEach(v => tb.append(el("tr", { style: v.weight === bt.configured_weight ? "font-weight:600" : "" },
       el("td", {}, `${Math.round(v.weight * 100)}% modello${v.weight === bt.configured_weight ? " (in uso)" : ""}`),
       el("td", { class: "num" }, v.slips), el("td", { class: "num", style: `color:${v.win_rate > 0.5 ? "var(--good-text)" : v.win_rate == null ? "" : "var(--critical)"}` }, pct(v.win_rate, 1)),
+      ...["valore", "proposta"].map(t => { const x = (v.by_tier || {})[t]; return el("td", { class: "num" }, x && x.slips ? `${pct(x.win_rate, 1)} su ${x.slips}` : "—"); }),
       el("td", { class: "num" }, v.avg_odds ? v.avg_odds.toFixed(2) : "—"), el("td", { class: "num" }, pct(v.avg_pred_prob, 1)),
       el("td", { class: "num" }, eur(v.profit)), el("td", { class: "num" }, pct(v.roi, 1)), el("td", {}, v.eliminated_on || "mai"))));
     btt.append(tb);
@@ -453,7 +476,9 @@ function render(ledger, latest, bt, cfg) {
       `Bankroll iniziale ${eur(c.bankroll.start)}, puntata fissa ${eur(c.bankroll.stake)} = ${c.bankroll.lives} vite.`,
       `Schedine da ${c.slip.min_legs} a ${c.slip.max_legs} eventi, quota totale tra ${c.slip.min_total_odds.toFixed(2)} e ${c.slip.max_total_odds.toFixed(2)}.`,
       `Si gioca solo se la probabilità stimata della schedina è almeno ${pct(c.slip.min_slip_prob)}.`,
-      `Massimo ${c.slip.max_slips_per_day} schedina al giorno; se nessuna combinazione rispetta le regole, si salta.`,
+      c.slip.always_play
+        ? `Massimo ${c.slip.max_slips_per_day} schedina al giorno. Se nessuna passa le regole rigide si gioca la "proposta": la più probabile a quota ~2 (eventi con prob. ≥ ${pct(c.fallback.min_leg_prob)}, valore atteso ≥ ${c.fallback.min_leg_ev.toFixed(2)}).`
+        : `Massimo ${c.slip.max_slips_per_day} schedina al giorno; se nessuna combinazione rispetta le regole, si salta.`,
       `Ogni evento: quota tra ${c.leg.min_odds.toFixed(2)} e ${c.leg.max_odds.toFixed(2)}, probabilità ≥ ${pct(c.leg.min_prob)}, valore atteso ≥ ${c.leg.min_ev.toFixed(2)}.`,
       `Mercati: 1X2 e Over/Under 2.5. Una sola giocata per partita.`,
       `Escluso l'evento se la squadra su cui puntiamo ha ${c.leg.max_absences_backed_team} o più assenti (infortuni/squalifiche).`,
