@@ -73,3 +73,21 @@ jobs:
             sleep $((2 ** i))
           done
           exit 1
+
+      - name: Publish dashboard to gh-pages/bot
+        run: |
+          git fetch origin gh-pages
+          git worktree add ../../site origin/gh-pages
+          mkdir -p ../../site/bot/data
+          cp dashboard/index.html ../../site/bot/
+          cp config.json ../../site/bot/data/
+          cp data/*.json ../../site/bot/data/
+          cd ../../site
+          git add bot
+          if git diff --cached --quiet; then echo "dashboard invariata"; exit 0; fi
+          git commit -m "football-bot: dashboard $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4; do
+            git push origin HEAD:gh-pages && exit 0
+            git pull --rebase origin gh-pages; sleep $((2 ** i))
+          done
+          exit 1
