@@ -7,6 +7,11 @@ on:
     - cron: "10 15 * * *"
     # weekly backtest refresh, Monday morning
     - cron: "40 5 * * 1"
+  push:
+    paths:
+      - "football-bot/bot/**"
+      - "football-bot/config.json"
+      - ".github/workflows/football-bot.yml"
   workflow_dispatch:
     inputs:
       mode:
@@ -53,6 +58,7 @@ jobs:
           if [ -z "$MODE" ]; then
             if [ "${{ github.event.schedule }}" = "40 5 * * 1" ]; then MODE=backtest; else MODE=daily; fi
           fi
+          if [ "$MODE" = daily ] && [ ! -f data/backtest.json ]; then python -m bot.run backtest; fi
           python -m bot.run "$MODE"
 
       - name: Commit data
