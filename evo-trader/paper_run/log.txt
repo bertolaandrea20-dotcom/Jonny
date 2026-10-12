@@ -49,3 +49,6 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 VENDE 15.454403 XRP/EUR per 19.05 € (sotto la media 50g)
 VENDE 251.77014 DOGE/EUR per 19.16 € (sotto la media 50g)
 2026-10-12 12:00:00+00:00: valore del bot 197.31 € (capitale iniziale 200.00 €)
+=== 2026-10-12T20:10:23Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-12 16:00:00+00:00: valore del bot 197.04 € (capitale iniziale 200.00 €)
