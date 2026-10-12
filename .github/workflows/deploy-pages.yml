@@ -5,6 +5,10 @@ on:
     branches:
       - claude/service-matching-platform-ulo9r
       - main
+  workflow_run:
+    workflows: ["Football bot"]
+    types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -37,6 +41,13 @@ jobs:
 
       - name: Build web app
         run: pnpm --filter @jonny/web build
+
+      - name: Add football bot dashboard
+        run: |
+          mkdir -p apps/web/out/bot/data
+          cp football-bot/dashboard/index.html apps/web/out/bot/
+          cp football-bot/config.json apps/web/out/bot/data/
+          cp football-bot/data/*.json apps/web/out/bot/data/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
