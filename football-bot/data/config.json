@@ -7,18 +7,22 @@
   "slip": {
     "min_legs": 2,
     "max_legs": 3,
-    "min_total_odds": 1.90,
-    "max_total_odds": 2.30,
-    "min_slip_prob": 0.50,
+    "min_total_odds": 1.9,
+    "max_total_odds": 2.3,
+    "min_slip_prob": 0.5,
     "max_slips_per_day": 1,
-    "one_leg_per_match": true
+    "one_leg_per_match": true,
+    "play_leagues": null
   },
   "leg": {
     "min_odds": 1.18,
     "max_odds": 1.75,
     "min_prob": 0.55,
-    "min_ev": 1.00,
-    "markets": ["1X2", "OU25"],
+    "min_ev": 1.0,
+    "markets": [
+      "1X2",
+      "OU25"
+    ],
     "max_absences_backed_team": 3
   },
   "model": {
@@ -35,17 +39,68 @@
     "void_after_days": 7
   },
   "leagues": {
-    "I1": {"name": "Serie A", "country": "Italia", "source": "football-data"},
-    "I2": {"name": "Serie B", "country": "Italia", "source": "football-data"},
-    "E0": {"name": "Premier League", "country": "Inghilterra", "source": "football-data"},
-    "SP1": {"name": "La Liga", "country": "Spagna", "source": "football-data"},
-    "F1": {"name": "Ligue 1", "country": "Francia", "source": "football-data"},
-    "D1": {"name": "Bundesliga", "country": "Germania", "source": "football-data"},
-    "N1": {"name": "Eredivisie", "country": "Olanda", "source": "football-data"},
-    "B1": {"name": "Pro League", "country": "Belgio", "source": "football-data"},
-    "T1": {"name": "Süper Lig", "country": "Turchia", "source": "football-data"},
-    "UCL": {"name": "Champions League", "country": "Europa", "source": "odds-api", "sport_key": "soccer_uefa_champs_league"},
-    "UEL": {"name": "Europa League", "country": "Europa", "source": "odds-api", "sport_key": "soccer_uefa_europa_league"},
-    "UECL": {"name": "Conference League", "country": "Europa", "source": "odds-api", "sport_key": "soccer_uefa_europa_conference_league"}
+    "I1": {
+      "name": "Serie A",
+      "country": "Italia",
+      "source": "football-data"
+    },
+    "I2": {
+      "name": "Serie B",
+      "country": "Italia",
+      "source": "football-data"
+    },
+    "E0": {
+      "name": "Premier League",
+      "country": "Inghilterra",
+      "source": "football-data"
+    },
+    "SP1": {
+      "name": "La Liga",
+      "country": "Spagna",
+      "source": "football-data"
+    },
+    "F1": {
+      "name": "Ligue 1",
+      "country": "Francia",
+      "source": "football-data"
+    },
+    "D1": {
+      "name": "Bundesliga",
+      "country": "Germania",
+      "source": "football-data"
+    },
+    "N1": {
+      "name": "Eredivisie",
+      "country": "Olanda",
+      "source": "football-data"
+    },
+    "B1": {
+      "name": "Pro League",
+      "country": "Belgio",
+      "source": "football-data"
+    },
+    "T1": {
+      "name": "Süper Lig",
+      "country": "Turchia",
+      "source": "football-data"
+    },
+    "UCL": {
+      "name": "Champions League",
+      "country": "Europa",
+      "source": "odds-api",
+      "sport_key": "soccer_uefa_champs_league"
+    },
+    "UEL": {
+      "name": "Europa League",
+      "country": "Europa",
+      "source": "odds-api",
+      "sport_key": "soccer_uefa_europa_league"
+    },
+    "UECL": {
+      "name": "Conference League",
+      "country": "Europa",
+      "source": "odds-api",
+      "sport_key": "soccer_uefa_europa_conference_league"
+    }
   }
 }
