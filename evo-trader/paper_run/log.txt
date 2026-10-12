@@ -37,3 +37,7 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-12T04:10:35Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-12 00:00:00+00:00: valore del bot 200.74 € (capitale iniziale 200.00 €)
+=== 2026-10-12T08:10:35Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 251.77014 DOGE/EUR per 19.74 € (sopra la media 50g)
+2026-10-12 04:00:00+00:00: valore del bot 202.11 € (capitale iniziale 200.00 €)
