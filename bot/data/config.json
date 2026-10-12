@@ -12,7 +12,8 @@
     "min_slip_prob": 0.5,
     "max_slips_per_day": 1,
     "one_leg_per_match": true,
-    "play_leagues": null
+    "play_leagues": null,
+    "always_play": true
   },
   "leg": {
     "min_odds": 1.18,
@@ -36,7 +37,8 @@
   "timing": {
     "min_hours_before_kickoff": 1.0,
     "max_hours_ahead": 36,
-    "void_after_days": 7
+    "void_after_days": 7,
+    "plan_days": 7
   },
   "leagues": {
     "I1": {
@@ -102,5 +104,10 @@
       "source": "odds-api",
       "sport_key": "soccer_uefa_europa_conference_league"
     }
+  },
+  "fallback": {
+    "min_leg_prob": 0.5,
+    "min_leg_ev": 0.85,
+    "min_slip_prob": 0.0
   }
 }

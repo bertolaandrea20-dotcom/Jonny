@@ -1,13 +1,14 @@
 {
-  "run_at": "2026-10-12T20:12:30Z",
-  "decision": "Nessuna combinazione rispetta tutte le regole: oggi non si gioca (nessuna giocata forzata).",
+  "run_at": "2026-10-12T20:29:47Z",
+  "decision": "Nessuna partita dei campionati seguiti nelle prossime ore: oggi non si gioca.",
   "sources": {
-    "football-data.co.uk": "ok (0 partite nella finestra)",
+    "football-data.co.uk": "ok (0 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
     "api-football (assenti)": "API_FOOTBALL_KEY mancante: regola assenti non applicata"
   },
+  "proposals": [],
   "candidates": [],
   "n_candidates": 0,
   "n_eligible": 0,
