@@ -1,0 +1,15 @@
+{
+  "start": 50.0,
+  "stake": 5.0,
+  "bankroll": 50.0,
+  "status": "attivo",
+  "created_at": "2026-10-12T19:56:35Z",
+  "slips": [],
+  "history": [
+    {
+      "t": "2026-10-12T19:56:35Z",
+      "bankroll": 50.0,
+      "event": "start"
+    }
+  ]
+}
