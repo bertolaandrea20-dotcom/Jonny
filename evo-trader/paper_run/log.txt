@@ -58,3 +58,9 @@ VENDE 0.0089150523 ETH/EUR per 19.52 € (sotto la media 50g)
 VENDE 113.61711 XLM/EUR per 19.36 € (sotto la media 50g)
 VENDE 0.20297262 SOL/EUR per 19.20 € (sotto la media 50g)
 2026-10-12 20:00:00+00:00: valore del bot 192.87 € (capitale iniziale 200.00 €)
+=== 2026-10-13T04:10:24Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 0.0086562275 ETH/EUR per 19.42 € (sopra la media 50g)
+COMPRA 111.53515 XLM/EUR per 19.26 € (sopra la media 50g)
+COMPRA 0.19879602 SOL/EUR per 19.11 € (sopra la media 50g)
+2026-10-13 00:00:00+00:00: valore del bot 194.03 € (capitale iniziale 200.00 €)
