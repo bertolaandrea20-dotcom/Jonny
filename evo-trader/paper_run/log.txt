@@ -52,3 +52,9 @@ VENDE 251.77014 DOGE/EUR per 19.16 € (sotto la media 50g)
 === 2026-10-12T20:10:23Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-12 16:00:00+00:00: valore del bot 197.04 € (capitale iniziale 200.00 €)
+=== 2026-10-13T00:10:15Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 0.0089150523 ETH/EUR per 19.52 € (sotto la media 50g)
+VENDE 113.61711 XLM/EUR per 19.36 € (sotto la media 50g)
+VENDE 0.20297262 SOL/EUR per 19.20 € (sotto la media 50g)
+2026-10-12 20:00:00+00:00: valore del bot 192.87 € (capitale iniziale 200.00 €)
