@@ -101,3 +101,8 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-14T12:10:37Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-14 08:00:00+00:00: valore del bot 191.54 € (capitale iniziale 200.00 €)
+=== 2026-10-14T16:10:42Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 0.008461688 ETH/EUR per 18.46 € (sotto la media 50g)
+VENDE 0.19259409 SOL/EUR per 17.96 € (sotto la media 50g)
+2026-10-14 12:00:00+00:00: valore del bot 188.58 € (capitale iniziale 200.00 €)
