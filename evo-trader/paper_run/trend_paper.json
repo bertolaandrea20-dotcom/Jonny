@@ -1,5 +1,5 @@
 {
- "last_bar": "2026-10-13 20:00:00+00:00",
+ "last_bar": "2026-10-14 00:00:00+00:00",
  "sleeves": [
   {
    "instrument": "kraken:BTC/EUR",
@@ -7,15 +7,15 @@
    "qty": 0.0002692462868644399,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.9763
+   "value": 20.0936
   },
   {
    "instrument": "kraken:ETH/EUR",
-   "cash": 19.018570037390315,
-   "qty": 0.0,
-   "trades": 6,
-   "fees": 0.29162067562820854,
-   "value": 19.0186
+   "cash": 0.0,
+   "qty": 0.008461688023346469,
+   "trades": 7,
+   "fees": 0.3391671007216843,
+   "value": 18.9615
   },
   {
    "instrument": "kraken:XRP/EUR",
@@ -31,7 +31,7 @@
    "qty": 89.78840760907202,
    "trades": 1,
    "fees": 0.05,
-   "value": 18.8948
+   "value": 18.9658
   },
   {
    "instrument": "kraken:LTC/EUR",
@@ -39,7 +39,7 @@
    "qty": 0.349090160801952,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.0533
+   "value": 19.3361
   },
   {
    "instrument": "kraken:LINK/EUR",
@@ -47,15 +47,15 @@
    "qty": 1.7159311997824107,
    "trades": 1,
    "fees": 0.05,
-   "value": 19.7265
+   "value": 19.9155
   },
   {
    "instrument": "kraken:TRX/EUR",
-   "cash": 19.685071834090888,
-   "qty": 0.0,
-   "trades": 2,
-   "fees": 0.09933601963431302,
-   "value": 19.6851
+   "cash": 6.800116025829084e-16,
+   "qty": 66.43326100174305,
+   "trades": 3,
+   "fees": 0.14854869921954023,
+   "value": 19.626
   },
   {
    "instrument": "kraken:DOGE/EUR",
@@ -75,11 +75,11 @@
   },
   {
    "instrument": "kraken:SOL/EUR",
-   "cash": 18.583273542087202,
-   "qty": 0.0,
-   "trades": 6,
-   "fees": 0.2865677398459334,
-   "value": 18.5833
+   "cash": 4.85722573273506e-16,
+   "qty": 0.19259409129356303,
+   "trades": 7,
+   "fees": 0.3330259237011514,
+   "value": 18.5276
   }
  ]
 }
