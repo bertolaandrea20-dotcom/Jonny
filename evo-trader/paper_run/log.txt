@@ -125,3 +125,8 @@ COMPRA 0.34432895 LTC/EUR per 17.90 € (sopra la media 50g)
 === 2026-10-15T12:10:39Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-15 08:00:00+00:00: valore del bot 185.90 € (capitale iniziale 200.00 €)
+=== 2026-10-15T16:10:58Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 85.124106 ADA/EUR per 17.54 € (sopra la media 50g)
+COMPRA 1.6310156 LINK/EUR per 18.31 € (sopra la media 50g)
+2026-10-15 12:00:00+00:00: valore del bot 186.89 € (capitale iniziale 200.00 €)
