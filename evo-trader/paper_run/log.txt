@@ -118,3 +118,7 @@ VENDE 89.788408 ADA/EUR per 17.63 € (sotto la media 50g)
 VENDE 0.34909016 LTC/EUR per 17.99 € (sotto la media 50g)
 VENDE 1.7159312 LINK/EUR per 18.40 € (sotto la media 50g)
 2026-10-15 00:00:00+00:00: valore del bot 185.83 € (capitale iniziale 200.00 €)
+=== 2026-10-15T08:11:11Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 0.34432895 LTC/EUR per 17.90 € (sopra la media 50g)
+2026-10-15 04:00:00+00:00: valore del bot 186.09 € (capitale iniziale 200.00 €)
