@@ -133,3 +133,6 @@ COMPRA 1.6310156 LINK/EUR per 18.31 € (sopra la media 50g)
 === 2026-10-15T20:10:12Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-15 16:00:00+00:00: valore del bot 186.82 € (capitale iniziale 200.00 €)
+=== 2026-10-16T00:10:30Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-15 20:00:00+00:00: valore del bot 186.67 € (capitale iniziale 200.00 €)
