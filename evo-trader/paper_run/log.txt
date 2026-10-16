@@ -145,3 +145,8 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-16T12:12:52Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-16 08:00:00+00:00: valore del bot 187.15 € (capitale iniziale 200.00 €)
+=== 2026-10-16T16:10:38Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 85.124106 ADA/EUR per 16.98 € (sotto la media 50g)
+VENDE 1.6310156 LINK/EUR per 17.89 € (sotto la media 50g)
+2026-10-16 12:00:00+00:00: valore del bot 185.38 € (capitale iniziale 200.00 €)
