@@ -1,8 +1,8 @@
 {
-  "run_at": "2026-10-17T11:33:28Z",
-  "decision": "Giocata S0002 proposta del giorno (regole larghe): 2 eventi @ 2.021 (prob. stimata 52%).",
+  "run_at": "2026-10-17T17:51:41Z",
+  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
   "sources": {
-    "football-data.co.uk": "ok (66 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (37 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
@@ -11,95 +11,53 @@
   "proposals": [
     {
       "date": "2026-10-17",
-      "matches": 31,
-      "tier": "proposta",
-      "total_odds": 2.083,
-      "prob": 0.4874,
-      "legs": [
-        {
-          "match_id": "E0|2026-10-17|Man City|Ipswich",
-          "league": "E0",
-          "kickoff": "2026-10-17T14:00:00Z",
-          "home": "Man City",
-          "away": "Ipswich",
-          "pick": "1",
-          "market": "1X2",
-          "odds": 1.24,
-          "prob": 0.7799,
-          "model_prob": 0.7992,
-          "market_prob": 0.7606,
-          "xg": [
-            3.0,
-            0.85
-          ],
-          "basis": "modello+mercato",
-          "eligible": false
-        },
-        {
-          "match_id": "I1|2026-10-17|Venezia|Napoli",
-          "league": "I1",
-          "kickoff": "2026-10-17T13:00:00Z",
-          "home": "Venezia",
-          "away": "Napoli",
-          "pick": "2",
-          "market": "1X2",
-          "odds": 1.68,
-          "prob": 0.625,
-          "model_prob": 0.6881,
-          "market_prob": 0.5619,
-          "xg": [
-            0.78,
-            2.19
-          ],
-          "basis": "modello+mercato",
-          "eligible": true
-        }
-      ]
+      "matches": 2,
+      "tier": null
     },
     {
       "date": "2026-10-18",
       "matches": 30,
       "tier": "proposta",
-      "total_odds": 2.005,
-      "prob": 0.4913,
+      "total_odds": 1.987,
+      "prob": 0.4583,
       "legs": [
         {
-          "match_id": "SP1|2026-10-18|Real Madrid|Sevilla",
-          "league": "SP1",
-          "kickoff": "2026-10-18T19:00:00Z",
-          "home": "Real Madrid",
-          "away": "Sevilla",
-          "pick": "1",
-          "market": "1X2",
-          "odds": 1.23,
-          "prob": 0.743,
-          "model_prob": 0.7263,
-          "market_prob": 0.7596,
+          "match_id": "D1|2026-10-18|M'gladbach|Hoffenheim",
+          "league": "D1",
+          "kickoff": "2026-10-18T15:30:00Z",
+          "home": "M'gladbach",
+          "away": "Hoffenheim",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.37,
+          "prob": 0.6881,
+          "model_prob": 0.6956,
+          "market_prob": 0.6807,
           "xg": [
-            2.46,
-            0.82
+            1.82,
+            1.77
           ],
           "basis": "modello+mercato",
           "eligible": false
         },
         {
-          "match_id": "SP1|2026-10-18|Osasuna|Santander",
-          "league": "SP1",
-          "kickoff": "2026-10-18T12:00:00Z",
-          "home": "Osasuna",
-          "away": "Santander",
+          "match_id": "D1|2026-10-18|Leverkusen|Freiburg",
+          "league": "D1",
+          "kickoff": "2026-10-18T13:30:00Z",
+          "home": "Leverkusen",
+          "away": "Freiburg",
           "pick": "O25",
           "market": "OU25",
-          "odds": 1.63,
-          "prob": 0.6612,
-          "model_prob": 0.7503,
-          "market_prob": 0.5722,
+          "odds": 1.45,
+          "prob": 0.6661,
+          "model_prob": 0.6894,
+          "market_prob": 0.6429,
           "xg": [
-            2.37,
-            1.55
+            2.22,
+            1.33
           ],
           "basis": "modello+mercato",
-          "eligible": true
+          "eligible": false
         }
       ]
     },
@@ -191,25 +149,6 @@
       "eligible": true
     },
     {
-      "match_id": "I1|2026-10-17|Venezia|Napoli",
-      "league": "I1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Venezia",
-      "away": "Napoli",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.68,
-      "prob": 0.625,
-      "model_prob": 0.6881,
-      "market_prob": 0.5619,
-      "xg": [
-        0.78,
-        2.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": true
-    },
-    {
       "match_id": "I2|2026-10-18|Juve Stabia|Sudtirol",
       "league": "I2",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -227,101 +166,6 @@
       ],
       "basis": "modello+mercato",
       "eligible": true
-    },
-    {
-      "match_id": "D1|2026-10-17|Bayern Munich|RB Leipzig",
-      "league": "D1",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Bayern Munich",
-      "away": "RB Leipzig",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.13,
-      "prob": 0.8093,
-      "model_prob": 0.7868,
-      "market_prob": 0.8318,
-      "xg": [
-        2.94,
-        1.23
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "N1|2026-10-17|Den Haag|PSV Eindhoven",
-      "league": "N1",
-      "kickoff": "2026-10-17T14:30:00Z",
-      "home": "Den Haag",
-      "away": "PSV Eindhoven",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.22,
-      "prob": 0.7995,
-      "model_prob": 0.8345,
-      "market_prob": 0.7645,
-      "xg": [
-        1.18,
-        3.39
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Man City|Ipswich",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Man City",
-      "away": "Ipswich",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.24,
-      "prob": 0.7799,
-      "model_prob": 0.7992,
-      "market_prob": 0.7606,
-      "xg": [
-        3.0,
-        0.85
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "N1|2026-10-17|Den Haag|PSV Eindhoven",
-      "league": "N1",
-      "kickoff": "2026-10-17T14:30:00Z",
-      "home": "Den Haag",
-      "away": "PSV Eindhoven",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.25,
-      "prob": 0.7665,
-      "model_prob": 0.7873,
-      "market_prob": 0.7458,
-      "xg": [
-        1.18,
-        3.39
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Bayern Munich|RB Leipzig",
-      "league": "D1",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Bayern Munich",
-      "away": "RB Leipzig",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.21,
-      "prob": 0.7456,
-      "model_prob": 0.7176,
-      "market_prob": 0.7736,
-      "xg": [
-        2.94,
-        1.23
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
     },
     {
       "match_id": "SP1|2026-10-18|Real Madrid|Sevilla",
@@ -343,63 +187,6 @@
       "eligible": false
     },
     {
-      "match_id": "SP1|2026-10-17|Betis|Barcelona",
-      "league": "SP1",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Betis",
-      "away": "Barcelona",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.24,
-      "prob": 0.7141,
-      "model_prob": 0.6728,
-      "market_prob": 0.7554,
-      "xg": [
-        1.38,
-        2.09
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Man City|Ipswich",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Man City",
-      "away": "Ipswich",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.36,
-      "prob": 0.712,
-      "model_prob": 0.7387,
-      "market_prob": 0.6852,
-      "xg": [
-        3.0,
-        0.85
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Fenerbahce|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Fenerbahce",
-      "away": "Alanyaspor",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.27,
-      "prob": 0.6934,
-      "model_prob": 0.6632,
-      "market_prob": 0.7235,
-      "xg": [
-        2.21,
-        0.91
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "D1|2026-10-18|M'gladbach|Hoffenheim",
       "league": "D1",
       "kickoff": "2026-10-18T15:30:00Z",
@@ -408,31 +195,12 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.37,
-      "prob": 0.6882,
+      "prob": 0.6881,
       "model_prob": 0.6956,
       "market_prob": 0.6807,
       "xg": [
         1.82,
         1.77
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Strasbourg|Paris SG",
-      "league": "F1",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Strasbourg",
-      "away": "Paris SG",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.32,
-      "prob": 0.6819,
-      "model_prob": 0.6553,
-      "market_prob": 0.7086,
-      "xg": [
-        1.42,
-        1.96
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -495,25 +263,6 @@
       "eligible": false
     },
     {
-      "match_id": "N1|2026-10-17|Telstar|Feyenoord",
-      "league": "N1",
-      "kickoff": "2026-10-17T18:00:00Z",
-      "home": "Telstar",
-      "away": "Feyenoord",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.3,
-      "prob": 0.668,
-      "model_prob": 0.6192,
-      "market_prob": 0.7168,
-      "xg": [
-        1.07,
-        2.12
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "D1|2026-10-18|Leverkusen|Freiburg",
       "league": "D1",
       "kickoff": "2026-10-18T13:30:00Z",
@@ -552,98 +301,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-17|Roma|Genoa",
-      "league": "I1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Roma",
-      "away": "Genoa",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.45,
-      "prob": 0.6636,
-      "model_prob": 0.6783,
-      "market_prob": 0.6489,
-      "xg": [
-        1.99,
-        0.67
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-17|Villarreal|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-17T14:15:00Z",
-      "home": "Villarreal",
-      "away": "Elche",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.44,
-      "prob": 0.6628,
-      "model_prob": 0.676,
-      "market_prob": 0.6496,
-      "xg": [
-        2.38,
-        1.11
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "N1|2026-10-17|Telstar|Feyenoord",
-      "league": "N1",
-      "kickoff": "2026-10-17T18:00:00Z",
-      "home": "Telstar",
-      "away": "Feyenoord",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.31,
-      "prob": 0.6591,
-      "model_prob": 0.6075,
-      "market_prob": 0.7107,
-      "xg": [
-        1.07,
-        2.12
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Elversberg|Augsburg",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Elversberg",
-      "away": "Augsburg",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.42,
-      "prob": 0.657,
-      "model_prob": null,
-      "market_prob": 0.657,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Hamburg|Stuttgart",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Hamburg",
-      "away": "Stuttgart",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.37,
-      "prob": 0.652,
-      "model_prob": 0.6233,
-      "market_prob": 0.6807,
-      "xg": [
-        1.3,
-        1.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "SP1|2026-10-18|Real Madrid|Sevilla",
       "league": "SP1",
       "kickoff": "2026-10-18T19:00:00Z",
@@ -658,25 +315,6 @@
       "xg": [
         2.46,
         0.82
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-17|Villarreal|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-17T14:15:00Z",
-      "home": "Villarreal",
-      "away": "Elche",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.44,
-      "prob": 0.6512,
-      "model_prob": 0.6491,
-      "market_prob": 0.6532,
-      "xg": [
-        2.38,
-        1.11
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -701,25 +339,6 @@
       "eligible": false
     },
     {
-      "match_id": "T1|2026-10-17|Genclerbirligi|Galatasaray",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Galatasaray",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.36,
-      "prob": 0.6378,
-      "model_prob": 0.5996,
-      "market_prob": 0.6761,
-      "xg": [
-        1.08,
-        2.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "N1|2026-10-17|Sparta Rotterdam|Willem II",
       "league": "N1",
       "kickoff": "2026-10-17T19:00:00Z",
@@ -729,7 +348,7 @@
       "market": "OU25",
       "odds": 1.43,
       "prob": 0.634,
-      "model_prob": 0.6185,
+      "model_prob": 0.6186,
       "market_prob": 0.6495,
       "xg": [
         2.0,
@@ -758,41 +377,6 @@
       "eligible": false
     },
     {
-      "match_id": "T1|2026-10-17|Genclerbirligi|Galatasaray",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Galatasaray",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.45,
-      "prob": 0.6274,
-      "model_prob": 0.6145,
-      "market_prob": 0.6402,
-      "xg": [
-        1.08,
-        2.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Werder Bremen|Paderborn",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Werder Bremen",
-      "away": "Paderborn",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.5,
-      "prob": 0.6231,
-      "model_prob": null,
-      "market_prob": 0.6231,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
       "match_id": "E0|2026-10-18|Brighton|Crystal Palace",
       "league": "E0",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -802,7 +386,7 @@
       "market": "1X2",
       "odds": 1.53,
       "prob": 0.6182,
-      "model_prob": 0.6238,
+      "model_prob": 0.6237,
       "market_prob": 0.6127,
       "xg": [
         2.1,
@@ -839,126 +423,12 @@
       "pick": "2",
       "market": "1X2",
       "odds": 1.44,
-      "prob": 0.6095,
-      "model_prob": 0.5723,
+      "prob": 0.6094,
+      "model_prob": 0.5722,
       "market_prob": 0.6467,
       "xg": [
         1.25,
         2.15
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Newcastle|Aston Villa",
-      "league": "E0",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Newcastle",
-      "away": "Aston Villa",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.58,
-      "prob": 0.6089,
-      "model_prob": 0.627,
-      "market_prob": 0.5907,
-      "xg": [
-        1.72,
-        1.51
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Union Berlin|Dortmund",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Union Berlin",
-      "away": "Dortmund",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.47,
-      "prob": 0.6084,
-      "model_prob": 0.5807,
-      "market_prob": 0.6361,
-      "xg": [
-        1.01,
-        2.01
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Padova|Virtus Entella",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Padova",
-      "away": "Virtus Entella",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.65,
-      "prob": 0.6047,
-      "model_prob": 0.6483,
-      "market_prob": 0.5612,
-      "xg": [
-        1.16,
-        0.95
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Fenerbahce|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Fenerbahce",
-      "away": "Alanyaspor",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.54,
-      "prob": 0.6024,
-      "model_prob": 0.6028,
-      "market_prob": 0.6021,
-      "xg": [
-        2.21,
-        0.91
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-17|Bologna|Inter",
-      "league": "I1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Bologna",
-      "away": "Inter",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.62,
-      "prob": 0.6017,
-      "model_prob": 0.6252,
-      "market_prob": 0.5781,
-      "xg": [
-        1.12,
-        2.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Troyes|Lens",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Troyes",
-      "away": "Lens",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.54,
-      "prob": 0.6007,
-      "model_prob": 0.5962,
-      "market_prob": 0.6051,
-      "xg": [
-        0.96,
-        2.12
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -978,44 +448,6 @@
       "xg": [
         2.1,
         0.98
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-17|Betis|Barcelona",
-      "league": "SP1",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Betis",
-      "away": "Barcelona",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.4,
-      "prob": 0.6002,
-      "model_prob": 0.5301,
-      "market_prob": 0.6704,
-      "xg": [
-        1.38,
-        2.09
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Union Berlin|Dortmund",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Union Berlin",
-      "away": "Dortmund",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.56,
-      "prob": 0.599,
-      "model_prob": 0.5983,
-      "market_prob": 0.5998,
-      "xg": [
-        1.01,
-        2.01
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1048,31 +480,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.66,
-      "prob": 0.5912,
+      "prob": 0.5911,
       "model_prob": 0.6191,
       "market_prob": 0.5632,
       "xg": [
         1.92,
         0.84
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-17|Bologna|Inter",
-      "league": "I1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Bologna",
-      "away": "Inter",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.59,
-      "prob": 0.5909,
-      "model_prob": 0.5912,
-      "market_prob": 0.5907,
-      "xg": [
-        1.12,
-        2.1
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1097,41 +510,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Schalke 04|Mainz",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Schalke 04",
-      "away": "Mainz",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.59,
-      "prob": 0.587,
-      "model_prob": null,
-      "market_prob": 0.587,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Strasbourg|Paris SG",
-      "league": "F1",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Strasbourg",
-      "away": "Paris SG",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.38,
-      "prob": 0.5859,
-      "model_prob": 0.495,
-      "market_prob": 0.6767,
-      "xg": [
-        1.42,
-        1.96
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-18|Buyuksehyr|Gaziantep",
       "league": "T1",
       "kickoff": "2026-10-18T16:00:00Z",
@@ -1141,87 +519,11 @@
       "market": "OU25",
       "odds": 1.57,
       "prob": 0.5856,
-      "model_prob": 0.5801,
+      "model_prob": 0.58,
       "market_prob": 0.5911,
       "xg": [
         2.07,
         0.94
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Brentford|Liverpool",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Brentford",
-      "away": "Liverpool",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.55,
-      "prob": 0.5844,
-      "model_prob": 0.5662,
-      "market_prob": 0.6026,
-      "xg": [
-        1.62,
-        1.33
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Amedspor|Konyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Amedspor",
-      "away": "Konyaspor",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.89,
-      "prob": 0.5764,
-      "model_prob": 0.6652,
-      "market_prob": 0.4876,
-      "xg": [
-        2.33,
-        1.0
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Troyes|Lens",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Troyes",
-      "away": "Lens",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.82,
-      "prob": 0.5735,
-      "model_prob": 0.632,
-      "market_prob": 0.515,
-      "xg": [
-        0.96,
-        2.12
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Amedspor|Konyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Amedspor",
-      "away": "Konyaspor",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.86,
-      "prob": 0.5722,
-      "model_prob": 0.6471,
-      "market_prob": 0.4973,
-      "xg": [
-        2.33,
-        1.0
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1303,25 +605,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-17|Venezia|Napoli",
-      "league": "I1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Venezia",
-      "away": "Napoli",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.67,
-      "prob": 0.5647,
-      "model_prob": 0.57,
-      "market_prob": 0.5594,
-      "xg": [
-        0.78,
-        2.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "N1|2026-10-18|Nijmegen|For Sittard",
       "league": "N1",
       "kickoff": "2026-10-18T18:00:00Z",
@@ -1379,44 +662,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Mantova|Palermo",
-      "league": "I2",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Mantova",
-      "away": "Palermo",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.71,
-      "prob": 0.5552,
-      "model_prob": 0.5676,
-      "market_prob": 0.5428,
-      "xg": [
-        1.39,
-        1.57
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Benevento|Vicenza",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Benevento",
-      "away": "Vicenza",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.98,
-      "prob": 0.5545,
-      "model_prob": 0.646,
-      "market_prob": 0.463,
-      "xg": [
-        2.0,
-        0.8
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-18|Juventus|Lazio",
       "league": "I1",
       "kickoff": "2026-10-18T18:45:00Z",
@@ -1426,49 +671,11 @@
       "market": "OU25",
       "odds": 1.83,
       "prob": 0.554,
-      "model_prob": 0.5987,
+      "model_prob": 0.5986,
       "market_prob": 0.5094,
       "xg": [
         1.37,
         0.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Carrarese|Modena",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Carrarese",
-      "away": "Modena",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.91,
-      "prob": 0.5525,
-      "model_prob": 0.6198,
-      "market_prob": 0.4852,
-      "xg": [
-        1.05,
-        1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Ascoli|Empoli",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Ascoli",
-      "away": "Empoli",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.85,
-      "prob": 0.5518,
-      "model_prob": 0.6051,
-      "market_prob": 0.4986,
-      "xg": [
-        1.53,
-        0.74
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1558,7 +765,7 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.62,
-      "prob": 0.5431,
+      "prob": 0.5432,
       "model_prob": 0.5093,
       "market_prob": 0.577,
       "xg": [
@@ -1588,25 +795,6 @@
       "eligible": false
     },
     {
-      "match_id": "F1|2026-10-17|Lille|Brest",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Lille",
-      "away": "Brest",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.66,
-      "prob": 0.5372,
-      "model_prob": 0.5112,
-      "market_prob": 0.5632,
-      "xg": [
-        1.78,
-        0.94
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "F1|2026-10-18|Le Havre|Auxerre",
       "league": "F1",
       "kickoff": "2026-10-18T15:15:00Z",
@@ -1621,25 +809,6 @@
       "xg": [
         1.27,
         1.09
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Lille|Brest",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Lille",
-      "away": "Brest",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.84,
-      "prob": 0.5359,
-      "model_prob": 0.5625,
-      "market_prob": 0.5093,
-      "xg": [
-        1.78,
-        0.94
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1683,25 +852,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Benevento|Vicenza",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Benevento",
-      "away": "Vicenza",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.74,
-      "prob": 0.5322,
-      "model_prob": 0.5322,
-      "market_prob": 0.5323,
-      "xg": [
-        2.0,
-        0.8
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "E0|2026-10-19|Tottenham|Coventry",
       "league": "E0",
       "kickoff": "2026-10-19T19:00:00Z",
@@ -1716,79 +866,6 @@
       "xg": [
         1.35,
         1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Werder Bremen|Paderborn",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Werder Bremen",
-      "away": "Paderborn",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.77,
-      "prob": 0.5296,
-      "model_prob": null,
-      "market_prob": 0.5296,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Fulham|Hull",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Fulham",
-      "away": "Hull",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.06,
-      "prob": 0.5291,
-      "model_prob": 0.6046,
-      "market_prob": 0.4536,
-      "xg": [
-        1.08,
-        1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-17|Roma|Genoa",
-      "league": "I1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Roma",
-      "away": "Genoa",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.68,
-      "prob": 0.5271,
-      "model_prob": 0.4963,
-      "market_prob": 0.5579,
-      "xg": [
-        1.99,
-        0.67
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Ascoli|Empoli",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Ascoli",
-      "away": "Empoli",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.83,
-      "prob": 0.5267,
-      "model_prob": 0.5531,
-      "market_prob": 0.5003,
-      "xg": [
-        1.53,
-        0.74
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1832,25 +909,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Pisa|Cremonese",
-      "league": "I2",
-      "kickoff": "2026-10-17T17:30:00Z",
-      "home": "Pisa",
-      "away": "Cremonese",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.69,
-      "prob": 0.5175,
-      "model_prob": 0.488,
-      "market_prob": 0.5469,
-      "xg": [
-        1.73,
-        0.99
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-18|Kasimpasa|Samsunspor",
       "league": "T1",
       "kickoff": "2026-10-18T10:30:00Z",
@@ -1870,25 +928,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Hamburg|Stuttgart",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Hamburg",
-      "away": "Stuttgart",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.79,
-      "prob": 0.5164,
-      "model_prob": 0.5107,
-      "market_prob": 0.5222,
-      "xg": [
-        1.3,
-        1.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-18|Milan|Atalanta",
       "league": "I1",
       "kickoff": "2026-10-18T16:00:00Z",
@@ -1898,7 +937,7 @@
       "market": "OU25",
       "odds": 2.06,
       "prob": 0.5153,
-      "model_prob": 0.577,
+      "model_prob": 0.5769,
       "market_prob": 0.4536,
       "xg": [
         1.28,
@@ -1992,8 +1031,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.72,
-      "prob": 0.5097,
-      "model_prob": 0.4769,
+      "prob": 0.5098,
+      "model_prob": 0.477,
       "market_prob": 0.5426,
       "xg": [
         1.19,
@@ -2031,7 +1070,7 @@
       "market": "OU25",
       "odds": 1.99,
       "prob": 0.5062,
-      "model_prob": 0.5445,
+      "model_prob": 0.5444,
       "market_prob": 0.4679,
       "xg": [
         1.09,
@@ -2069,7 +1108,7 @@
       "market": "1X2",
       "odds": 2.06,
       "prob": 0.4994,
-      "model_prob": 0.544,
+      "model_prob": 0.5439,
       "market_prob": 0.4548,
       "xg": [
         0.95,
@@ -2088,7 +1127,7 @@
       "market": "OU25",
       "odds": 1.75,
       "prob": 0.4938,
-      "model_prob": 0.4555,
+      "model_prob": 0.4556,
       "market_prob": 0.5321,
       "xg": [
         1.09,
@@ -2144,8 +1183,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 2.04,
-      "prob": 0.4903,
-      "model_prob": 0.5231,
+      "prob": 0.4902,
+      "model_prob": 0.523,
       "market_prob": 0.4574,
       "xg": [
         1.19,
@@ -2174,25 +1213,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Pisa|Cremonese",
-      "league": "I2",
-      "kickoff": "2026-10-17T17:30:00Z",
-      "home": "Pisa",
-      "away": "Cremonese",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.12,
-      "prob": 0.485,
-      "model_prob": 0.5377,
-      "market_prob": 0.4324,
-      "xg": [
-        1.73,
-        0.99
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-18|Milan|Atalanta",
       "league": "I1",
       "kickoff": "2026-10-18T16:00:00Z",
@@ -2202,7 +1222,7 @@
       "market": "OU25",
       "odds": 1.71,
       "prob": 0.4847,
-      "model_prob": 0.423,
+      "model_prob": 0.4231,
       "market_prob": 0.5464,
       "xg": [
         1.28,
@@ -2226,25 +1246,6 @@
       "xg": [
         1.52,
         1.09
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Pisa|Cremonese",
-      "league": "I2",
-      "kickoff": "2026-10-17T17:30:00Z",
-      "home": "Pisa",
-      "away": "Cremonese",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 2.04,
-      "prob": 0.4825,
-      "model_prob": 0.512,
-      "market_prob": 0.4531,
-      "xg": [
-        1.73,
-        0.99
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2288,25 +1289,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-17|Roma|Genoa",
-      "league": "I1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Roma",
-      "away": "Genoa",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.12,
-      "prob": 0.4729,
-      "model_prob": 0.5037,
-      "market_prob": 0.4421,
-      "xg": [
-        1.99,
-        0.67
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "F1|2026-10-18|Angers|Marseille",
       "league": "F1",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -2316,30 +1298,11 @@
       "market": "1X2",
       "odds": 2.07,
       "prob": 0.4728,
-      "model_prob": 0.4938,
+      "model_prob": 0.4937,
       "market_prob": 0.4519,
       "xg": [
         1.06,
         1.62
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Fulham|Hull",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Fulham",
-      "away": "Hull",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.71,
-      "prob": 0.4709,
-      "model_prob": 0.3954,
-      "market_prob": 0.5464,
-      "xg": [
-        1.08,
-        1.19
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2378,25 +1341,6 @@
       "xg": [
         1.35,
         1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Benevento|Vicenza",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Benevento",
-      "away": "Vicenza",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.98,
-      "prob": 0.4678,
-      "model_prob": 0.4678,
-      "market_prob": 0.4677,
-      "xg": [
-        2.0,
-        0.8
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2478,25 +1422,6 @@
       "eligible": false
     },
     {
-      "match_id": "F1|2026-10-17|Lille|Brest",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Lille",
-      "away": "Brest",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.14,
-      "prob": 0.4628,
-      "model_prob": 0.4888,
-      "market_prob": 0.4368,
-      "xg": [
-        1.78,
-        0.94
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-18|Milan|Atalanta",
       "league": "I1",
       "kickoff": "2026-10-18T16:00:00Z",
@@ -2524,7 +1449,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.21,
-      "prob": 0.4569,
+      "prob": 0.4568,
       "model_prob": 0.4907,
       "market_prob": 0.423,
       "xg": [
@@ -2611,44 +1536,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Ascoli|Empoli",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Ascoli",
-      "away": "Empoli",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.84,
-      "prob": 0.4482,
-      "model_prob": 0.3949,
-      "market_prob": 0.5014,
-      "xg": [
-        1.53,
-        0.74
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Carrarese|Modena",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Carrarese",
-      "away": "Modena",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.8,
-      "prob": 0.4475,
-      "model_prob": 0.3802,
-      "market_prob": 0.5148,
-      "xg": [
-        1.05,
-        1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-18|Juventus|Lazio",
       "league": "I1",
       "kickoff": "2026-10-18T18:45:00Z",
@@ -2658,49 +1545,11 @@
       "market": "OU25",
       "odds": 1.9,
       "prob": 0.446,
-      "model_prob": 0.4013,
+      "model_prob": 0.4014,
       "market_prob": 0.4906,
       "xg": [
         1.37,
         0.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Mantova|Palermo",
-      "league": "I2",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Mantova",
-      "away": "Palermo",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.03,
-      "prob": 0.4448,
-      "model_prob": 0.4324,
-      "market_prob": 0.4572,
-      "xg": [
-        1.39,
-        1.57
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Carrarese|Modena",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Carrarese",
-      "away": "Modena",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.78,
-      "prob": 0.4447,
-      "model_prob": 0.3748,
-      "market_prob": 0.5146,
-      "xg": [
-        1.05,
-        1.17
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2725,44 +1574,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-17|Venezia|Napoli",
-      "league": "I1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Venezia",
-      "away": "Napoli",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.12,
-      "prob": 0.4353,
-      "model_prob": 0.43,
-      "market_prob": 0.4406,
-      "xg": [
-        0.78,
-        2.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Fulham|Hull",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Fulham",
-      "away": "Hull",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.7,
-      "prob": 0.4348,
-      "model_prob": 0.3184,
-      "market_prob": 0.5513,
-      "xg": [
-        1.08,
-        1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "SP1|2026-10-18|Malaga|Sociedad",
       "league": "SP1",
       "kickoff": "2026-10-18T16:30:00Z",
@@ -2772,7 +1583,7 @@
       "market": "1X2",
       "odds": 2.15,
       "prob": 0.4325,
-      "model_prob": 0.4308,
+      "model_prob": 0.4307,
       "market_prob": 0.4343,
       "xg": [
         1.09,
@@ -2858,60 +1669,6 @@
       "eligible": false
     },
     {
-      "match_id": "T1|2026-10-17|Amedspor|Konyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Amedspor",
-      "away": "Konyaspor",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.84,
-      "prob": 0.4278,
-      "model_prob": 0.3529,
-      "market_prob": 0.5027,
-      "xg": [
-        2.33,
-        1.0
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Schalke 04|Mainz",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Schalke 04",
-      "away": "Mainz",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.21,
-      "prob": 0.4233,
-      "model_prob": null,
-      "market_prob": 0.4233,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Newcastle|Aston Villa",
-      "league": "E0",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Newcastle",
-      "away": "Aston Villa",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.22,
-      "prob": 0.4211,
-      "model_prob": 0.4201,
-      "market_prob": 0.4221,
-      "xg": [
-        1.72,
-        1.51
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-18|Kasimpasa|Samsunspor",
       "league": "T1",
       "kickoff": "2026-10-18T10:30:00Z",
@@ -2931,44 +1688,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Mantova|Palermo",
-      "league": "I2",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Mantova",
-      "away": "Palermo",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.13,
-      "prob": 0.419,
-      "model_prob": 0.4085,
-      "market_prob": 0.4294,
-      "xg": [
-        1.39,
-        1.57
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Brentford|Liverpool",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Brentford",
-      "away": "Liverpool",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.34,
-      "prob": 0.4177,
-      "model_prob": 0.4344,
-      "market_prob": 0.4009,
-      "xg": [
-        1.62,
-        1.33
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "F1|2026-10-18|Lorient|Monaco",
       "league": "F1",
       "kickoff": "2026-10-18T15:15:00Z",
@@ -2983,25 +1702,6 @@
       "xg": [
         1.38,
         1.42
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Brentford|Liverpool",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Brentford",
-      "away": "Liverpool",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.35,
-      "prob": 0.4156,
-      "model_prob": 0.4338,
-      "market_prob": 0.3974,
-      "xg": [
-        1.62,
-        1.33
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3035,29 +1735,13 @@
       "market": "OU25",
       "odds": 2.27,
       "prob": 0.4144,
-      "model_prob": 0.4199,
+      "model_prob": 0.42,
       "market_prob": 0.4089,
       "xg": [
         2.07,
         0.94
       ],
       "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Schalke 04|Mainz",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Schalke 04",
-      "away": "Mainz",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.26,
-      "prob": 0.413,
-      "model_prob": null,
-      "market_prob": 0.413,
-      "xg": null,
-      "basis": "mercato",
       "eligible": false
     },
     {
@@ -3175,63 +1859,6 @@
       "eligible": false
     },
     {
-      "match_id": "F1|2026-10-17|Troyes|Lens",
-      "league": "F1",
-      "kickoff": "2026-10-17T18:45:00Z",
-      "home": "Troyes",
-      "away": "Lens",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.36,
-      "prob": 0.3993,
-      "model_prob": 0.4038,
-      "market_prob": 0.3949,
-      "xg": [
-        0.96,
-        2.12
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-17|Bologna|Inter",
-      "league": "I1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Bologna",
-      "away": "Inter",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.22,
-      "prob": 0.3983,
-      "model_prob": 0.3748,
-      "market_prob": 0.4219,
-      "xg": [
-        1.12,
-        2.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Fenerbahce|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-10-17T16:00:00Z",
-      "home": "Fenerbahce",
-      "away": "Alanyaspor",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.33,
-      "prob": 0.3976,
-      "model_prob": 0.3972,
-      "market_prob": 0.3979,
-      "xg": [
-        2.21,
-        0.91
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "E0|2026-10-18|Leeds|Man United",
       "league": "E0",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -3246,25 +1873,6 @@
       "xg": [
         1.42,
         1.29
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Padova|Virtus Entella",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Padova",
-      "away": "Virtus Entella",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 2.11,
-      "prob": 0.3953,
-      "model_prob": 0.3517,
-      "market_prob": 0.4388,
-      "xg": [
-        1.16,
-        0.95
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3289,63 +1897,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Padova|Virtus Entella",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Padova",
-      "away": "Virtus Entella",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.34,
-      "prob": 0.3926,
-      "model_prob": 0.3942,
-      "market_prob": 0.391,
-      "xg": [
-        1.16,
-        0.95
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Union Berlin|Dortmund",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Union Berlin",
-      "away": "Dortmund",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.57,
-      "prob": 0.3916,
-      "model_prob": 0.4193,
-      "market_prob": 0.3639,
-      "xg": [
-        1.01,
-        2.01
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Newcastle|Aston Villa",
-      "league": "E0",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Newcastle",
-      "away": "Aston Villa",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.28,
-      "prob": 0.3911,
-      "model_prob": 0.373,
-      "market_prob": 0.4093,
-      "xg": [
-        1.72,
-        1.51
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-19|Parma|Torino",
       "league": "I1",
       "kickoff": "2026-10-19T18:45:00Z",
@@ -3365,22 +1916,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Elversberg|Augsburg",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Elversberg",
-      "away": "Augsburg",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.43,
-      "prob": 0.3844,
-      "model_prob": null,
-      "market_prob": 0.3844,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-19|Monza|Cagliari",
       "league": "I1",
       "kickoff": "2026-10-19T16:30:00Z",
@@ -3390,46 +1925,11 @@
       "market": "1X2",
       "odds": 3.04,
       "prob": 0.381,
-      "model_prob": 0.4544,
+      "model_prob": 0.4543,
       "market_prob": 0.3077,
       "xg": [
         1.19,
         1.58
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "D1|2026-10-17|Werder Bremen|Paderborn",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Werder Bremen",
-      "away": "Paderborn",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.48,
-      "prob": 0.3769,
-      "model_prob": null,
-      "market_prob": 0.3769,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-17|Genclerbirligi|Galatasaray",
-      "league": "T1",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Galatasaray",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.58,
-      "prob": 0.3726,
-      "model_prob": 0.3855,
-      "market_prob": 0.3598,
-      "xg": [
-        1.08,
-        2.1
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3473,22 +1973,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Elversberg|Augsburg",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Elversberg",
-      "away": "Augsburg",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.54,
-      "prob": 0.3678,
-      "model_prob": null,
-      "market_prob": 0.3678,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
       "match_id": "N1|2026-10-17|Sparta Rotterdam|Willem II",
       "league": "N1",
       "kickoff": "2026-10-17T19:00:00Z",
@@ -3498,7 +1982,7 @@
       "market": "OU25",
       "odds": 2.65,
       "prob": 0.366,
-      "model_prob": 0.3815,
+      "model_prob": 0.3814,
       "market_prob": 0.3505,
       "xg": [
         2.0,
@@ -3603,25 +2087,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Hamburg|Stuttgart",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Hamburg",
-      "away": "Stuttgart",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.92,
-      "prob": 0.348,
-      "model_prob": 0.3767,
-      "market_prob": 0.3193,
-      "xg": [
-        1.3,
-        1.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-19|Trabzonspor|Besiktas",
       "league": "T1",
       "kickoff": "2026-10-19T17:00:00Z",
@@ -3641,22 +2106,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Elversberg|Augsburg",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Elversberg",
-      "away": "Augsburg",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.72,
-      "prob": 0.343,
-      "model_prob": null,
-      "market_prob": 0.343,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
       "match_id": "SP1|2026-10-19|Getafe|Vallecano",
       "league": "SP1",
       "kickoff": "2026-10-19T19:00:00Z",
@@ -3665,7 +2114,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.85,
-      "prob": 0.3414,
+      "prob": 0.3415,
       "model_prob": 0.3544,
       "market_prob": 0.3285,
       "xg": [
@@ -3703,31 +2152,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 3.26,
-      "prob": 0.338,
+      "prob": 0.3381,
       "model_prob": 0.3875,
       "market_prob": 0.2886,
       "xg": [
         1.25,
         1.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-17|Villarreal|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-17T14:15:00Z",
-      "home": "Villarreal",
-      "away": "Elche",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.67,
-      "prob": 0.3372,
-      "model_prob": 0.324,
-      "market_prob": 0.3504,
-      "xg": [
-        2.38,
-        1.11
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3828,25 +2258,6 @@
       "eligible": false
     },
     {
-      "match_id": "N1|2026-10-17|Telstar|Feyenoord",
-      "league": "N1",
-      "kickoff": "2026-10-17T18:00:00Z",
-      "home": "Telstar",
-      "away": "Feyenoord",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 3.29,
-      "prob": 0.332,
-      "model_prob": 0.3808,
-      "market_prob": 0.2832,
-      "xg": [
-        1.07,
-        2.12
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "N1|2026-10-18|Twente|Utrecht",
       "league": "N1",
       "kickoff": "2026-10-18T18:00:00Z",
@@ -3861,25 +2272,6 @@
       "xg": [
         2.02,
         1.21
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Newcastle|Aston Villa",
-      "league": "E0",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Newcastle",
-      "away": "Aston Villa",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.93,
-      "prob": 0.3258,
-      "model_prob": 0.3319,
-      "market_prob": 0.3198,
-      "xg": [
-        1.72,
-        1.51
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3918,25 +2310,6 @@
       "xg": [
         2.1,
         1.36
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Brentford|Liverpool",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Brentford",
-      "away": "Liverpool",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.76,
-      "prob": 0.3226,
-      "model_prob": 0.3052,
-      "market_prob": 0.3399,
-      "xg": [
-        1.62,
-        1.33
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -3999,60 +2372,6 @@
       "eligible": false
     },
     {
-      "match_id": "D1|2026-10-17|Schalke 04|Mainz",
-      "league": "D1",
-      "kickoff": "2026-10-17T13:30:00Z",
-      "home": "Schalke 04",
-      "away": "Mainz",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.94,
-      "prob": 0.3182,
-      "model_prob": null,
-      "market_prob": 0.3182,
-      "xg": null,
-      "basis": "mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "F1|2026-10-17|Strasbourg|Paris SG",
-      "league": "F1",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Strasbourg",
-      "away": "Paris SG",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 3.21,
-      "prob": 0.3181,
-      "model_prob": 0.3447,
-      "market_prob": 0.2914,
-      "xg": [
-        1.42,
-        1.96
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Mantova|Palermo",
-      "league": "I2",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Mantova",
-      "away": "Palermo",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 3.1,
-      "prob": 0.3123,
-      "model_prob": 0.3295,
-      "market_prob": 0.2951,
-      "xg": [
-        1.39,
-        1.57
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "D1|2026-10-18|M'gladbach|Hoffenheim",
       "league": "D1",
       "kickoff": "2026-10-18T15:30:00Z",
@@ -4061,7 +2380,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.92,
-      "prob": 0.3118,
+      "prob": 0.3119,
       "model_prob": 0.3044,
       "market_prob": 0.3193,
       "xg": [
@@ -4081,7 +2400,7 @@
       "market": "1X2",
       "odds": 3.48,
       "prob": 0.3116,
-      "model_prob": 0.3543,
+      "model_prob": 0.3544,
       "market_prob": 0.2688,
       "xg": [
         1.38,
@@ -4105,25 +2424,6 @@
       "xg": [
         0.92,
         0.81
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Padova|Virtus Entella",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Padova",
-      "away": "Virtus Entella",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.04,
-      "prob": 0.3096,
-      "model_prob": 0.3183,
-      "market_prob": 0.301,
-      "xg": [
-        1.16,
-        0.95
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -4157,7 +2457,7 @@
       "market": "1X2",
       "odds": 3.01,
       "prob": 0.3086,
-      "model_prob": 0.3063,
+      "model_prob": 0.3062,
       "market_prob": 0.3109,
       "xg": [
         1.27,
@@ -4224,25 +2524,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Padova|Virtus Entella",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Padova",
-      "away": "Virtus Entella",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.97,
-      "prob": 0.2977,
-      "model_prob": 0.2874,
-      "market_prob": 0.3081,
-      "xg": [
-        1.16,
-        0.95
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-18|Kocaelispor|Goztep",
       "league": "T1",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -4252,30 +2533,11 @@
       "market": "1X2",
       "odds": 3.36,
       "prob": 0.296,
-      "model_prob": 0.3185,
+      "model_prob": 0.3184,
       "market_prob": 0.2735,
       "xg": [
         1.13,
         0.99
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Fulham|Hull",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Fulham",
-      "away": "Hull",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 4.51,
-      "prob": 0.2913,
-      "model_prob": 0.3749,
-      "market_prob": 0.2078,
-      "xg": [
-        1.08,
-        1.19
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -4328,7 +2590,7 @@
       "market": "1X2",
       "odds": 3.14,
       "prob": 0.2901,
-      "model_prob": 0.2828,
+      "model_prob": 0.2829,
       "market_prob": 0.2974,
       "xg": [
         1.09,
@@ -4352,25 +2614,6 @@
       "xg": [
         1.27,
         1.09
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-17|Man City|Ipswich",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Man City",
-      "away": "Ipswich",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.96,
-      "prob": 0.288,
-      "model_prob": 0.2613,
-      "market_prob": 0.3148,
-      "xg": [
-        3.0,
-        0.85
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -4409,44 +2652,6 @@
       "xg": [
         1.47,
         0.93
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Carrarese|Modena",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Carrarese",
-      "away": "Modena",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.51,
-      "prob": 0.286,
-      "model_prob": 0.3111,
-      "market_prob": 0.2609,
-      "xg": [
-        1.05,
-        1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-17|Betis|Barcelona",
-      "league": "SP1",
-      "kickoff": "2026-10-17T16:30:00Z",
-      "home": "Betis",
-      "away": "Barcelona",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 3.83,
-      "prob": 0.2859,
-      "model_prob": 0.3272,
-      "market_prob": 0.2446,
-      "xg": [
-        1.38,
-        2.09
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -4566,25 +2771,6 @@
       "eligible": false
     },
     {
-      "match_id": "E0|2026-10-17|Fulham|Hull",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Fulham",
-      "away": "Hull",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.89,
-      "prob": 0.2738,
-      "model_prob": 0.3067,
-      "market_prob": 0.2409,
-      "xg": [
-        1.08,
-        1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I2|2026-10-18|Sampdoria|Arezzo",
       "league": "I2",
       "kickoff": "2026-10-18T17:30:00Z",
@@ -4618,44 +2804,6 @@
       "xg": [
         1.37,
         0.92
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Ascoli|Empoli",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Ascoli",
-      "away": "Empoli",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.44,
-      "prob": 0.2714,
-      "model_prob": 0.2766,
-      "market_prob": 0.2661,
-      "xg": [
-        1.53,
-        0.74
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Pisa|Cremonese",
-      "league": "I2",
-      "kickoff": "2026-10-17T17:30:00Z",
-      "home": "Pisa",
-      "away": "Cremonese",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.19,
-      "prob": 0.2713,
-      "model_prob": 0.2554,
-      "market_prob": 0.2873,
-      "xg": [
-        1.73,
-        0.99
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -4699,44 +2847,6 @@
       "eligible": false
     },
     {
-      "match_id": "I2|2026-10-17|Carrarese|Modena",
-      "league": "I2",
-      "kickoff": "2026-10-17T13:00:00Z",
-      "home": "Carrarese",
-      "away": "Modena",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 4.08,
-      "prob": 0.2693,
-      "model_prob": 0.3141,
-      "market_prob": 0.2245,
-      "xg": [
-        1.05,
-        1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-10-17|Mantova|Palermo",
-      "league": "I2",
-      "kickoff": "2026-10-17T15:15:00Z",
-      "home": "Mantova",
-      "away": "Palermo",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.32,
-      "prob": 0.2687,
-      "model_prob": 0.2619,
-      "market_prob": 0.2755,
-      "xg": [
-        1.39,
-        1.57
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "F1|2026-10-18|Angers|Marseille",
       "league": "F1",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -4745,7 +2855,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 3.16,
-      "prob": 0.2677,
+      "prob": 0.2678,
       "model_prob": 0.2395,
       "market_prob": 0.296,
       "xg": [
@@ -4832,25 +2942,6 @@
       "eligible": false
     },
     {
-      "match_id": "E0|2026-10-17|Brentford|Liverpool",
-      "league": "E0",
-      "kickoff": "2026-10-17T14:00:00Z",
-      "home": "Brentford",
-      "away": "Liverpool",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.62,
-      "prob": 0.2598,
-      "model_prob": 0.2604,
-      "market_prob": 0.2592,
-      "xg": [
-        1.62,
-        1.33
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "F1|2026-10-18|Angers|Marseille",
       "league": "F1",
       "kickoff": "2026-10-18T13:00:00Z",
@@ -4868,10 +2959,675 @@
       ],
       "basis": "modello+mercato",
       "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-18|Bournemouth|Sunderland",
+      "league": "E0",
+      "kickoff": "2026-10-18T13:00:00Z",
+      "home": "Bournemouth",
+      "away": "Sunderland",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.44,
+      "prob": 0.2591,
+      "model_prob": 0.2454,
+      "market_prob": 0.2728,
+      "xg": [
+        1.63,
+        1.09
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-18|Fiorentina|Como",
+      "league": "I1",
+      "kickoff": "2026-10-18T13:00:00Z",
+      "home": "Fiorentina",
+      "away": "Como",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.61,
+      "prob": 0.2585,
+      "model_prob": 0.2574,
+      "market_prob": 0.2595,
+      "xg": [
+        0.95,
+        1.71
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Zwolle|Go Ahead Eagles",
+      "league": "N1",
+      "kickoff": "2026-10-18T10:15:00Z",
+      "home": "Zwolle",
+      "away": "Go Ahead Eagles",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 3.31,
+      "prob": 0.2567,
+      "model_prob": 0.2326,
+      "market_prob": 0.2808,
+      "xg": [
+        1.35,
+        2.13
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "SP1|2026-10-18|Osasuna|Santander",
+      "league": "SP1",
+      "kickoff": "2026-10-18T12:00:00Z",
+      "home": "Osasuna",
+      "away": "Santander",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.46,
+      "prob": 0.2553,
+      "model_prob": 0.2407,
+      "market_prob": 0.2698,
+      "xg": [
+        2.37,
+        1.55
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "T1|2026-10-19|Trabzonspor|Besiktas",
+      "league": "T1",
+      "kickoff": "2026-10-19T17:00:00Z",
+      "home": "Trabzonspor",
+      "away": "Besiktas",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.65,
+      "prob": 0.2527,
+      "model_prob": 0.2544,
+      "market_prob": 0.2509,
+      "xg": [
+        1.72,
+        1.25
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "SP1|2026-10-18|Celta|Alaves",
+      "league": "SP1",
+      "kickoff": "2026-10-18T14:15:00Z",
+      "home": "Celta",
+      "away": "Alaves",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.5,
+      "prob": 0.248,
+      "model_prob": 0.2296,
+      "market_prob": 0.2664,
+      "xg": [
+        1.47,
+        0.93
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-19|Tottenham|Coventry",
+      "league": "E0",
+      "kickoff": "2026-10-19T19:00:00Z",
+      "home": "Tottenham",
+      "away": "Coventry",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.55,
+      "prob": 0.247,
+      "model_prob": 0.2877,
+      "market_prob": 0.2063,
+      "xg": [
+        1.35,
+        1.17
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-18|Fiorentina|Como",
+      "league": "I1",
+      "kickoff": "2026-10-18T13:00:00Z",
+      "home": "Fiorentina",
+      "away": "Como",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 3.28,
+      "prob": 0.2422,
+      "model_prob": 0.1987,
+      "market_prob": 0.2856,
+      "xg": [
+        0.95,
+        1.71
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Groningen|Ajax",
+      "league": "N1",
+      "kickoff": "2026-10-18T14:45:00Z",
+      "home": "Groningen",
+      "away": "Ajax",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.06,
+      "prob": 0.2402,
+      "model_prob": 0.2519,
+      "market_prob": 0.2285,
+      "xg": [
+        1.41,
+        1.71
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "D1|2026-10-18|M'gladbach|Hoffenheim",
+      "league": "D1",
+      "kickoff": "2026-10-18T15:30:00Z",
+      "home": "M'gladbach",
+      "away": "Hoffenheim",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.94,
+      "prob": 0.2353,
+      "model_prob": 0.2338,
+      "market_prob": 0.2368,
+      "xg": [
+        1.82,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-18|Sampdoria|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-18T17:30:00Z",
+      "home": "Sampdoria",
+      "away": "Arezzo",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.13,
+      "prob": 0.2349,
+      "model_prob": 0.2482,
+      "market_prob": 0.2217,
+      "xg": [
+        1.5,
+        1.02
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-18|Lyon|Nice",
+      "league": "F1",
+      "kickoff": "2026-10-18T18:45:00Z",
+      "home": "Lyon",
+      "away": "Nice",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.98,
+      "prob": 0.2329,
+      "model_prob": 0.2309,
+      "market_prob": 0.2349,
+      "xg": [
+        1.92,
+        0.84
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "SP1|2026-10-18|Osasuna|Santander",
+      "league": "SP1",
+      "kickoff": "2026-10-18T12:00:00Z",
+      "home": "Osasuna",
+      "away": "Santander",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.61,
+      "prob": 0.2322,
+      "model_prob": 0.2059,
+      "market_prob": 0.2586,
+      "xg": [
+        2.37,
+        1.55
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-19|Tottenham|Coventry",
+      "league": "E0",
+      "kickoff": "2026-10-19T19:00:00Z",
+      "home": "Tottenham",
+      "away": "Coventry",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 6.23,
+      "prob": 0.232,
+      "model_prob": 0.3132,
+      "market_prob": 0.1507,
+      "xg": [
+        1.35,
+        1.17
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Zwolle|Go Ahead Eagles",
+      "league": "N1",
+      "kickoff": "2026-10-18T10:15:00Z",
+      "home": "Zwolle",
+      "away": "Go Ahead Eagles",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.83,
+      "prob": 0.232,
+      "model_prob": 0.2214,
+      "market_prob": 0.2426,
+      "xg": [
+        1.35,
+        2.13
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "T1|2026-10-18|Buyuksehyr|Gaziantep",
+      "league": "T1",
+      "kickoff": "2026-10-18T16:00:00Z",
+      "home": "Buyuksehyr",
+      "away": "Gaziantep",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.96,
+      "prob": 0.2253,
+      "model_prob": 0.2184,
+      "market_prob": 0.2323,
+      "xg": [
+        2.07,
+        0.94
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-17|Sparta Rotterdam|Willem II",
+      "league": "N1",
+      "kickoff": "2026-10-17T19:00:00Z",
+      "home": "Sparta Rotterdam",
+      "away": "Willem II",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.31,
+      "prob": 0.2231,
+      "model_prob": 0.2308,
+      "market_prob": 0.2155,
+      "xg": [
+        2.0,
+        1.19
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-18|Udinese|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-18T10:30:00Z",
+      "home": "Udinese",
+      "away": "Lecce",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.14,
+      "prob": 0.2228,
+      "model_prob": 0.2191,
+      "market_prob": 0.2266,
+      "xg": [
+        1.51,
+        0.92
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "D1|2026-10-18|Leverkusen|Freiburg",
+      "league": "D1",
+      "kickoff": "2026-10-18T13:30:00Z",
+      "home": "Leverkusen",
+      "away": "Freiburg",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.15,
+      "prob": 0.2209,
+      "model_prob": 0.2167,
+      "market_prob": 0.225,
+      "xg": [
+        2.22,
+        1.33
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "D1|2026-10-18|Leverkusen|Freiburg",
+      "league": "D1",
+      "kickoff": "2026-10-18T13:30:00Z",
+      "home": "Leverkusen",
+      "away": "Freiburg",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.14,
+      "prob": 0.22,
+      "model_prob": 0.2144,
+      "market_prob": 0.2256,
+      "xg": [
+        2.22,
+        1.33
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Nijmegen|For Sittard",
+      "league": "N1",
+      "kickoff": "2026-10-18T18:00:00Z",
+      "home": "Nijmegen",
+      "away": "For Sittard",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.65,
+      "prob": 0.2186,
+      "model_prob": 0.2373,
+      "market_prob": 0.1998,
+      "xg": [
+        2.1,
+        1.36
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Nijmegen|For Sittard",
+      "league": "N1",
+      "kickoff": "2026-10-18T18:00:00Z",
+      "home": "Nijmegen",
+      "away": "For Sittard",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.38,
+      "prob": 0.2181,
+      "model_prob": 0.2241,
+      "market_prob": 0.2121,
+      "xg": [
+        2.1,
+        1.36
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-18|Brighton|Crystal Palace",
+      "league": "E0",
+      "kickoff": "2026-10-18T13:00:00Z",
+      "home": "Brighton",
+      "away": "Crystal Palace",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.42,
+      "prob": 0.2145,
+      "model_prob": 0.2169,
+      "market_prob": 0.2121,
+      "xg": [
+        2.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-18|Juventus|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-18T18:45:00Z",
+      "home": "Juventus",
+      "away": "Lazio",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 5.03,
+      "prob": 0.2138,
+      "model_prob": 0.2413,
+      "market_prob": 0.1863,
+      "xg": [
+        1.37,
+        0.92
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-17|Sparta Rotterdam|Willem II",
+      "league": "N1",
+      "kickoff": "2026-10-17T19:00:00Z",
+      "home": "Sparta Rotterdam",
+      "away": "Willem II",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.55,
+      "prob": 0.2095,
+      "model_prob": 0.2148,
+      "market_prob": 0.2041,
+      "xg": [
+        2.0,
+        1.19
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Cambuur|AZ Alkmaar",
+      "league": "N1",
+      "kickoff": "2026-10-18T12:30:00Z",
+      "home": "Cambuur",
+      "away": "AZ Alkmaar",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.83,
+      "prob": 0.2059,
+      "model_prob": 0.2189,
+      "market_prob": 0.1928,
+      "xg": [
+        1.25,
+        2.15
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Twente|Utrecht",
+      "league": "N1",
+      "kickoff": "2026-10-18T18:00:00Z",
+      "home": "Twente",
+      "away": "Utrecht",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 5.61,
+      "prob": 0.1976,
+      "model_prob": 0.2299,
+      "market_prob": 0.1654,
+      "xg": [
+        2.02,
+        1.21
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-18|Nott'm Forest|Arsenal",
+      "league": "E0",
+      "kickoff": "2026-10-18T15:30:00Z",
+      "home": "Nott'm Forest",
+      "away": "Arsenal",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 5.59,
+      "prob": 0.1935,
+      "model_prob": 0.2192,
+      "market_prob": 0.1679,
+      "xg": [
+        0.88,
+        1.44
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Cambuur|AZ Alkmaar",
+      "league": "N1",
+      "kickoff": "2026-10-18T12:30:00Z",
+      "home": "Cambuur",
+      "away": "AZ Alkmaar",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 5.8,
+      "prob": 0.1847,
+      "model_prob": 0.2088,
+      "market_prob": 0.1605,
+      "xg": [
+        1.25,
+        2.15
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "T1|2026-10-18|Buyuksehyr|Gaziantep",
+      "league": "T1",
+      "kickoff": "2026-10-18T16:00:00Z",
+      "home": "Buyuksehyr",
+      "away": "Gaziantep",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.45,
+      "prob": 0.1806,
+      "model_prob": 0.1545,
+      "market_prob": 0.2067,
+      "xg": [
+        2.07,
+        0.94
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-18|Lyon|Nice",
+      "league": "F1",
+      "kickoff": "2026-10-18T18:45:00Z",
+      "home": "Lyon",
+      "away": "Nice",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.63,
+      "prob": 0.176,
+      "model_prob": 0.15,
+      "market_prob": 0.2019,
+      "xg": [
+        1.92,
+        0.84
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "N1|2026-10-18|Twente|Utrecht",
+      "league": "N1",
+      "kickoff": "2026-10-18T18:00:00Z",
+      "home": "Twente",
+      "away": "Utrecht",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 7.34,
+      "prob": 0.1722,
+      "model_prob": 0.218,
+      "market_prob": 0.1264,
+      "xg": [
+        2.02,
+        1.21
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "E0|2026-10-18|Brighton|Crystal Palace",
+      "league": "E0",
+      "kickoff": "2026-10-18T13:00:00Z",
+      "home": "Brighton",
+      "away": "Crystal Palace",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 5.35,
+      "prob": 0.1673,
+      "model_prob": 0.1594,
+      "market_prob": 0.1752,
+      "xg": [
+        2.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "SP1|2026-10-18|Real Madrid|Sevilla",
+      "league": "SP1",
+      "kickoff": "2026-10-18T19:00:00Z",
+      "home": "Real Madrid",
+      "away": "Sevilla",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 6.27,
+      "prob": 0.1616,
+      "model_prob": 0.1743,
+      "market_prob": 0.149,
+      "xg": [
+        2.46,
+        0.82
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "SP1|2026-10-18|Real Madrid|Sevilla",
+      "league": "SP1",
+      "kickoff": "2026-10-18T19:00:00Z",
+      "home": "Real Madrid",
+      "away": "Sevilla",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 10.23,
+      "prob": 0.0954,
+      "model_prob": 0.0995,
+      "market_prob": 0.0913,
+      "xg": [
+        2.46,
+        0.82
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
     }
   ],
-  "n_candidates": 330,
-  "n_eligible": 4,
+  "n_candidates": 185,
+  "n_eligible": 3,
   "stats": {
     "slips_settled": 0,
     "slips_won": 0,
