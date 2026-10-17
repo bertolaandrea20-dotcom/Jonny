@@ -164,3 +164,6 @@ VENDE 84.117753 ADA/EUR per 16.81 € (sotto la media 50g)
 === 2026-10-17T08:10:14Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-17 04:00:00+00:00: valore del bot 185.20 € (capitale iniziale 200.00 €)
+=== 2026-10-17T12:10:26Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-17 08:00:00+00:00: valore del bot 185.31 € (capitale iniziale 200.00 €)
