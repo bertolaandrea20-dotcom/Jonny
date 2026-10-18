@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 40.0,
+  "bankroll": 35.0,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -97,6 +97,55 @@
           "xg": [
             2.37,
             1.55
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "S0003",
+      "created_at": "2026-10-18T12:01:57Z",
+      "stake": 5.0,
+      "total_odds": 2.041,
+      "prob": 0.4737,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "SP1|2026-10-19|Getafe|Vallecano",
+          "league": "SP1",
+          "kickoff": "2026-10-19T19:00:00Z",
+          "home": "Getafe",
+          "away": "Vallecano",
+          "pick": "U25",
+          "market": "OU25",
+          "odds": 1.49,
+          "prob": 0.6884,
+          "model_prob": 0.7493,
+          "market_prob": 0.6275,
+          "xg": [
+            0.92,
+            0.81
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "D1|2026-10-18|M'gladbach|Hoffenheim",
+          "league": "D1",
+          "kickoff": "2026-10-18T15:30:00Z",
+          "home": "M'gladbach",
+          "away": "Hoffenheim",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.37,
+          "prob": 0.6881,
+          "model_prob": 0.6956,
+          "market_prob": 0.6807,
+          "xg": [
+            1.82,
+            1.77
           ],
           "basis": "modello+mercato",
           "status": "pending"
