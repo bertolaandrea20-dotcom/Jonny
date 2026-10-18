@@ -175,3 +175,7 @@ VENDE 0.34432895 LTC/EUR per 18.01 € (sotto la media 50g)
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 COMPRA 0.33909128 LTC/EUR per 17.92 € (sopra la media 50g)
 2026-10-17 16:00:00+00:00: valore del bot 184.83 € (capitale iniziale 200.00 €)
+=== 2026-10-18T00:10:10Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 0.33909128 LTC/EUR per 17.73 € (sotto la media 50g)
+2026-10-17 20:00:00+00:00: valore del bot 184.54 € (capitale iniziale 200.00 €)
