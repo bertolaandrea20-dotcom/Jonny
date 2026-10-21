@@ -255,3 +255,6 @@ COMPRA 81.944752 ADA/EUR per 16.73 € (sopra la media 50g)
 COMPRA 1.5736416 LINK/EUR per 17.80 € (sopra la media 50g)
 COMPRA 0.18497882 SOL/EUR per 17.87 € (sopra la media 50g)
 2026-10-21 12:00:00+00:00: valore del bot 184.90 € (capitale iniziale 200.00 €)
+=== 2026-10-21T20:10:05Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-21 16:00:00+00:00: valore del bot 184.67 € (capitale iniziale 200.00 €)
