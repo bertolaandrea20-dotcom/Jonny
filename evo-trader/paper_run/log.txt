@@ -265,3 +265,6 @@ VENDE 1.5736416 LINK/EUR per 17.48 € (sotto la media 50g)
 VENDE 66.433261 TRX/EUR per 19.53 € (sotto la media 50g)
 VENDE 0.18497882 SOL/EUR per 17.58 € (sotto la media 50g)
 2026-10-21 20:00:00+00:00: valore del bot 183.39 € (capitale iniziale 200.00 €)
+=== 2026-10-22T04:11:34Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-22 00:00:00+00:00: valore del bot 182.85 € (capitale iniziale 200.00 €)
