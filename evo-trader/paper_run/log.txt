@@ -268,3 +268,7 @@ VENDE 0.18497882 SOL/EUR per 17.58 € (sotto la media 50g)
 === 2026-10-22T04:11:34Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-22 00:00:00+00:00: valore del bot 182.85 € (capitale iniziale 200.00 €)
+=== 2026-10-22T08:12:08Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 0.31715737 LTC/EUR per 16.86 € (sotto la media 50g)
+2026-10-22 04:00:00+00:00: valore del bot 182.40 € (capitale iniziale 200.00 €)
