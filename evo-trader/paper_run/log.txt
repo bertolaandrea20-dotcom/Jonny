@@ -276,3 +276,7 @@ VENDE 0.31715737 LTC/EUR per 16.86 € (sotto la media 50g)
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 COMPRA 65.866405 TRX/EUR per 19.44 € (sopra la media 50g)
 2026-10-22 08:00:00+00:00: valore del bot 182.29 € (capitale iniziale 200.00 €)
+=== 2026-10-22T16:16:14Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 65.866405 TRX/EUR per 19.39 € (sotto la media 50g)
+2026-10-22 12:00:00+00:00: valore del bot 182.17 € (capitale iniziale 200.00 €)
