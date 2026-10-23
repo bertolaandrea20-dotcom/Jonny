@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 55.15,
+  "bankroll": 50.15,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -163,6 +163,55 @@
       ],
       "payout": 10.21,
       "settled_at": "2026-10-20T12:40:54Z"
+    },
+    {
+      "id": "S0004",
+      "created_at": "2026-10-23T19:09:21Z",
+      "stake": 5.0,
+      "total_odds": 1.968,
+      "prob": 0.4595,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "D1|2026-10-24|Dortmund|Ein Frankfurt",
+          "league": "D1",
+          "kickoff": "2026-10-24T16:30:00Z",
+          "home": "Dortmund",
+          "away": "Ein Frankfurt",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.33,
+          "prob": 0.6967,
+          "model_prob": 0.6884,
+          "market_prob": 0.7051,
+          "xg": [
+            2.57,
+            0.98
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "N1|2026-10-24|Willem II|Cambuur",
+          "league": "N1",
+          "kickoff": "2026-10-24T16:45:00Z",
+          "home": "Willem II",
+          "away": "Cambuur",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.48,
+          "prob": 0.6595,
+          "model_prob": 0.6881,
+          "market_prob": 0.6309,
+          "xg": [
+            1.56,
+            1.98
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
     }
   ],
   "history": [
