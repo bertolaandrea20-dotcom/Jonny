@@ -1,8 +1,8 @@
 {
-  "run_at": "2026-10-23T19:09:21Z",
-  "decision": "Giocata S0004 proposta del giorno (regole larghe): 2 eventi @ 1.968 (prob. stimata 46%).",
+  "run_at": "2026-10-24T11:57:43Z",
+  "decision": "Giocata S0005 proposta del giorno (regole larghe): 2 eventi @ 1.952 (prob. stimata 51%).",
   "sources": {
-    "football-data.co.uk": "ok (76 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (73 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
@@ -11,45 +11,45 @@
   "proposals": [
     {
       "date": "2026-10-24",
-      "matches": 36,
+      "matches": 33,
       "tier": "proposta",
-      "total_odds": 1.968,
-      "prob": 0.4595,
+      "total_odds": 1.915,
+      "prob": 0.4593,
       "legs": [
         {
-          "match_id": "D1|2026-10-24|Dortmund|Ein Frankfurt",
+          "match_id": "D1|2026-10-24|RB Leipzig|Elversberg",
           "league": "D1",
-          "kickoff": "2026-10-24T16:30:00Z",
-          "home": "Dortmund",
-          "away": "Ein Frankfurt",
+          "kickoff": "2026-10-24T13:30:00Z",
+          "home": "RB Leipzig",
+          "away": "Elversberg",
           "pick": "O25",
           "market": "OU25",
-          "odds": 1.33,
-          "prob": 0.6967,
-          "model_prob": 0.6884,
-          "market_prob": 0.7051,
+          "odds": 1.26,
+          "prob": 0.745,
+          "model_prob": 0.7476,
+          "market_prob": 0.7423,
           "xg": [
-            2.57,
-            0.98
+            2.38,
+            1.52
           ],
           "basis": "modello+mercato",
           "eligible": false
         },
         {
-          "match_id": "N1|2026-10-24|Willem II|Cambuur",
-          "league": "N1",
-          "kickoff": "2026-10-24T16:45:00Z",
-          "home": "Willem II",
-          "away": "Cambuur",
+          "match_id": "D1|2026-10-24|Mainz|Werder Bremen",
+          "league": "D1",
+          "kickoff": "2026-10-24T13:30:00Z",
+          "home": "Mainz",
+          "away": "Werder Bremen",
           "pick": "O25",
           "market": "OU25",
-          "odds": 1.48,
-          "prob": 0.6595,
-          "model_prob": 0.6881,
-          "market_prob": 0.6309,
+          "odds": 1.52,
+          "prob": 0.6165,
+          "model_prob": 0.6158,
+          "market_prob": 0.6171,
           "xg": [
-            1.56,
-            1.98
+            1.99,
+            1.19
           ],
           "basis": "modello+mercato",
           "eligible": false
@@ -61,7 +61,7 @@
       "matches": 35,
       "tier": "proposta",
       "total_odds": 1.952,
-      "prob": 0.513,
+      "prob": 0.5128,
       "legs": [
         {
           "match_id": "D1|2026-10-25|Freiburg|Bayern Munich",
@@ -72,8 +72,8 @@
           "pick": "O25",
           "market": "OU25",
           "odds": 1.22,
-          "prob": 0.7627,
-          "model_prob": 0.7586,
+          "prob": 0.7626,
+          "model_prob": 0.7585,
           "market_prob": 0.7667,
           "xg": [
             1.39,
@@ -91,8 +91,8 @@
           "pick": "U25",
           "market": "OU25",
           "odds": 1.6,
-          "prob": 0.6726,
-          "model_prob": 0.7618,
+          "prob": 0.6725,
+          "model_prob": 0.7617,
           "market_prob": 0.5833,
           "xg": [
             1.04,
@@ -120,7 +120,7 @@
           "market": "OU25",
           "odds": 1.47,
           "prob": 0.6652,
-          "model_prob": 0.698,
+          "model_prob": 0.6979,
           "market_prob": 0.6325,
           "xg": [
             1.99,
@@ -161,8 +161,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.6,
-      "prob": 0.6726,
-      "model_prob": 0.7618,
+      "prob": 0.6725,
+      "model_prob": 0.7617,
       "market_prob": 0.5833,
       "xg": [
         1.04,
@@ -181,7 +181,7 @@
       "market": "OU25",
       "odds": 1.56,
       "prob": 0.6558,
-      "model_prob": 0.7137,
+      "model_prob": 0.7136,
       "market_prob": 0.5979,
       "xg": [
         2.22,
@@ -200,7 +200,7 @@
       "market": "OU25",
       "odds": 1.62,
       "prob": 0.6419,
-      "model_prob": 0.7102,
+      "model_prob": 0.71,
       "market_prob": 0.5737,
       "xg": [
         1.93,
@@ -218,8 +218,8 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.59,
-      "prob": 0.6361,
-      "model_prob": 0.6857,
+      "prob": 0.636,
+      "model_prob": 0.6855,
       "market_prob": 0.5865,
       "xg": [
         2.28,
@@ -237,8 +237,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.69,
-      "prob": 0.5976,
-      "model_prob": 0.6459,
+      "prob": 0.5975,
+      "model_prob": 0.6457,
       "market_prob": 0.5493,
       "xg": [
         1.26,
@@ -275,8 +275,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.22,
-      "prob": 0.7627,
-      "model_prob": 0.7586,
+      "prob": 0.7626,
+      "model_prob": 0.7585,
       "market_prob": 0.7667,
       "xg": [
         1.39,
@@ -333,7 +333,7 @@
       "market": "1X2",
       "odds": 1.3,
       "prob": 0.7457,
-      "model_prob": 0.7809,
+      "model_prob": 0.7808,
       "market_prob": 0.7106,
       "xg": [
         2.57,
@@ -352,7 +352,7 @@
       "market": "OU25",
       "odds": 1.26,
       "prob": 0.745,
-      "model_prob": 0.7477,
+      "model_prob": 0.7476,
       "market_prob": 0.7423,
       "xg": [
         2.38,
@@ -371,7 +371,7 @@
       "market": "1X2",
       "odds": 1.34,
       "prob": 0.7228,
-      "model_prob": 0.7446,
+      "model_prob": 0.7445,
       "market_prob": 0.7011,
       "xg": [
         2.8,
@@ -409,7 +409,7 @@
       "market": "OU25",
       "odds": 1.32,
       "prob": 0.7068,
-      "model_prob": 0.705,
+      "model_prob": 0.7049,
       "market_prob": 0.7086,
       "xg": [
         2.6,
@@ -447,7 +447,7 @@
       "market": "1X2",
       "odds": 1.33,
       "prob": 0.6981,
-      "model_prob": 0.7016,
+      "model_prob": 0.7015,
       "market_prob": 0.6947,
       "xg": [
         2.6,
@@ -465,8 +465,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.4,
-      "prob": 0.6975,
-      "model_prob": 0.7283,
+      "prob": 0.6974,
+      "model_prob": 0.7282,
       "market_prob": 0.6667,
       "xg": [
         2.8,
@@ -485,7 +485,7 @@
       "market": "OU25",
       "odds": 1.33,
       "prob": 0.6967,
-      "model_prob": 0.6884,
+      "model_prob": 0.6883,
       "market_prob": 0.7051,
       "xg": [
         2.57,
@@ -504,7 +504,7 @@
       "market": "1X2",
       "odds": 1.26,
       "prob": 0.693,
-      "model_prob": 0.637,
+      "model_prob": 0.6369,
       "market_prob": 0.7491,
       "xg": [
         2.08,
@@ -523,7 +523,7 @@
       "market": "OU25",
       "odds": 1.34,
       "prob": 0.6835,
-      "model_prob": 0.6695,
+      "model_prob": 0.6694,
       "market_prob": 0.6975,
       "xg": [
         1.17,
@@ -542,7 +542,7 @@
       "market": "1X2",
       "odds": 1.45,
       "prob": 0.678,
-      "model_prob": 0.7108,
+      "model_prob": 0.7107,
       "market_prob": 0.6453,
       "xg": [
         2.57,
@@ -561,7 +561,7 @@
       "market": "OU25",
       "odds": 1.41,
       "prob": 0.6672,
-      "model_prob": 0.675,
+      "model_prob": 0.6749,
       "market_prob": 0.6594,
       "xg": [
         1.89,
@@ -580,7 +580,7 @@
       "market": "OU25",
       "odds": 1.47,
       "prob": 0.6652,
-      "model_prob": 0.698,
+      "model_prob": 0.6979,
       "market_prob": 0.6325,
       "xg": [
         1.99,
@@ -636,8 +636,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 1.36,
-      "prob": 0.6581,
-      "model_prob": 0.6268,
+      "prob": 0.658,
+      "model_prob": 0.6267,
       "market_prob": 0.6894,
       "xg": [
         1.39,
@@ -655,11 +655,11 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.45,
-      "prob": 0.6547,
-      "model_prob": 0.6692,
+      "prob": 0.6546,
+      "model_prob": 0.669,
       "market_prob": 0.6402,
       "xg": [
-        2.3,
+        2.29,
         1.15
       ],
       "basis": "modello+mercato",
@@ -732,7 +732,7 @@
       "market": "1X2",
       "odds": 1.43,
       "prob": 0.6276,
-      "model_prob": 0.6161,
+      "model_prob": 0.616,
       "market_prob": 0.6391,
       "xg": [
         1.86,
@@ -770,7 +770,7 @@
       "market": "OU25",
       "odds": 1.5,
       "prob": 0.6256,
-      "model_prob": 0.6262,
+      "model_prob": 0.6261,
       "market_prob": 0.625,
       "xg": [
         2.09,
@@ -826,8 +826,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 1.48,
-      "prob": 0.6211,
-      "model_prob": 0.6162,
+      "prob": 0.621,
+      "model_prob": 0.6161,
       "market_prob": 0.6259,
       "xg": [
         1.17,
@@ -865,7 +865,7 @@
       "market": "1X2",
       "odds": 1.49,
       "prob": 0.6171,
-      "model_prob": 0.6021,
+      "model_prob": 0.602,
       "market_prob": 0.6322,
       "xg": [
         1.98,
@@ -922,7 +922,7 @@
       "market": "1X2",
       "odds": 1.55,
       "prob": 0.6158,
-      "model_prob": 0.6286,
+      "model_prob": 0.6285,
       "market_prob": 0.603,
       "xg": [
         2.03,
@@ -941,7 +941,7 @@
       "market": "1X2",
       "odds": 1.41,
       "prob": 0.6122,
-      "model_prob": 0.561,
+      "model_prob": 0.5609,
       "market_prob": 0.6635,
       "xg": [
         2.38,
@@ -959,11 +959,11 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.8,
-      "prob": 0.6101,
-      "model_prob": 0.7041,
+      "prob": 0.61,
+      "model_prob": 0.704,
       "market_prob": 0.5161,
       "xg": [
-        1.8,
+        1.79,
         1.84
       ],
       "basis": "modello+mercato",
@@ -979,7 +979,7 @@
       "market": "OU25",
       "odds": 1.43,
       "prob": 0.6098,
-      "model_prob": 0.5651,
+      "model_prob": 0.565,
       "market_prob": 0.6546,
       "xg": [
         1.98,
@@ -1017,7 +1017,7 @@
       "market": "OU25",
       "odds": 1.63,
       "prob": 0.6066,
-      "model_prob": 0.6377,
+      "model_prob": 0.6376,
       "market_prob": 0.5755,
       "xg": [
         1.66,
@@ -1055,7 +1055,7 @@
       "market": "OU25",
       "odds": 1.59,
       "prob": 0.5986,
-      "model_prob": 0.6103,
+      "model_prob": 0.6102,
       "market_prob": 0.587,
       "xg": [
         2.28,
@@ -1098,25 +1098,6 @@
       "xg": [
         1.83,
         1.2
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "E0|2026-10-24|Aston Villa|Man City",
-      "league": "E0",
-      "kickoff": "2026-10-24T11:30:00Z",
-      "home": "Aston Villa",
-      "away": "Man City",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.5,
-      "prob": 0.596,
-      "model_prob": 0.568,
-      "market_prob": 0.6241,
-      "xg": [
-        1.18,
-        1.78
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1169,7 +1150,7 @@
       "market": "OU25",
       "odds": 1.81,
       "prob": 0.5925,
-      "model_prob": 0.6703,
+      "model_prob": 0.6702,
       "market_prob": 0.5147,
       "xg": [
         1.38,
@@ -1188,7 +1169,7 @@
       "market": "OU25",
       "odds": 1.67,
       "prob": 0.5918,
-      "model_prob": 0.6243,
+      "model_prob": 0.6242,
       "market_prob": 0.5594,
       "xg": [
         1.83,
@@ -1217,25 +1198,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-25|Lecce|Juventus",
-      "league": "I1",
-      "kickoff": "2026-10-25T17:00:00Z",
-      "home": "Lecce",
-      "away": "Juventus",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.43,
-      "prob": 0.5899,
-      "model_prob": 0.5247,
-      "market_prob": 0.655,
-      "xg": [
-        0.82,
-        1.5
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "N1|2026-10-25|AZ Alkmaar|Twente",
       "league": "N1",
       "kickoff": "2026-10-25T19:00:00Z",
@@ -1250,6 +1212,25 @@
       "xg": [
         1.44,
         1.35
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-25|Lecce|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-25T17:00:00Z",
+      "home": "Lecce",
+      "away": "Juventus",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 1.43,
+      "prob": 0.5898,
+      "model_prob": 0.5247,
+      "market_prob": 0.655,
+      "xg": [
+        0.82,
+        1.5
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1397,7 +1378,7 @@
       "market": "OU25",
       "odds": 1.62,
       "prob": 0.5728,
-      "model_prob": 0.5686,
+      "model_prob": 0.5687,
       "market_prob": 0.577,
       "xg": [
         1.75,
@@ -1415,8 +1396,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.75,
-      "prob": 0.5705,
-      "model_prob": 0.6114,
+      "prob": 0.5704,
+      "model_prob": 0.6113,
       "market_prob": 0.5296,
       "xg": [
         1.18,
@@ -1454,7 +1435,7 @@
       "market": "OU25",
       "odds": 1.7,
       "prob": 0.5687,
-      "model_prob": 0.5884,
+      "model_prob": 0.5883,
       "market_prob": 0.5491,
       "xg": [
         1.08,
@@ -1472,8 +1453,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.92,
-      "prob": 0.5638,
-      "model_prob": 0.6395,
+      "prob": 0.5637,
+      "model_prob": 0.6394,
       "market_prob": 0.488,
       "xg": [
         1.5,
@@ -1511,7 +1492,7 @@
       "market": "OU25",
       "odds": 1.91,
       "prob": 0.5578,
-      "model_prob": 0.625,
+      "model_prob": 0.6249,
       "market_prob": 0.4907,
       "xg": [
         0.97,
@@ -1540,25 +1521,6 @@
       "eligible": false
     },
     {
-      "match_id": "F1|2026-10-25|Angers|Lorient",
-      "league": "F1",
-      "kickoff": "2026-10-25T16:15:00Z",
-      "home": "Angers",
-      "away": "Lorient",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.77,
-      "prob": 0.5547,
-      "model_prob": 0.5826,
-      "market_prob": 0.5267,
-      "xg": [
-        0.99,
-        1.37
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "SP1|2026-10-25|Sociedad|Levante",
       "league": "SP1",
       "kickoff": "2026-10-25T17:30:00Z",
@@ -1568,11 +1530,30 @@
       "market": "1X2",
       "odds": 1.64,
       "prob": 0.5547,
-      "model_prob": 0.5374,
+      "model_prob": 0.5373,
       "market_prob": 0.5721,
       "xg": [
         2.22,
         1.48
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-25|Angers|Lorient",
+      "league": "F1",
+      "kickoff": "2026-10-25T16:15:00Z",
+      "home": "Angers",
+      "away": "Lorient",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.77,
+      "prob": 0.5546,
+      "model_prob": 0.5825,
+      "market_prob": 0.5267,
+      "xg": [
+        0.99,
+        1.37
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1616,25 +1597,6 @@
       "eligible": false
     },
     {
-      "match_id": "E0|2026-10-24|Aston Villa|Man City",
-      "league": "E0",
-      "kickoff": "2026-10-24T11:30:00Z",
-      "home": "Aston Villa",
-      "away": "Man City",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.62,
-      "prob": 0.5426,
-      "model_prob": 0.5048,
-      "market_prob": 0.5805,
-      "xg": [
-        1.18,
-        1.78
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "B1|2026-10-25|Gent|Anderlecht",
       "league": "B1",
       "kickoff": "2026-10-25T17:30:00Z",
@@ -1654,25 +1616,6 @@
       "eligible": false
     },
     {
-      "match_id": "B1|2026-10-24|Westerlo|Beveren",
-      "league": "B1",
-      "kickoff": "2026-10-24T18:45:00Z",
-      "home": "Westerlo",
-      "away": "Beveren",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.05,
-      "prob": 0.5371,
-      "model_prob": 0.6234,
-      "market_prob": 0.4508,
-      "xg": [
-        2.3,
-        1.15
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I1|2026-10-25|Lecce|Juventus",
       "league": "I1",
       "kickoff": "2026-10-25T17:00:00Z",
@@ -1682,11 +1625,30 @@
       "market": "OU25",
       "odds": 1.93,
       "prob": 0.5371,
-      "model_prob": 0.5902,
+      "model_prob": 0.5901,
       "market_prob": 0.484,
       "xg": [
         0.82,
         1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "B1|2026-10-24|Westerlo|Beveren",
+      "league": "B1",
+      "kickoff": "2026-10-24T18:45:00Z",
+      "home": "Westerlo",
+      "away": "Beveren",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.05,
+      "prob": 0.537,
+      "model_prob": 0.6232,
+      "market_prob": 0.4508,
+      "xg": [
+        2.29,
+        1.15
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1720,7 +1682,7 @@
       "market": "OU25",
       "odds": 2.27,
       "prob": 0.5339,
-      "model_prob": 0.6575,
+      "model_prob": 0.6574,
       "market_prob": 0.4104,
       "xg": [
         0.91,
@@ -1739,30 +1701,11 @@
       "market": "OU25",
       "odds": 1.57,
       "prob": 0.5329,
-      "model_prob": 0.4725,
+      "model_prob": 0.4726,
       "market_prob": 0.5933,
       "xg": [
         1.56,
         1.01
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-24|Eyupspor|Kasimpasa",
-      "league": "T1",
-      "kickoff": "2026-10-24T10:30:00Z",
-      "home": "Eyupspor",
-      "away": "Kasimpasa",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.8,
-      "prob": 0.5327,
-      "model_prob": 0.5479,
-      "market_prob": 0.5174,
-      "xg": [
-        1.05,
-        1.44
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -1795,8 +1738,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 1.66,
-      "prob": 0.5304,
-      "model_prob": 0.4965,
+      "prob": 0.5303,
+      "model_prob": 0.4964,
       "market_prob": 0.5643,
       "xg": [
         1.06,
@@ -1814,7 +1757,7 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.61,
-      "prob": 0.5296,
+      "prob": 0.5297,
       "model_prob": 0.4819,
       "market_prob": 0.5774,
       "xg": [
@@ -1834,7 +1777,7 @@
       "market": "OU25",
       "odds": 1.83,
       "prob": 0.5256,
-      "model_prob": 0.5406,
+      "model_prob": 0.5405,
       "market_prob": 0.5107,
       "xg": [
         1.48,
@@ -1871,8 +1814,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.55,
-      "prob": 0.5221,
-      "model_prob": 0.4407,
+      "prob": 0.5222,
+      "model_prob": 0.4409,
       "market_prob": 0.6036,
       "xg": [
         1.43,
@@ -1890,31 +1833,12 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.97,
-      "prob": 0.5186,
-      "model_prob": 0.5668,
+      "prob": 0.5185,
+      "model_prob": 0.5666,
       "market_prob": 0.4704,
       "xg": [
         1.24,
         1.17
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-10-24|Eyupspor|Kasimpasa",
-      "league": "T1",
-      "kickoff": "2026-10-24T10:30:00Z",
-      "home": "Eyupspor",
-      "away": "Kasimpasa",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.57,
-      "prob": 0.5181,
-      "model_prob": 0.4501,
-      "market_prob": 0.5861,
-      "xg": [
-        1.05,
-        1.44
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2023,8 +1947,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.31,
-      "prob": 0.5119,
-      "model_prob": 0.6191,
+      "prob": 0.5117,
+      "model_prob": 0.6188,
       "market_prob": 0.4046,
       "xg": [
         1.2,
@@ -2067,25 +1991,6 @@
       "xg": [
         2.18,
         1.72
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-24|Vallecano|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-24T12:00:00Z",
-      "home": "Vallecano",
-      "away": "Elche",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.82,
-      "prob": 0.5092,
-      "model_prob": 0.5063,
-      "market_prob": 0.5121,
-      "xg": [
-        1.6,
-        1.1
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2148,25 +2053,6 @@
       "eligible": false
     },
     {
-      "match_id": "SP1|2026-10-24|Vallecano|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-24T12:00:00Z",
-      "home": "Vallecano",
-      "away": "Elche",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.77,
-      "prob": 0.5067,
-      "model_prob": 0.482,
-      "market_prob": 0.5314,
-      "xg": [
-        1.6,
-        1.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "E0|2026-10-25|Hull|Brentford",
       "league": "E0",
       "kickoff": "2026-10-25T14:00:00Z",
@@ -2176,7 +2062,7 @@
       "market": "OU25",
       "odds": 1.63,
       "prob": 0.5058,
-      "model_prob": 0.4382,
+      "model_prob": 0.4383,
       "market_prob": 0.5733,
       "xg": [
         1.26,
@@ -2252,7 +2138,7 @@
       "market": "OU25",
       "odds": 2.19,
       "prob": 0.4942,
-      "model_prob": 0.5618,
+      "model_prob": 0.5617,
       "market_prob": 0.4267,
       "xg": [
         1.26,
@@ -2289,8 +2175,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.01,
-      "prob": 0.4931,
-      "model_prob": 0.528,
+      "prob": 0.493,
+      "model_prob": 0.5278,
       "market_prob": 0.4581,
       "xg": [
         1.38,
@@ -2333,25 +2219,6 @@
       "xg": [
         1.06,
         1.63
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-24|Vallecano|Elche",
-      "league": "SP1",
-      "kickoff": "2026-10-24T12:00:00Z",
-      "home": "Vallecano",
-      "away": "Elche",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.91,
-      "prob": 0.4908,
-      "model_prob": 0.4937,
-      "market_prob": 0.4879,
-      "xg": [
-        1.6,
-        1.1
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -2403,8 +2270,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.57,
-      "prob": 0.4881,
-      "model_prob": 0.3809,
+      "prob": 0.4883,
+      "model_prob": 0.3812,
       "market_prob": 0.5954,
       "xg": [
         1.2,
@@ -2498,8 +2365,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.75,
-      "prob": 0.4814,
-      "model_prob": 0.4332,
+      "prob": 0.4815,
+      "model_prob": 0.4334,
       "market_prob": 0.5296,
       "xg": [
         1.24,
@@ -2517,8 +2384,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.36,
-      "prob": 0.4779,
-      "model_prob": 0.5593,
+      "prob": 0.4778,
+      "model_prob": 0.5591,
       "market_prob": 0.3964,
       "xg": [
         1.43,
@@ -2537,7 +2404,7 @@
       "market": "1X2",
       "odds": 1.77,
       "prob": 0.4762,
-      "model_prob": 0.4306,
+      "model_prob": 0.4305,
       "market_prob": 0.5219,
       "xg": [
         1.15,
@@ -2594,7 +2461,7 @@
       "market": "OU25",
       "odds": 1.91,
       "prob": 0.4744,
-      "model_prob": 0.4594,
+      "model_prob": 0.4595,
       "market_prob": 0.4893,
       "xg": [
         1.48,
@@ -2612,7 +2479,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.2,
-      "prob": 0.4704,
+      "prob": 0.4703,
       "model_prob": 0.5181,
       "market_prob": 0.4226,
       "xg": [
@@ -2661,25 +2528,6 @@
       "eligible": false
     },
     {
-      "match_id": "T1|2026-10-24|Eyupspor|Kasimpasa",
-      "league": "T1",
-      "kickoff": "2026-10-24T10:30:00Z",
-      "home": "Eyupspor",
-      "away": "Kasimpasa",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.93,
-      "prob": 0.4673,
-      "model_prob": 0.4521,
-      "market_prob": 0.4826,
-      "xg": [
-        1.05,
-        1.44
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "B1|2026-10-25|Genk|Standard",
       "league": "B1",
       "kickoff": "2026-10-25T12:30:00Z",
@@ -2689,7 +2537,7 @@
       "market": "OU25",
       "odds": 2.29,
       "prob": 0.4671,
-      "model_prob": 0.5275,
+      "model_prob": 0.5274,
       "market_prob": 0.4067,
       "xg": [
         1.56,
@@ -2708,7 +2556,7 @@
       "market": "OU25",
       "odds": 1.58,
       "prob": 0.4661,
-      "model_prob": 0.3425,
+      "model_prob": 0.3426,
       "market_prob": 0.5896,
       "xg": [
         0.91,
@@ -2765,7 +2613,7 @@
       "market": "OU25",
       "odds": 1.81,
       "prob": 0.4629,
-      "model_prob": 0.4098,
+      "model_prob": 0.4099,
       "market_prob": 0.516,
       "xg": [
         0.82,
@@ -2802,7 +2650,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.14,
-      "prob": 0.4599,
+      "prob": 0.4598,
       "model_prob": 0.4915,
       "market_prob": 0.4282,
       "xg": [
@@ -2822,7 +2670,7 @@
       "market": "1X2",
       "odds": 2.02,
       "prob": 0.4595,
-      "model_prob": 0.459,
+      "model_prob": 0.4589,
       "market_prob": 0.4601,
       "xg": [
         1.3,
@@ -2860,7 +2708,7 @@
       "market": "1X2",
       "odds": 2.08,
       "prob": 0.4571,
-      "model_prob": 0.4636,
+      "model_prob": 0.4635,
       "market_prob": 0.4507,
       "xg": [
         1.48,
@@ -2878,7 +2726,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.13,
-      "prob": 0.4456,
+      "prob": 0.4455,
       "model_prob": 0.4598,
       "market_prob": 0.4313,
       "xg": [
@@ -2897,8 +2745,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.97,
-      "prob": 0.4453,
-      "model_prob": 0.4174,
+      "prob": 0.4454,
+      "model_prob": 0.4175,
       "market_prob": 0.4733,
       "xg": [
         0.99,
@@ -2955,7 +2803,7 @@
       "market": "1X2",
       "odds": 2.39,
       "prob": 0.4431,
-      "model_prob": 0.4932,
+      "model_prob": 0.4931,
       "market_prob": 0.3931,
       "xg": [
         1.75,
@@ -2974,7 +2822,7 @@
       "market": "OU25",
       "odds": 1.84,
       "prob": 0.4422,
-      "model_prob": 0.375,
+      "model_prob": 0.3751,
       "market_prob": 0.5093,
       "xg": [
         0.97,
@@ -3011,8 +2859,8 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.82,
-      "prob": 0.4391,
-      "model_prob": 0.3737,
+      "prob": 0.4392,
+      "model_prob": 0.3738,
       "market_prob": 0.5046,
       "xg": [
         1.18,
@@ -3031,7 +2879,7 @@
       "market": "1X2",
       "odds": 2.22,
       "prob": 0.4386,
-      "model_prob": 0.4549,
+      "model_prob": 0.455,
       "market_prob": 0.4222,
       "xg": [
         1.43,
@@ -3049,8 +2897,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.83,
-      "prob": 0.4362,
-      "model_prob": 0.3605,
+      "prob": 0.4363,
+      "model_prob": 0.3606,
       "market_prob": 0.512,
       "xg": [
         1.5,
@@ -3069,7 +2917,7 @@
       "market": "1X2",
       "odds": 2.19,
       "prob": 0.4335,
-      "model_prob": 0.4464,
+      "model_prob": 0.4463,
       "market_prob": 0.4206,
       "xg": [
         1.26,
@@ -3088,7 +2936,7 @@
       "market": "OU25",
       "odds": 2.07,
       "prob": 0.4313,
-      "model_prob": 0.4116,
+      "model_prob": 0.4117,
       "market_prob": 0.4509,
       "xg": [
         1.08,
@@ -3107,7 +2955,7 @@
       "market": "1X2",
       "odds": 2.27,
       "prob": 0.4303,
-      "model_prob": 0.4535,
+      "model_prob": 0.4534,
       "market_prob": 0.4072,
       "xg": [
         1.16,
@@ -3125,8 +2973,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.97,
-      "prob": 0.4295,
-      "model_prob": 0.3886,
+      "prob": 0.4296,
+      "model_prob": 0.3887,
       "market_prob": 0.4704,
       "xg": [
         1.18,
@@ -3144,8 +2992,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.28,
-      "prob": 0.4291,
-      "model_prob": 0.4475,
+      "prob": 0.429,
+      "model_prob": 0.4474,
       "market_prob": 0.4107,
       "xg": [
         1.74,
@@ -3163,7 +3011,7 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.15,
-      "prob": 0.4289,
+      "prob": 0.4288,
       "model_prob": 0.4196,
       "market_prob": 0.4381,
       "xg": [
@@ -3202,7 +3050,7 @@
       "market": "OU25",
       "odds": 2.21,
       "prob": 0.4272,
-      "model_prob": 0.4314,
+      "model_prob": 0.4313,
       "market_prob": 0.423,
       "xg": [
         1.75,
@@ -3221,7 +3069,7 @@
       "market": "1X2",
       "odds": 2.12,
       "prob": 0.4271,
-      "model_prob": 0.4208,
+      "model_prob": 0.4209,
       "market_prob": 0.4333,
       "xg": [
         1.93,
@@ -3239,7 +3087,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.04,
-      "prob": 0.4262,
+      "prob": 0.4263,
       "model_prob": 0.3947,
       "market_prob": 0.4578,
       "xg": [
@@ -3392,7 +3240,7 @@
       "market": "1X2",
       "odds": 2.33,
       "prob": 0.4146,
-      "model_prob": 0.4354,
+      "model_prob": 0.4352,
       "market_prob": 0.3939,
       "xg": [
         1.19,
@@ -3525,7 +3373,7 @@
       "market": "OU25",
       "odds": 2.12,
       "prob": 0.4082,
-      "model_prob": 0.3757,
+      "model_prob": 0.3758,
       "market_prob": 0.4406,
       "xg": [
         1.83,
@@ -3544,7 +3392,7 @@
       "market": "OU25",
       "odds": 1.92,
       "prob": 0.4075,
-      "model_prob": 0.3297,
+      "model_prob": 0.3298,
       "market_prob": 0.4853,
       "xg": [
         1.38,
@@ -3582,7 +3430,7 @@
       "market": "1X2",
       "odds": 2.16,
       "prob": 0.4067,
-      "model_prob": 0.3842,
+      "model_prob": 0.3843,
       "market_prob": 0.4292,
       "xg": [
         1.44,
@@ -3611,25 +3459,6 @@
       "eligible": false
     },
     {
-      "match_id": "E0|2026-10-24|Aston Villa|Man City",
-      "league": "E0",
-      "kickoff": "2026-10-24T11:30:00Z",
-      "home": "Aston Villa",
-      "away": "Man City",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.49,
-      "prob": 0.404,
-      "model_prob": 0.432,
-      "market_prob": 0.3759,
-      "xg": [
-        1.18,
-        1.78
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "I2|2026-10-24|Virtus Entella|Mantova",
       "league": "I2",
       "kickoff": "2026-10-24T13:00:00Z",
@@ -3639,7 +3468,7 @@
       "market": "1X2",
       "odds": 2.22,
       "prob": 0.4038,
-      "model_prob": 0.3942,
+      "model_prob": 0.3943,
       "market_prob": 0.4134,
       "xg": [
         1.36,
@@ -3657,8 +3486,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 2.06,
-      "prob": 0.4024,
-      "model_prob": 0.3541,
+      "prob": 0.4025,
+      "model_prob": 0.3543,
       "market_prob": 0.4507,
       "xg": [
         1.26,
@@ -3696,7 +3525,7 @@
       "market": "OU25",
       "odds": 2.26,
       "prob": 0.4014,
-      "model_prob": 0.3897,
+      "model_prob": 0.3898,
       "market_prob": 0.413,
       "xg": [
         2.28,
@@ -3756,7 +3585,7 @@
       "model_prob": 0.3742,
       "market_prob": 0.4148,
       "xg": [
-        1.8,
+        1.79,
         1.84
       ],
       "basis": "modello+mercato",
@@ -3772,7 +3601,7 @@
       "market": "OU25",
       "odds": 2.21,
       "prob": 0.3934,
-      "model_prob": 0.3623,
+      "model_prob": 0.3624,
       "market_prob": 0.4245,
       "xg": [
         1.66,
@@ -3790,7 +3619,7 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.23,
-      "prob": 0.3932,
+      "prob": 0.3931,
       "model_prob": 0.3658,
       "market_prob": 0.4205,
       "xg": [
@@ -3809,7 +3638,7 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.51,
-      "prob": 0.3925,
+      "prob": 0.3924,
       "model_prob": 0.4097,
       "market_prob": 0.3752,
       "xg": [
@@ -3866,7 +3695,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.37,
-      "prob": 0.3909,
+      "prob": 0.391,
       "model_prob": 0.3846,
       "market_prob": 0.3973,
       "xg": [
@@ -3886,7 +3715,7 @@
       "market": "OU25",
       "odds": 2.71,
       "prob": 0.3902,
-      "model_prob": 0.4349,
+      "model_prob": 0.435,
       "market_prob": 0.3454,
       "xg": [
         1.98,
@@ -3904,11 +3733,11 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.92,
-      "prob": 0.3899,
-      "model_prob": 0.2959,
+      "prob": 0.39,
+      "model_prob": 0.296,
       "market_prob": 0.4839,
       "xg": [
-        1.8,
+        1.79,
         1.84
       ],
       "basis": "modello+mercato",
@@ -3943,7 +3772,7 @@
       "market": "1X2",
       "odds": 1.89,
       "prob": 0.3831,
-      "model_prob": 0.2767,
+      "model_prob": 0.2768,
       "market_prob": 0.4895,
       "xg": [
         0.91,
@@ -4038,7 +3867,7 @@
       "market": "OU25",
       "odds": 2.5,
       "prob": 0.3744,
-      "model_prob": 0.3738,
+      "model_prob": 0.3739,
       "market_prob": 0.375,
       "xg": [
         2.09,
@@ -4095,7 +3924,7 @@
       "market": "1X2",
       "odds": 2.46,
       "prob": 0.3704,
-      "model_prob": 0.3679,
+      "model_prob": 0.368,
       "market_prob": 0.3729,
       "xg": [
         1.24,
@@ -4152,7 +3981,7 @@
       "market": "OU25",
       "odds": 2.18,
       "prob": 0.3581,
-      "model_prob": 0.2898,
+      "model_prob": 0.29,
       "market_prob": 0.4263,
       "xg": [
         1.93,
@@ -4171,7 +4000,7 @@
       "market": "1X2",
       "odds": 2.76,
       "prob": 0.3548,
-      "model_prob": 0.3685,
+      "model_prob": 0.3684,
       "market_prob": 0.3412,
       "xg": [
         1.66,
@@ -4190,10 +4019,10 @@
       "market": "1X2",
       "odds": 2.95,
       "prob": 0.3523,
-      "model_prob": 0.3939,
+      "model_prob": 0.3938,
       "market_prob": 0.3107,
       "xg": [
-        1.8,
+        1.79,
         1.84
       ],
       "basis": "modello+mercato",
@@ -4265,11 +4094,11 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.58,
-      "prob": 0.3453,
-      "model_prob": 0.3308,
+      "prob": 0.3454,
+      "model_prob": 0.331,
       "market_prob": 0.3598,
       "xg": [
-        2.3,
+        2.29,
         1.15
       ],
       "basis": "modello+mercato",
@@ -4285,7 +4114,7 @@
       "market": "OU25",
       "odds": 2.32,
       "prob": 0.3442,
-      "model_prob": 0.2863,
+      "model_prob": 0.2864,
       "market_prob": 0.4021,
       "xg": [
         2.22,
@@ -4323,7 +4152,7 @@
       "market": "1X2",
       "odds": 2.64,
       "prob": 0.3415,
-      "model_prob": 0.3356,
+      "model_prob": 0.3355,
       "market_prob": 0.3475,
       "xg": [
         1.24,
@@ -4380,7 +4209,7 @@
       "market": "1X2",
       "odds": 2.47,
       "prob": 0.3377,
-      "model_prob": 0.2994,
+      "model_prob": 0.2995,
       "market_prob": 0.376,
       "xg": [
         1.56,
@@ -4399,7 +4228,7 @@
       "market": "1X2",
       "odds": 2.71,
       "prob": 0.337,
-      "model_prob": 0.3285,
+      "model_prob": 0.3286,
       "market_prob": 0.3455,
       "xg": [
         1.74,
@@ -4437,7 +4266,7 @@
       "market": "OU25",
       "odds": 2.53,
       "prob": 0.3348,
-      "model_prob": 0.302,
+      "model_prob": 0.3021,
       "market_prob": 0.3675,
       "xg": [
         1.99,
@@ -4475,7 +4304,7 @@
       "market": "OU25",
       "odds": 2.73,
       "prob": 0.3328,
-      "model_prob": 0.325,
+      "model_prob": 0.3251,
       "market_prob": 0.3406,
       "xg": [
         1.89,
@@ -4513,7 +4342,7 @@
       "market": "1X2",
       "odds": 2.99,
       "prob": 0.3283,
-      "model_prob": 0.3494,
+      "model_prob": 0.3493,
       "market_prob": 0.3072,
       "xg": [
         1.93,
@@ -4531,8 +4360,8 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 2.24,
-      "prob": 0.3274,
-      "model_prob": 0.2382,
+      "prob": 0.3275,
+      "model_prob": 0.2383,
       "market_prob": 0.4167,
       "xg": [
         1.04,
@@ -4551,7 +4380,7 @@
       "market": "1X2",
       "odds": 3.04,
       "prob": 0.3267,
-      "model_prob": 0.3448,
+      "model_prob": 0.3449,
       "market_prob": 0.3085,
       "xg": [
         1.24,
@@ -4570,7 +4399,7 @@
       "market": "OU25",
       "odds": 3.09,
       "prob": 0.3165,
-      "model_prob": 0.3305,
+      "model_prob": 0.3306,
       "market_prob": 0.3025,
       "xg": [
         1.17,
@@ -4608,7 +4437,7 @@
       "market": "1X2",
       "odds": 3.07,
       "prob": 0.3157,
-      "model_prob": 0.3245,
+      "model_prob": 0.3246,
       "market_prob": 0.3069,
       "xg": [
         1.08,
@@ -4627,7 +4456,7 @@
       "market": "1X2",
       "odds": 2.76,
       "prob": 0.3108,
-      "model_prob": 0.2803,
+      "model_prob": 0.2804,
       "market_prob": 0.3412,
       "xg": [
         0.97,
@@ -4664,8 +4493,8 @@
       "pick": "1",
       "market": "1X2",
       "odds": 3.04,
-      "prob": 0.3086,
-      "model_prob": 0.3087,
+      "prob": 0.3087,
+      "model_prob": 0.3088,
       "market_prob": 0.3086,
       "xg": [
         1.08,
@@ -4721,8 +4550,8 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.89,
-      "prob": 0.3041,
-      "model_prob": 0.2907,
+      "prob": 0.3042,
+      "model_prob": 0.2909,
       "market_prob": 0.3175,
       "xg": [
         1.19,
@@ -4741,7 +4570,7 @@
       "market": "OU25",
       "odds": 3.18,
       "prob": 0.3033,
-      "model_prob": 0.3116,
+      "model_prob": 0.3117,
       "market_prob": 0.2949,
       "xg": [
         2.57,
@@ -4759,8 +4588,8 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.8,
-      "prob": 0.3025,
-      "model_prob": 0.2717,
+      "prob": 0.3026,
+      "model_prob": 0.2718,
       "market_prob": 0.3333,
       "xg": [
         2.8,
@@ -4797,7 +4626,7 @@
       "pick": "1",
       "market": "1X2",
       "odds": 3.16,
-      "prob": 0.3007,
+      "prob": 0.3008,
       "model_prob": 0.3034,
       "market_prob": 0.2981,
       "xg": [
@@ -4817,7 +4646,7 @@
       "market": "1X2",
       "odds": 3.81,
       "prob": 0.2991,
-      "model_prob": 0.3523,
+      "model_prob": 0.3522,
       "market_prob": 0.2459,
       "xg": [
         1.04,
@@ -4874,7 +4703,7 @@
       "market": "1X2",
       "odds": 3.32,
       "prob": 0.2968,
-      "model_prob": 0.31,
+      "model_prob": 0.3099,
       "market_prob": 0.2836,
       "xg": [
         0.97,
@@ -4901,14 +4730,185 @@
       ],
       "basis": "modello+mercato",
       "eligible": false
+    },
+    {
+      "match_id": "B1|2026-10-24|RAAL La Louviere|Waregem",
+      "league": "B1",
+      "kickoff": "2026-10-24T18:45:00Z",
+      "home": "RAAL La Louviere",
+      "away": "Waregem",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.91,
+      "prob": 0.2964,
+      "model_prob": 0.2752,
+      "market_prob": 0.3177,
+      "xg": [
+        1.16,
+        1.55
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-25|Rennes|Strasbourg",
+      "league": "F1",
+      "kickoff": "2026-10-25T16:15:00Z",
+      "home": "Rennes",
+      "away": "Strasbourg",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.75,
+      "prob": 0.2957,
+      "model_prob": 0.2525,
+      "market_prob": 0.3389,
+      "xg": [
+        2.18,
+        1.72
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "D1|2026-10-24|FC Koln|Schalke 04",
+      "league": "D1",
+      "kickoff": "2026-10-24T13:30:00Z",
+      "home": "FC Koln",
+      "away": "Schalke 04",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.23,
+      "prob": 0.2943,
+      "model_prob": 0.2987,
+      "market_prob": 0.2899,
+      "xg": [
+        1.2,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-25|Angers|Lorient",
+      "league": "F1",
+      "kickoff": "2026-10-25T16:15:00Z",
+      "home": "Angers",
+      "away": "Lorient",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.86,
+      "prob": 0.2941,
+      "model_prob": 0.2606,
+      "market_prob": 0.3275,
+      "xg": [
+        0.99,
+        1.37
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "B1|2026-10-25|Club Brugge|St Truiden",
+      "league": "B1",
+      "kickoff": "2026-10-25T15:00:00Z",
+      "home": "Club Brugge",
+      "away": "St Truiden",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 3.21,
+      "prob": 0.2932,
+      "model_prob": 0.2951,
+      "market_prob": 0.2914,
+      "xg": [
+        2.6,
+        1.04
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "B1|2026-10-25|Gent|Anderlecht",
+      "league": "B1",
+      "kickoff": "2026-10-25T17:30:00Z",
+      "home": "Gent",
+      "away": "Anderlecht",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.96,
+      "prob": 0.2932,
+      "model_prob": 0.2751,
+      "market_prob": 0.3113,
+      "xg": [
+        1.42,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "F1|2026-10-25|Monaco|Lille",
+      "league": "F1",
+      "kickoff": "2026-10-25T14:00:00Z",
+      "home": "Monaco",
+      "away": "Lille",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.46,
+      "prob": 0.2915,
+      "model_prob": 0.3131,
+      "market_prob": 0.2699,
+      "xg": [
+        1.31,
+        1.14
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "D1|2026-10-25|Hoffenheim|Leverkusen",
+      "league": "D1",
+      "kickoff": "2026-10-25T14:30:00Z",
+      "home": "Hoffenheim",
+      "away": "Leverkusen",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 3.0,
+      "prob": 0.2914,
+      "model_prob": 0.2708,
+      "market_prob": 0.3119,
+      "xg": [
+        1.74,
+        2.04
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-25|Atalanta|Frosinone",
+      "league": "I1",
+      "kickoff": "2026-10-25T14:00:00Z",
+      "home": "Atalanta",
+      "away": "Frosinone",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.75,
+      "prob": 0.29,
+      "model_prob": 0.3305,
+      "market_prob": 0.2495,
+      "xg": [
+        1.56,
+        1.38
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
     }
   ],
-  "n_candidates": 380,
+  "n_candidates": 365,
   "n_eligible": 6,
   "stats": {
     "slips_settled": 3,
     "slips_won": 2,
-    "slips_pending": 1,
+    "slips_pending": 2,
     "win_rate": 0.6666666666666666,
     "legs_won": 5,
     "legs_settled": 6,
@@ -4918,7 +4918,7 @@
       "kind": "won",
       "length": 1
     },
-    "lives": 10
+    "lives": 9
   },
   "equity": 55.15
 }
