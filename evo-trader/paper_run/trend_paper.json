@@ -1,13 +1,13 @@
 {
- "last_bar": "2026-10-24 04:00:00+00:00",
+ "last_bar": "2026-10-24 08:00:00+00:00",
  "sleeves": [
   {
    "instrument": "kraken:BTC/EUR",
-   "cash": 7.077671781985373e-16,
-   "qty": 0.0002692462868644399,
-   "trades": 1,
-   "fees": 0.05,
-   "value": 19.3945
+   "cash": 19.30934584429258,
+   "qty": 0.0,
+   "trades": 2,
+   "fees": 0.09839435048694882,
+   "value": 19.3093
   },
   {
    "instrument": "kraken:ETH/EUR",
