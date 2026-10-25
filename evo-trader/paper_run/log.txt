@@ -320,3 +320,7 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-24T20:10:17Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-24 16:00:00+00:00: valore del bot 181.88 € (capitale iniziale 200.00 €)
+=== 2026-10-25T00:10:38Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+COMPRA 0.00026676542 BTC/EUR per 19.26 € (sopra la media 50g)
+2026-10-24 20:00:00+00:00: valore del bot 181.83 € (capitale iniziale 200.00 €)
