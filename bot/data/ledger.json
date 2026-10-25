@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 45.15,
+  "bankroll": 40.15,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -256,6 +256,55 @@
           "xg": [
             1.04,
             0.64
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "S0006",
+      "created_at": "2026-10-25T12:31:50Z",
+      "stake": 5.0,
+      "total_odds": 1.918,
+      "prob": 0.499,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "D1|2026-10-25|Hoffenheim|Leverkusen",
+          "league": "D1",
+          "kickoff": "2026-10-25T14:30:00Z",
+          "home": "Hoffenheim",
+          "away": "Leverkusen",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.36,
+          "prob": 0.7086,
+          "model_prob": 0.7291,
+          "market_prob": 0.6881,
+          "xg": [
+            1.74,
+            2.04
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "F1|2026-10-25|Rennes|Strasbourg",
+          "league": "F1",
+          "kickoff": "2026-10-25T16:15:00Z",
+          "home": "Rennes",
+          "away": "Strasbourg",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.41,
+          "prob": 0.7042,
+          "model_prob": 0.7474,
+          "market_prob": 0.6611,
+          "xg": [
+            2.18,
+            1.72
           ],
           "basis": "modello+mercato",
           "status": "pending"
