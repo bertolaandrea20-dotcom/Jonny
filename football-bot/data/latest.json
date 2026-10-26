@@ -1,8 +1,8 @@
 {
-  "run_at": "2026-10-25T18:22:45Z",
-  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
+  "run_at": "2026-10-26T14:09:27Z",
+  "decision": "Giocata S0007 proposta del giorno (regole larghe): 2 eventi @ 2.014 (prob. stimata 42%).",
   "sources": {
-    "football-data.co.uk": "ok (7 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (5 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
@@ -10,16 +10,11 @@
   },
   "proposals": [
     {
-      "date": "2026-10-25",
-      "matches": 2,
-      "tier": null
-    },
-    {
       "date": "2026-10-26",
       "matches": 5,
       "tier": "proposta",
       "total_odds": 2.014,
-      "prob": 0.4202,
+      "prob": 0.4201,
       "legs": [
         {
           "match_id": "T1|2026-10-26|Galatasaray|Fenerbahce",
@@ -30,7 +25,7 @@
           "pick": "O25",
           "market": "OU25",
           "odds": 1.47,
-          "prob": 0.6652,
+          "prob": 0.6651,
           "model_prob": 0.6978,
           "market_prob": 0.6325,
           "xg": [
@@ -49,7 +44,7 @@
           "pick": "O25",
           "market": "OU25",
           "odds": 1.37,
-          "prob": 0.6317,
+          "prob": 0.6316,
           "model_prob": 0.5849,
           "market_prob": 0.6784,
           "xg": [
@@ -64,25 +59,6 @@
   ],
   "candidates": [
     {
-      "match_id": "SP1|2026-10-25|Barcelona|Real Madrid",
-      "league": "SP1",
-      "kickoff": "2026-10-25T20:00:00Z",
-      "home": "Barcelona",
-      "away": "Real Madrid",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.16,
-      "prob": 0.761,
-      "model_prob": 0.7172,
-      "market_prob": 0.8047,
-      "xg": [
-        2.39,
-        1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-26|Galatasaray|Fenerbahce",
       "league": "T1",
       "kickoff": "2026-10-26T18:30:00Z",
@@ -91,7 +67,7 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.47,
-      "prob": 0.6652,
+      "prob": 0.6651,
       "model_prob": 0.6978,
       "market_prob": 0.6325,
       "xg": [
@@ -110,7 +86,7 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.37,
-      "prob": 0.6317,
+      "prob": 0.6316,
       "model_prob": 0.5849,
       "market_prob": 0.6784,
       "xg": [
@@ -149,7 +125,7 @@
       "market": "1X2",
       "odds": 1.43,
       "prob": 0.6006,
-      "model_prob": 0.5451,
+      "model_prob": 0.545,
       "market_prob": 0.6562,
       "xg": [
         1.85,
@@ -178,25 +154,6 @@
       "eligible": false
     },
     {
-      "match_id": "SP1|2026-10-25|Barcelona|Real Madrid",
-      "league": "SP1",
-      "kickoff": "2026-10-25T20:00:00Z",
-      "home": "Barcelona",
-      "away": "Real Madrid",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.6,
-      "prob": 0.595,
-      "model_prob": 0.6046,
-      "market_prob": 0.5855,
-      "xg": [
-        2.39,
-        1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-26|Rizespor|Trabzonspor",
       "league": "T1",
       "kickoff": "2026-10-26T16:00:00Z",
@@ -211,44 +168,6 @@
       "xg": [
         1.14,
         1.71
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-25|Udinese|Milan",
-      "league": "I1",
-      "kickoff": "2026-10-25T19:45:00Z",
-      "home": "Udinese",
-      "away": "Milan",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 1.66,
-      "prob": 0.5303,
-      "model_prob": 0.4963,
-      "market_prob": 0.5643,
-      "xg": [
-        1.06,
-        1.63
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-25|Udinese|Milan",
-      "league": "I1",
-      "kickoff": "2026-10-25T19:45:00Z",
-      "home": "Udinese",
-      "away": "Milan",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.83,
-      "prob": 0.5077,
-      "model_prob": 0.5047,
-      "market_prob": 0.5107,
-      "xg": [
-        1.06,
-        1.63
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -282,7 +201,7 @@
       "market": "1X2",
       "odds": 1.92,
       "prob": 0.4969,
-      "model_prob": 0.5063,
+      "model_prob": 0.5062,
       "market_prob": 0.4875,
       "xg": [
         1.73,
@@ -311,25 +230,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-25|Udinese|Milan",
-      "league": "I1",
-      "kickoff": "2026-10-25T19:45:00Z",
-      "home": "Udinese",
-      "away": "Milan",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.91,
-      "prob": 0.4923,
-      "model_prob": 0.4953,
-      "market_prob": 0.4893,
-      "xg": [
-        1.06,
-        1.63
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-26|Rizespor|Trabzonspor",
       "league": "T1",
       "kickoff": "2026-10-26T16:00:00Z",
@@ -338,8 +238,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 1.92,
-      "prob": 0.4885,
-      "model_prob": 0.4979,
+      "prob": 0.4884,
+      "model_prob": 0.4978,
       "market_prob": 0.4791,
       "xg": [
         1.14,
@@ -414,7 +314,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.89,
-      "prob": 0.3683,
+      "prob": 0.3684,
       "model_prob": 0.4151,
       "market_prob": 0.3216,
       "xg": [
@@ -433,7 +333,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.53,
-      "prob": 0.3348,
+      "prob": 0.3349,
       "model_prob": 0.3022,
       "market_prob": 0.3675,
       "xg": [
@@ -490,31 +390,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 3.33,
-      "prob": 0.2608,
-      "model_prob": 0.2454,
+      "prob": 0.2609,
+      "model_prob": 0.2455,
       "market_prob": 0.2762,
       "xg": [
         1.14,
         1.71
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-10-25|Udinese|Milan",
-      "league": "I1",
-      "kickoff": "2026-10-25T19:45:00Z",
-      "home": "Udinese",
-      "away": "Milan",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.76,
-      "prob": 0.2573,
-      "model_prob": 0.2654,
-      "market_prob": 0.2491,
-      "xg": [
-        1.06,
-        1.63
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -534,25 +415,6 @@
       "xg": [
         1.14,
         1.71
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-25|Barcelona|Real Madrid",
-      "league": "SP1",
-      "kickoff": "2026-10-25T20:00:00Z",
-      "home": "Barcelona",
-      "away": "Real Madrid",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 4.78,
-      "prob": 0.239,
-      "model_prob": 0.2828,
-      "market_prob": 0.1953,
-      "xg": [
-        2.39,
-        1.32
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -615,25 +477,6 @@
       "eligible": false
     },
     {
-      "match_id": "SP1|2026-10-25|Barcelona|Real Madrid",
-      "league": "SP1",
-      "kickoff": "2026-10-25T20:00:00Z",
-      "home": "Barcelona",
-      "away": "Real Madrid",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 3.98,
-      "prob": 0.2149,
-      "model_prob": 0.1944,
-      "market_prob": 0.2354,
-      "xg": [
-        2.39,
-        1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-26|Besiktas|Buyuksehyr",
       "league": "T1",
       "kickoff": "2026-10-26T16:00:00Z",
@@ -653,44 +496,6 @@
       "eligible": false
     },
     {
-      "match_id": "I1|2026-10-25|Udinese|Milan",
-      "league": "I1",
-      "kickoff": "2026-10-25T19:45:00Z",
-      "home": "Udinese",
-      "away": "Milan",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 5.02,
-      "prob": 0.2124,
-      "model_prob": 0.2383,
-      "market_prob": 0.1866,
-      "xg": [
-        1.06,
-        1.63
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "SP1|2026-10-25|Barcelona|Real Madrid",
-      "league": "SP1",
-      "kickoff": "2026-10-25T20:00:00Z",
-      "home": "Barcelona",
-      "away": "Real Madrid",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 5.23,
-      "prob": 0.1901,
-      "model_prob": 0.2011,
-      "market_prob": 0.1791,
-      "xg": [
-        2.39,
-        1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
       "match_id": "T1|2026-10-26|Besiktas|Buyuksehyr",
       "league": "T1",
       "kickoff": "2026-10-26T16:00:00Z",
@@ -700,7 +505,7 @@
       "market": "1X2",
       "odds": 6.76,
       "prob": 0.189,
-      "model_prob": 0.2417,
+      "model_prob": 0.2418,
       "market_prob": 0.1362,
       "xg": [
         1.83,
@@ -719,7 +524,7 @@
       "market": "1X2",
       "odds": 6.1,
       "prob": 0.1825,
-      "model_prob": 0.2111,
+      "model_prob": 0.2112,
       "market_prob": 0.1538,
       "xg": [
         1.85,
@@ -729,12 +534,12 @@
       "eligible": false
     }
   ],
-  "n_candidates": 35,
+  "n_candidates": 25,
   "n_eligible": 0,
   "stats": {
     "slips_settled": 3,
     "slips_won": 2,
-    "slips_pending": 3,
+    "slips_pending": 4,
     "win_rate": 0.6666666666666666,
     "legs_won": 5,
     "legs_settled": 6,
@@ -744,7 +549,7 @@
       "kind": "won",
       "length": 1
     },
-    "lives": 8
+    "lives": 7
   },
   "equity": 55.15
 }
