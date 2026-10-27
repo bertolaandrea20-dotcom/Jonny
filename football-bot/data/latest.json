@@ -1,31 +1,2074 @@
 {
-  "run_at": "2026-10-26T20:27:02Z",
-  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
+  "run_at": "2026-10-27T13:08:53Z",
+  "decision": "Giocata S0008 proposta del giorno (regole larghe): 2 eventi @ 2.181 (prob. stimata 45%).",
   "sources": {
-    "football-data.co.uk": "ok (0 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (20 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
     "api-football (assenti)": "API_FOOTBALL_KEY mancante: regola assenti non applicata"
   },
-  "proposals": [],
-  "candidates": [],
-  "n_candidates": 0,
-  "n_eligible": 0,
+  "proposals": [
+    {
+      "date": "2026-10-27",
+      "matches": 10,
+      "tier": "proposta",
+      "total_odds": 2.148,
+      "prob": 0.4212,
+      "legs": [
+        {
+          "match_id": "I1|2026-10-27|Roma|Cagliari",
+          "league": "I1",
+          "kickoff": "2026-10-27T19:45:00Z",
+          "home": "Roma",
+          "away": "Cagliari",
+          "pick": "1",
+          "market": "1X2",
+          "odds": 1.31,
+          "prob": 0.6918,
+          "model_prob": 0.6624,
+          "market_prob": 0.7212,
+          "xg": [
+            1.9,
+            0.66
+          ],
+          "basis": "modello+mercato",
+          "eligible": false
+        },
+        {
+          "match_id": "I2|2026-10-27|Padova|Sudtirol",
+          "league": "I2",
+          "kickoff": "2026-10-27T19:00:00Z",
+          "home": "Padova",
+          "away": "Sudtirol",
+          "pick": "U25",
+          "market": "OU25",
+          "odds": 1.64,
+          "prob": 0.6088,
+          "model_prob": 0.6526,
+          "market_prob": 0.565,
+          "xg": [
+            1.1,
+            0.98
+          ],
+          "basis": "modello+mercato",
+          "eligible": false
+        }
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "matches": 8,
+      "tier": "proposta",
+      "total_odds": 2.248,
+      "prob": 0.4487,
+      "legs": [
+        {
+          "match_id": "I1|2026-10-28|Venezia|Inter",
+          "league": "I1",
+          "kickoff": "2026-10-28T17:30:00Z",
+          "home": "Venezia",
+          "away": "Inter",
+          "pick": "2",
+          "market": "1X2",
+          "odds": 1.33,
+          "prob": 0.7421,
+          "model_prob": 0.7777,
+          "market_prob": 0.7066,
+          "xg": [
+            0.83,
+            2.8
+          ],
+          "basis": "modello+mercato",
+          "eligible": false
+        },
+        {
+          "match_id": "I1|2026-10-28|Monza|Napoli",
+          "league": "I1",
+          "kickoff": "2026-10-28T19:45:00Z",
+          "home": "Monza",
+          "away": "Napoli",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.69,
+          "prob": 0.6047,
+          "model_prob": 0.6541,
+          "market_prob": 0.5553,
+          "xg": [
+            1.21,
+            2.16
+          ],
+          "basis": "modello+mercato",
+          "eligible": true
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "matches": 2,
+      "tier": "proposta",
+      "total_odds": 2.29,
+      "prob": 0.3613,
+      "legs": [
+        {
+          "match_id": "I1|2026-10-29|Frosinone|Lecce",
+          "league": "I1",
+          "kickoff": "2026-10-29T17:30:00Z",
+          "home": "Frosinone",
+          "away": "Lecce",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.44,
+          "prob": 0.6375,
+          "model_prob": 0.6253,
+          "market_prob": 0.6496,
+          "xg": [
+            2.16,
+            1.07
+          ],
+          "basis": "modello+mercato",
+          "eligible": false
+        },
+        {
+          "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+          "league": "I1",
+          "kickoff": "2026-10-29T19:45:00Z",
+          "home": "Fiorentina",
+          "away": "Atalanta",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.59,
+          "prob": 0.5667,
+          "model_prob": 0.5453,
+          "market_prob": 0.5881,
+          "xg": [
+            1.21,
+            1.65
+          ],
+          "basis": "modello+mercato",
+          "eligible": false
+        }
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "match_id": "I1|2026-10-28|Monza|Napoli",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Monza",
+      "away": "Napoli",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.69,
+      "prob": 0.6047,
+      "model_prob": 0.6541,
+      "market_prob": 0.5553,
+      "xg": [
+        1.21,
+        2.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": true
+    },
+    {
+      "match_id": "I1|2026-10-28|Venezia|Inter",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Venezia",
+      "away": "Inter",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 1.33,
+      "prob": 0.7421,
+      "model_prob": 0.7777,
+      "market_prob": 0.7066,
+      "xg": [
+        0.83,
+        2.8
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Venezia|Inter",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Venezia",
+      "away": "Inter",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.34,
+      "prob": 0.703,
+      "model_prob": 0.7031,
+      "market_prob": 0.7029,
+      "xg": [
+        0.83,
+        2.8
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Roma|Cagliari",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Roma",
+      "away": "Cagliari",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 1.31,
+      "prob": 0.6918,
+      "model_prob": 0.6624,
+      "market_prob": 0.7212,
+      "xg": [
+        1.9,
+        0.66
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Frosinone|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-29T17:30:00Z",
+      "home": "Frosinone",
+      "away": "Lecce",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.44,
+      "prob": 0.6375,
+      "model_prob": 0.6253,
+      "market_prob": 0.6496,
+      "xg": [
+        2.16,
+        1.07
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Padova|Sudtirol",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Padova",
+      "away": "Sudtirol",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.64,
+      "prob": 0.6088,
+      "model_prob": 0.6526,
+      "market_prob": 0.565,
+      "xg": [
+        1.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Parma|Udinese",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Parma",
+      "away": "Udinese",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.65,
+      "prob": 0.5948,
+      "model_prob": 0.6215,
+      "market_prob": 0.5681,
+      "xg": [
+        1.02,
+        1.18
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Benevento|Catanzaro",
+      "league": "I2",
+      "kickoff": "2026-10-27T18:00:00Z",
+      "home": "Benevento",
+      "away": "Catanzaro",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.6,
+      "prob": 0.5923,
+      "model_prob": 0.6046,
+      "market_prob": 0.5801,
+      "xg": [
+        2.07,
+        1.06
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Frosinone|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-29T17:30:00Z",
+      "home": "Frosinone",
+      "away": "Lecce",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 1.66,
+      "prob": 0.5896,
+      "model_prob": 0.6147,
+      "market_prob": 0.5644,
+      "xg": [
+        2.16,
+        1.07
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Benevento|Catanzaro",
+      "league": "I2",
+      "kickoff": "2026-10-27T18:00:00Z",
+      "home": "Benevento",
+      "away": "Catanzaro",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 1.59,
+      "prob": 0.5886,
+      "model_prob": 0.5993,
+      "market_prob": 0.578,
+      "xg": [
+        2.07,
+        1.06
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Virtus Entella|Avellino",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Virtus Entella",
+      "away": "Avellino",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.65,
+      "prob": 0.5824,
+      "model_prob": 0.6025,
+      "market_prob": 0.5623,
+      "xg": [
+        1.2,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Genoa|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Genoa",
+      "away": "Juventus",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.73,
+      "prob": 0.5696,
+      "model_prob": 0.5993,
+      "market_prob": 0.5399,
+      "xg": [
+        0.83,
+        1.45
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+      "league": "I1",
+      "kickoff": "2026-10-29T19:45:00Z",
+      "home": "Fiorentina",
+      "away": "Atalanta",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.59,
+      "prob": 0.5667,
+      "model_prob": 0.5453,
+      "market_prob": 0.5881,
+      "xg": [
+        1.21,
+        1.65
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Monza|Napoli",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Monza",
+      "away": "Napoli",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 1.74,
+      "prob": 0.563,
+      "model_prob": 0.5847,
+      "market_prob": 0.5413,
+      "xg": [
+        1.21,
+        2.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Ascoli|Sampdoria",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Ascoli",
+      "away": "Sampdoria",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.09,
+      "prob": 0.5591,
+      "model_prob": 0.6788,
+      "market_prob": 0.4393,
+      "xg": [
+        1.95,
+        0.63
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Pisa|Palermo",
+      "league": "I2",
+      "kickoff": "2026-10-28T18:00:00Z",
+      "home": "Pisa",
+      "away": "Palermo",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.69,
+      "prob": 0.5508,
+      "model_prob": 0.5523,
+      "market_prob": 0.5493,
+      "xg": [
+        1.47,
+        1.42
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Torino|Como",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Torino",
+      "away": "Como",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 1.74,
+      "prob": 0.5476,
+      "model_prob": 0.5531,
+      "market_prob": 0.5421,
+      "xg": [
+        0.97,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Torino|Como",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Torino",
+      "away": "Como",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.65,
+      "prob": 0.5432,
+      "model_prob": 0.5183,
+      "market_prob": 0.5681,
+      "xg": [
+        0.97,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Vicenza|Modena",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Vicenza",
+      "away": "Modena",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.75,
+      "prob": 0.5363,
+      "model_prob": 0.5417,
+      "market_prob": 0.5308,
+      "xg": [
+        1.29,
+        1.56
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Milan|Bologna",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Milan",
+      "away": "Bologna",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 1.62,
+      "prob": 0.5358,
+      "model_prob": 0.4903,
+      "market_prob": 0.5814,
+      "xg": [
+        1.51,
+        0.96
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Genoa|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Genoa",
+      "away": "Juventus",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 1.68,
+      "prob": 0.5342,
+      "model_prob": 0.5076,
+      "market_prob": 0.5607,
+      "xg": [
+        0.83,
+        1.45
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Cesena|Empoli",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Cesena",
+      "away": "Empoli",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.75,
+      "prob": 0.5334,
+      "model_prob": 0.5361,
+      "market_prob": 0.5308,
+      "xg": [
+        1.37,
+        1.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Roma|Cagliari",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Roma",
+      "away": "Cagliari",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.61,
+      "prob": 0.5295,
+      "model_prob": 0.4728,
+      "market_prob": 0.5861,
+      "xg": [
+        1.9,
+        0.66
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Sassuolo|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-27T17:30:00Z",
+      "home": "Sassuolo",
+      "away": "Lazio",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.66,
+      "prob": 0.5259,
+      "model_prob": 0.4874,
+      "market_prob": 0.5643,
+      "xg": [
+        1.13,
+        1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Mantova|Cremonese",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Mantova",
+      "away": "Cremonese",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.79,
+      "prob": 0.5179,
+      "model_prob": 0.517,
+      "market_prob": 0.5188,
+      "xg": [
+        1.6,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Milan|Bologna",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Milan",
+      "away": "Bologna",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.94,
+      "prob": 0.5168,
+      "model_prob": 0.5509,
+      "market_prob": 0.4827,
+      "xg": [
+        1.51,
+        0.96
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Ascoli|Sampdoria",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Ascoli",
+      "away": "Sampdoria",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.86,
+      "prob": 0.5106,
+      "model_prob": 0.5225,
+      "market_prob": 0.4987,
+      "xg": [
+        1.95,
+        0.63
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Juve Stabia|Verona",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Juve Stabia",
+      "away": "Verona",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.83,
+      "prob": 0.5091,
+      "model_prob": 0.5127,
+      "market_prob": 0.5054,
+      "xg": [
+        1.47,
+        1.26
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Carrarese|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Carrarese",
+      "away": "Arezzo",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.75,
+      "prob": 0.507,
+      "model_prob": 0.4845,
+      "market_prob": 0.5296,
+      "xg": [
+        1.79,
+        0.95
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Carrarese|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Carrarese",
+      "away": "Arezzo",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.97,
+      "prob": 0.493,
+      "model_prob": 0.5155,
+      "market_prob": 0.4704,
+      "xg": [
+        1.79,
+        0.95
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Juve Stabia|Verona",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Juve Stabia",
+      "away": "Verona",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.87,
+      "prob": 0.4909,
+      "model_prob": 0.4873,
+      "market_prob": 0.4946,
+      "xg": [
+        1.47,
+        1.26
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Ascoli|Sampdoria",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Ascoli",
+      "away": "Sampdoria",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.85,
+      "prob": 0.4894,
+      "model_prob": 0.4775,
+      "market_prob": 0.5013,
+      "xg": [
+        1.95,
+        0.63
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Carrarese|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Carrarese",
+      "away": "Arezzo",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.22,
+      "prob": 0.4887,
+      "model_prob": 0.5639,
+      "market_prob": 0.4135,
+      "xg": [
+        1.79,
+        0.95
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Milan|Bologna",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Milan",
+      "away": "Bologna",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.81,
+      "prob": 0.4832,
+      "model_prob": 0.4491,
+      "market_prob": 0.5173,
+      "xg": [
+        1.51,
+        0.96
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Mantova|Cremonese",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Mantova",
+      "away": "Cremonese",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.93,
+      "prob": 0.4821,
+      "model_prob": 0.483,
+      "market_prob": 0.4812,
+      "xg": [
+        1.6,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Sassuolo|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-27T17:30:00Z",
+      "home": "Sassuolo",
+      "away": "Lazio",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.15,
+      "prob": 0.4741,
+      "model_prob": 0.5126,
+      "market_prob": 0.4357,
+      "xg": [
+        1.13,
+        1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Roma|Cagliari",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Roma",
+      "away": "Cagliari",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.28,
+      "prob": 0.4705,
+      "model_prob": 0.5272,
+      "market_prob": 0.4139,
+      "xg": [
+        1.9,
+        0.66
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Cesena|Empoli",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Cesena",
+      "away": "Empoli",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 1.98,
+      "prob": 0.4666,
+      "model_prob": 0.4639,
+      "market_prob": 0.4692,
+      "xg": [
+        1.37,
+        1.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Vicenza|Modena",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Vicenza",
+      "away": "Modena",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 1.98,
+      "prob": 0.4637,
+      "model_prob": 0.4583,
+      "market_prob": 0.4692,
+      "xg": [
+        1.29,
+        1.56
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Mantova|Cremonese",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Mantova",
+      "away": "Cremonese",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.17,
+      "prob": 0.4618,
+      "model_prob": 0.5011,
+      "market_prob": 0.4224,
+      "xg": [
+        1.6,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Torino|Como",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Torino",
+      "away": "Como",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.17,
+      "prob": 0.4568,
+      "model_prob": 0.4817,
+      "market_prob": 0.4319,
+      "xg": [
+        0.97,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Sassuolo|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-27T17:30:00Z",
+      "home": "Sassuolo",
+      "away": "Lazio",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.09,
+      "prob": 0.4492,
+      "model_prob": 0.4476,
+      "market_prob": 0.4509,
+      "xg": [
+        1.13,
+        1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Pisa|Palermo",
+      "league": "I2",
+      "kickoff": "2026-10-28T18:00:00Z",
+      "home": "Pisa",
+      "away": "Palermo",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.06,
+      "prob": 0.4492,
+      "model_prob": 0.4477,
+      "market_prob": 0.4507,
+      "xg": [
+        1.47,
+        1.42
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Vicenza|Modena",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Vicenza",
+      "away": "Modena",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.0,
+      "prob": 0.4426,
+      "model_prob": 0.4265,
+      "market_prob": 0.4587,
+      "xg": [
+        1.29,
+        1.56
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+      "league": "I1",
+      "kickoff": "2026-10-29T19:45:00Z",
+      "home": "Fiorentina",
+      "away": "Atalanta",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.27,
+      "prob": 0.4333,
+      "model_prob": 0.4547,
+      "market_prob": 0.4119,
+      "xg": [
+        1.21,
+        1.65
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Cesena|Empoli",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Cesena",
+      "away": "Empoli",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.0,
+      "prob": 0.4326,
+      "model_prob": 0.4065,
+      "market_prob": 0.4588,
+      "xg": [
+        1.37,
+        1.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Genoa|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Genoa",
+      "away": "Juventus",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 2.03,
+      "prob": 0.4304,
+      "model_prob": 0.4007,
+      "market_prob": 0.4601,
+      "xg": [
+        0.83,
+        1.45
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Virtus Entella|Avellino",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Virtus Entella",
+      "away": "Avellino",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 2.12,
+      "prob": 0.4176,
+      "model_prob": 0.3975,
+      "market_prob": 0.4377,
+      "xg": [
+        1.2,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Virtus Entella|Avellino",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Virtus Entella",
+      "away": "Avellino",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.01,
+      "prob": 0.4165,
+      "model_prob": 0.3768,
+      "market_prob": 0.4561,
+      "xg": [
+        1.2,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Benevento|Catanzaro",
+      "league": "I2",
+      "kickoff": "2026-10-27T18:00:00Z",
+      "home": "Benevento",
+      "away": "Catanzaro",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.21,
+      "prob": 0.4077,
+      "model_prob": 0.3954,
+      "market_prob": 0.4199,
+      "xg": [
+        2.07,
+        1.06
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Parma|Udinese",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Parma",
+      "away": "Udinese",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 2.17,
+      "prob": 0.4052,
+      "model_prob": 0.3785,
+      "market_prob": 0.4319,
+      "xg": [
+        1.02,
+        1.18
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Monza|Napoli",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Monza",
+      "away": "Napoli",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.11,
+      "prob": 0.3953,
+      "model_prob": 0.3459,
+      "market_prob": 0.4447,
+      "xg": [
+        1.21,
+        2.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Pisa|Palermo",
+      "league": "I2",
+      "kickoff": "2026-10-28T18:00:00Z",
+      "home": "Pisa",
+      "away": "Palermo",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.27,
+      "prob": 0.3917,
+      "model_prob": 0.3785,
+      "market_prob": 0.4049,
+      "xg": [
+        1.47,
+        1.42
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Padova|Sudtirol",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Padova",
+      "away": "Sudtirol",
+      "pick": "O25",
+      "market": "OU25",
+      "odds": 2.13,
+      "prob": 0.3912,
+      "model_prob": 0.3474,
+      "market_prob": 0.435,
+      "xg": [
+        1.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+      "league": "I1",
+      "kickoff": "2026-10-29T19:45:00Z",
+      "home": "Fiorentina",
+      "away": "Atalanta",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.01,
+      "prob": 0.389,
+      "model_prob": 0.4667,
+      "market_prob": 0.3113,
+      "xg": [
+        1.21,
+        1.65
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Parma|Udinese",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Parma",
+      "away": "Udinese",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.49,
+      "prob": 0.3815,
+      "model_prob": 0.3859,
+      "market_prob": 0.3771,
+      "xg": [
+        1.02,
+        1.18
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Padova|Sudtirol",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Padova",
+      "away": "Sudtirol",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.35,
+      "prob": 0.3802,
+      "model_prob": 0.3701,
+      "market_prob": 0.3904,
+      "xg": [
+        1.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Juve Stabia|Verona",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Juve Stabia",
+      "away": "Verona",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.75,
+      "prob": 0.3724,
+      "model_prob": 0.4114,
+      "market_prob": 0.3335,
+      "xg": [
+        1.47,
+        1.26
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Frosinone|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-29T17:30:00Z",
+      "home": "Frosinone",
+      "away": "Lecce",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 2.67,
+      "prob": 0.3625,
+      "model_prob": 0.3747,
+      "market_prob": 0.3504,
+      "xg": [
+        2.16,
+        1.07
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+      "league": "I1",
+      "kickoff": "2026-10-29T19:45:00Z",
+      "home": "Fiorentina",
+      "away": "Atalanta",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.18,
+      "prob": 0.3509,
+      "model_prob": 0.2719,
+      "market_prob": 0.4298,
+      "xg": [
+        1.21,
+        1.65
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Juve Stabia|Verona",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Juve Stabia",
+      "away": "Verona",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.37,
+      "prob": 0.3506,
+      "model_prob": 0.3142,
+      "market_prob": 0.3869,
+      "xg": [
+        1.47,
+        1.26
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Pisa|Palermo",
+      "league": "I2",
+      "kickoff": "2026-10-28T18:00:00Z",
+      "home": "Pisa",
+      "away": "Palermo",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.88,
+      "prob": 0.337,
+      "model_prob": 0.3549,
+      "market_prob": 0.3191,
+      "xg": [
+        1.47,
+        1.42
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Parma|Udinese",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Parma",
+      "away": "Udinese",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 2.9,
+      "prob": 0.3135,
+      "model_prob": 0.3031,
+      "market_prob": 0.3238,
+      "xg": [
+        1.02,
+        1.18
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Padova|Sudtirol",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Padova",
+      "away": "Sudtirol",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.05,
+      "prob": 0.311,
+      "model_prob": 0.3213,
+      "market_prob": 0.3008,
+      "xg": [
+        1.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Padova|Sudtirol",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Padova",
+      "away": "Sudtirol",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 2.97,
+      "prob": 0.3087,
+      "model_prob": 0.3086,
+      "market_prob": 0.3089,
+      "xg": [
+        1.1,
+        0.98
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Parma|Udinese",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Parma",
+      "away": "Udinese",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.14,
+      "prob": 0.305,
+      "model_prob": 0.311,
+      "market_prob": 0.2991,
+      "xg": [
+        1.02,
+        1.18
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Virtus Entella|Avellino",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Virtus Entella",
+      "away": "Avellino",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.17,
+      "prob": 0.2976,
+      "model_prob": 0.306,
+      "market_prob": 0.2892,
+      "xg": [
+        1.2,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Venezia|Inter",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Venezia",
+      "away": "Inter",
+      "pick": "U25",
+      "market": "OU25",
+      "odds": 3.17,
+      "prob": 0.297,
+      "model_prob": 0.2969,
+      "market_prob": 0.2971,
+      "xg": [
+        0.83,
+        2.8
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Vicenza|Modena",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Vicenza",
+      "away": "Modena",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 3.39,
+      "prob": 0.2888,
+      "model_prob": 0.307,
+      "market_prob": 0.2706,
+      "xg": [
+        1.29,
+        1.56
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Virtus Entella|Avellino",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Virtus Entella",
+      "away": "Avellino",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.6,
+      "prob": 0.2859,
+      "model_prob": 0.3171,
+      "market_prob": 0.2547,
+      "xg": [
+        1.2,
+        1.08
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Cesena|Empoli",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Cesena",
+      "away": "Empoli",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.22,
+      "prob": 0.2858,
+      "model_prob": 0.2866,
+      "market_prob": 0.2849,
+      "xg": [
+        1.37,
+        1.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Cesena|Empoli",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Cesena",
+      "away": "Empoli",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.58,
+      "prob": 0.2816,
+      "model_prob": 0.3069,
+      "market_prob": 0.2563,
+      "xg": [
+        1.37,
+        1.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Sassuolo|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-27T17:30:00Z",
+      "home": "Sassuolo",
+      "away": "Lazio",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 3.33,
+      "prob": 0.2793,
+      "model_prob": 0.2756,
+      "market_prob": 0.283,
+      "xg": [
+        1.13,
+        1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Mantova|Cremonese",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Mantova",
+      "away": "Cremonese",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.22,
+      "prob": 0.277,
+      "model_prob": 0.2693,
+      "market_prob": 0.2847,
+      "xg": [
+        1.6,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Juve Stabia|Verona",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Juve Stabia",
+      "away": "Verona",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.28,
+      "prob": 0.277,
+      "model_prob": 0.2744,
+      "market_prob": 0.2796,
+      "xg": [
+        1.47,
+        1.26
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Genoa|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Genoa",
+      "away": "Juventus",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.66,
+      "prob": 0.2721,
+      "model_prob": 0.2869,
+      "market_prob": 0.2574,
+      "xg": [
+        0.83,
+        1.45
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Sassuolo|Lazio",
+      "league": "I1",
+      "kickoff": "2026-10-27T17:30:00Z",
+      "home": "Sassuolo",
+      "away": "Lazio",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.54,
+      "prob": 0.2715,
+      "model_prob": 0.2768,
+      "market_prob": 0.2662,
+      "xg": [
+        1.13,
+        1.5
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Pisa|Palermo",
+      "league": "I2",
+      "kickoff": "2026-10-28T18:00:00Z",
+      "home": "Pisa",
+      "away": "Palermo",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.33,
+      "prob": 0.2713,
+      "model_prob": 0.2666,
+      "market_prob": 0.276,
+      "xg": [
+        1.47,
+        1.42
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Carrarese|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Carrarese",
+      "away": "Arezzo",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.16,
+      "prob": 0.2693,
+      "model_prob": 0.2482,
+      "market_prob": 0.2905,
+      "xg": [
+        1.79,
+        0.95
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Vicenza|Modena",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Vicenza",
+      "away": "Modena",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.39,
+      "prob": 0.2686,
+      "model_prob": 0.2666,
+      "market_prob": 0.2706,
+      "xg": [
+        1.29,
+        1.56
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Mantova|Cremonese",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Mantova",
+      "away": "Cremonese",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.13,
+      "prob": 0.2613,
+      "model_prob": 0.2297,
+      "market_prob": 0.2929,
+      "xg": [
+        1.6,
+        1.01
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+      "league": "I1",
+      "kickoff": "2026-10-29T19:45:00Z",
+      "home": "Fiorentina",
+      "away": "Atalanta",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.62,
+      "prob": 0.2601,
+      "model_prob": 0.2613,
+      "market_prob": 0.2589,
+      "xg": [
+        1.21,
+        1.65
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Milan|Bologna",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Milan",
+      "away": "Bologna",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.91,
+      "prob": 0.2599,
+      "model_prob": 0.279,
+      "market_prob": 0.2409,
+      "xg": [
+        1.51,
+        0.96
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Torino|Como",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Torino",
+      "away": "Como",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.8,
+      "prob": 0.2493,
+      "model_prob": 0.2504,
+      "market_prob": 0.2482,
+      "xg": [
+        0.97,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Ascoli|Sampdoria",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Ascoli",
+      "away": "Sampdoria",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.26,
+      "prob": 0.2493,
+      "model_prob": 0.2169,
+      "market_prob": 0.2816,
+      "xg": [
+        1.95,
+        0.63
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-28|Carrarese|Arezzo",
+      "league": "I2",
+      "kickoff": "2026-10-28T19:00:00Z",
+      "home": "Carrarese",
+      "away": "Arezzo",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.1,
+      "prob": 0.242,
+      "model_prob": 0.1879,
+      "market_prob": 0.2961,
+      "xg": [
+        1.79,
+        0.95
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Monza|Napoli",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Monza",
+      "away": "Napoli",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 3.89,
+      "prob": 0.2297,
+      "model_prob": 0.2172,
+      "market_prob": 0.2421,
+      "xg": [
+        1.21,
+        2.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Benevento|Catanzaro",
+      "league": "I2",
+      "kickoff": "2026-10-27T18:00:00Z",
+      "home": "Benevento",
+      "away": "Catanzaro",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.0,
+      "prob": 0.226,
+      "model_prob": 0.2223,
+      "market_prob": 0.2298,
+      "xg": [
+        2.07,
+        1.06
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Frosinone|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-29T17:30:00Z",
+      "home": "Frosinone",
+      "away": "Lecce",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 4.13,
+      "prob": 0.2206,
+      "model_prob": 0.2144,
+      "market_prob": 0.2269,
+      "xg": [
+        2.16,
+        1.07
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Monza|Napoli",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Monza",
+      "away": "Napoli",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 4.35,
+      "prob": 0.2073,
+      "model_prob": 0.1981,
+      "market_prob": 0.2165,
+      "xg": [
+        1.21,
+        2.16
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Milan|Bologna",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Milan",
+      "away": "Bologna",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 5.3,
+      "prob": 0.2042,
+      "model_prob": 0.2307,
+      "market_prob": 0.1777,
+      "xg": [
+        1.51,
+        0.96
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Torino|Como",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Torino",
+      "away": "Como",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 4.5,
+      "prob": 0.2031,
+      "model_prob": 0.1965,
+      "market_prob": 0.2096,
+      "xg": [
+        0.97,
+        1.77
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Roma|Cagliari",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Roma",
+      "away": "Cagliari",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 5.33,
+      "prob": 0.2007,
+      "model_prob": 0.2242,
+      "market_prob": 0.1773,
+      "xg": [
+        1.9,
+        0.66
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Genoa|Juventus",
+      "league": "I1",
+      "kickoff": "2026-10-28T19:45:00Z",
+      "home": "Genoa",
+      "away": "Juventus",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 5.18,
+      "prob": 0.1937,
+      "model_prob": 0.2055,
+      "market_prob": 0.1819,
+      "xg": [
+        0.83,
+        1.45
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Ascoli|Sampdoria",
+      "league": "I2",
+      "kickoff": "2026-10-27T19:00:00Z",
+      "home": "Ascoli",
+      "away": "Sampdoria",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 3.29,
+      "prob": 0.1917,
+      "model_prob": 0.1043,
+      "market_prob": 0.2791,
+      "xg": [
+        1.95,
+        0.63
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-29|Frosinone|Lecce",
+      "league": "I1",
+      "kickoff": "2026-10-29T17:30:00Z",
+      "home": "Frosinone",
+      "away": "Lecce",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.49,
+      "prob": 0.1898,
+      "model_prob": 0.171,
+      "market_prob": 0.2087,
+      "xg": [
+        2.16,
+        1.07
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I2|2026-10-27|Benevento|Catanzaro",
+      "league": "I2",
+      "kickoff": "2026-10-27T18:00:00Z",
+      "home": "Benevento",
+      "away": "Catanzaro",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 4.78,
+      "prob": 0.1854,
+      "model_prob": 0.1785,
+      "market_prob": 0.1923,
+      "xg": [
+        2.07,
+        1.06
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Venezia|Inter",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Venezia",
+      "away": "Inter",
+      "pick": "X",
+      "market": "1X2",
+      "odds": 5.47,
+      "prob": 0.1579,
+      "model_prob": 0.1441,
+      "market_prob": 0.1718,
+      "xg": [
+        0.83,
+        2.8
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-27|Roma|Cagliari",
+      "league": "I1",
+      "kickoff": "2026-10-27T19:45:00Z",
+      "home": "Roma",
+      "away": "Cagliari",
+      "pick": "2",
+      "market": "1X2",
+      "odds": 9.31,
+      "prob": 0.1074,
+      "model_prob": 0.1134,
+      "market_prob": 0.1015,
+      "xg": [
+        1.9,
+        0.66
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    },
+    {
+      "match_id": "I1|2026-10-28|Venezia|Inter",
+      "league": "I1",
+      "kickoff": "2026-10-28T17:30:00Z",
+      "home": "Venezia",
+      "away": "Inter",
+      "pick": "1",
+      "market": "1X2",
+      "odds": 7.73,
+      "prob": 0.0999,
+      "model_prob": 0.0783,
+      "market_prob": 0.1216,
+      "xg": [
+        0.83,
+        2.8
+      ],
+      "basis": "modello+mercato",
+      "eligible": false
+    }
+  ],
+  "n_candidates": 100,
+  "n_eligible": 1,
   "stats": {
-    "slips_settled": 3,
-    "slips_won": 2,
-    "slips_pending": 4,
-    "win_rate": 0.6666666666666666,
-    "legs_won": 5,
-    "legs_settled": 6,
-    "profit": 5.15,
-    "roi": 0.3433333333333332,
+    "slips_settled": 7,
+    "slips_won": 3,
+    "slips_pending": 1,
+    "win_rate": 0.42857142857142855,
+    "legs_won": 10,
+    "legs_settled": 14,
+    "profit": -5.26,
+    "roi": -0.15028571428571422,
     "streak": {
-      "kind": "won",
+      "kind": "lost",
       "length": 1
     },
     "lives": 7
   },
-  "equity": 55.15
+  "equity": 44.74
 }
