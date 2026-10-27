@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 35.15,
+  "bankroll": 39.74,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -171,7 +171,7 @@
       "total_odds": 1.968,
       "prob": 0.4595,
       "tier": "proposta",
-      "status": "pending",
+      "status": "lost",
       "legs": [
         {
           "match_id": "D1|2026-10-24|Dortmund|Ein Frankfurt",
@@ -190,7 +190,8 @@
             0.98
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "lost",
+          "score": "1-0"
         },
         {
           "match_id": "N1|2026-10-24|Willem II|Cambuur",
@@ -209,9 +210,12 @@
             1.98
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "1-6"
         }
-      ]
+      ],
+      "payout": 0.0,
+      "settled_at": "2026-10-27T13:08:53Z"
     },
     {
       "id": "S0005",
@@ -220,7 +224,7 @@
       "total_odds": 1.952,
       "prob": 0.5128,
       "tier": "proposta",
-      "status": "pending",
+      "status": "lost",
       "legs": [
         {
           "match_id": "D1|2026-10-25|Freiburg|Bayern Munich",
@@ -239,7 +243,8 @@
             2.59
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "1-3"
         },
         {
           "match_id": "SP1|2026-10-25|Ath Bilbao|Getafe",
@@ -258,9 +263,12 @@
             0.64
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "lost",
+          "score": "4-0"
         }
-      ]
+      ],
+      "payout": 0.0,
+      "settled_at": "2026-10-27T13:08:53Z"
     },
     {
       "id": "S0006",
@@ -269,7 +277,7 @@
       "total_odds": 1.918,
       "prob": 0.499,
       "tier": "proposta",
-      "status": "pending",
+      "status": "won",
       "legs": [
         {
           "match_id": "D1|2026-10-25|Hoffenheim|Leverkusen",
@@ -288,7 +296,8 @@
             2.04
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "3-0"
         },
         {
           "match_id": "F1|2026-10-25|Rennes|Strasbourg",
@@ -307,9 +316,12 @@
             1.72
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "3-0"
         }
-      ]
+      ],
+      "payout": 9.59,
+      "settled_at": "2026-10-27T13:08:53Z"
     },
     {
       "id": "S0007",
@@ -318,7 +330,7 @@
       "total_odds": 2.014,
       "prob": 0.4201,
       "tier": "proposta",
-      "status": "pending",
+      "status": "lost",
       "legs": [
         {
           "match_id": "T1|2026-10-26|Galatasaray|Fenerbahce",
@@ -337,7 +349,8 @@
             1.62
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "2-1"
         },
         {
           "match_id": "T1|2026-10-26|Besiktas|Buyuksehyr",
@@ -354,6 +367,58 @@
           "xg": [
             1.83,
             1.2
+          ],
+          "basis": "modello+mercato",
+          "status": "lost",
+          "score": "2-0"
+        }
+      ],
+      "payout": 0.0,
+      "settled_at": "2026-10-27T13:08:53Z"
+    },
+    {
+      "id": "S0008",
+      "created_at": "2026-10-27T13:08:53Z",
+      "stake": 5.0,
+      "total_odds": 2.181,
+      "prob": 0.4518,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "I1|2026-10-28|Venezia|Inter",
+          "league": "I1",
+          "kickoff": "2026-10-28T17:30:00Z",
+          "home": "Venezia",
+          "away": "Inter",
+          "pick": "2",
+          "market": "1X2",
+          "odds": 1.33,
+          "prob": 0.7421,
+          "model_prob": 0.7777,
+          "market_prob": 0.7066,
+          "xg": [
+            0.83,
+            2.8
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "I2|2026-10-27|Padova|Sudtirol",
+          "league": "I2",
+          "kickoff": "2026-10-27T19:00:00Z",
+          "home": "Padova",
+          "away": "Sudtirol",
+          "pick": "U25",
+          "market": "OU25",
+          "odds": 1.64,
+          "prob": 0.6088,
+          "model_prob": 0.6526,
+          "market_prob": 0.565,
+          "xg": [
+            1.1,
+            0.98
           ],
           "basis": "modello+mercato",
           "status": "pending"
@@ -381,6 +446,26 @@
       "t": "2026-10-20T12:40:54Z",
       "bankroll": 55.15,
       "event": "S0003 vinta"
+    },
+    {
+      "t": "2026-10-27T13:08:53Z",
+      "bankroll": 50.15,
+      "event": "S0004 persa"
+    },
+    {
+      "t": "2026-10-27T13:08:53Z",
+      "bankroll": 45.15,
+      "event": "S0005 persa"
+    },
+    {
+      "t": "2026-10-27T13:08:53Z",
+      "bankroll": 49.74,
+      "event": "S0006 vinta"
+    },
+    {
+      "t": "2026-10-27T13:08:53Z",
+      "bankroll": 44.74,
+      "event": "S0007 persa"
     }
   ]
 }
