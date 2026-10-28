@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 39.74,
+  "bankroll": 34.74,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -419,6 +419,55 @@
           "xg": [
             1.1,
             0.98
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "S0009",
+      "created_at": "2026-10-28T13:57:51Z",
+      "stake": 5.0,
+      "total_odds": 2.29,
+      "prob": 0.3612,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "I1|2026-10-29|Frosinone|Lecce",
+          "league": "I1",
+          "kickoff": "2026-10-29T17:30:00Z",
+          "home": "Frosinone",
+          "away": "Lecce",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.44,
+          "prob": 0.6374,
+          "model_prob": 0.6251,
+          "market_prob": 0.6496,
+          "xg": [
+            2.16,
+            1.07
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "I1|2026-10-29|Fiorentina|Atalanta",
+          "league": "I1",
+          "kickoff": "2026-10-29T19:45:00Z",
+          "home": "Fiorentina",
+          "away": "Atalanta",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.59,
+          "prob": 0.5667,
+          "model_prob": 0.5452,
+          "market_prob": 0.5881,
+          "xg": [
+            1.21,
+            1.65
           ],
           "basis": "modello+mercato",
           "status": "pending"
