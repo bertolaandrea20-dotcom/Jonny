@@ -404,3 +404,8 @@ VENDE 64.644788 TRX/EUR per 19.08 € (sotto la media 50g)
 === 2026-10-29T00:10:41Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-28 20:00:00+00:00: valore del bot 181.11 € (capitale iniziale 200.00 €)
+=== 2026-10-29T04:10:05Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 0.00025869142 BTC/EUR per 18.51 € (sotto la media 50g)
+COMPRA 63.975988 TRX/EUR per 18.98 € (sopra la media 50g)
+2026-10-29 00:00:00+00:00: valore del bot 180.66 € (capitale iniziale 200.00 €)
