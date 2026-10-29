@@ -1,0 +1,50 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #root .ground { position: absolute; inset: 0; background: #121110; }
+    #root .slate { position: absolute; left: 130px; top: 470px; width: 820px; }
+    #root .sticks { position: relative; height: 108px; }
+    #root .stick { position: absolute; left: 0; width: 820px; height: 54px; border: 5px solid #f3efe6;
+      background: repeating-linear-gradient(-45deg, #f3efe6 0 44px, #121110 44px 88px); }
+    #root .stick-top { top: 0; transform-origin: 0% 100%; }
+    #root .stick-bottom { top: 54px; }
+    #root .board { position: relative; height: 520px; background: #1b1a18; border: 6px solid #f3efe6;
+      color: #f3efe6; font-family: 'Oswald', sans-serif; }
+    #root .row { position: absolute; left: 0; right: 0; border-bottom: 4px solid rgba(243,239,230,.85);
+      display: flex; align-items: center; padding: 0 34px; }
+    #root .row-prod { top: 0; height: 110px; }
+    #root .row-scene { top: 110px; height: 110px; }
+    #root .label { font-size: 34px; letter-spacing: .14em; opacity: .75; width: 190px; }
+    #root .value { font-size: 52px; font-weight: 600; letter-spacing: .04em; }
+    #root .row-ciak { top: 220px; height: 288px; border-bottom: none; }
+    #root .ciak-num { font-family: 'League Gothic', sans-serif; font-size: 300px; line-height: 1;
+      color: #d0202e; margin-left: 20px; }
+    #root .gag { position: absolute; left: 60px; right: 60px; top: 1150px; text-align: center;
+      font-family: 'League Gothic', sans-serif; font-size: 132px; line-height: 1.02; color: #f3efe6;
+      letter-spacing: .01em; }
+
+  </style>
+  <div id="root" data-composition-id="ciak4" data-width="1080" data-height="1920">
+    <div class="ground"></div>
+    <div class="slate" id="ciak4-slate">
+      <div class="sticks">
+        <div class="stick stick-top" id="ciak4-top"></div>
+        <div class="stick stick-bottom"></div>
+      </div>
+      <div class="board" id="ciak4-board">
+        <div class="row row-prod"><span class="label">PROD.</span><span class="value">VINTAGE PADDOCK</span></div>
+        <div class="row row-scene"><span class="label">SCENA</span><span class="value">ALFA ROMEO</span></div>
+        <div class="row row-ciak"><span class="label">CIAK</span><span class="ciak-num" id="ciak4-num">4</span></div>
+      </div>
+    </div>
+    <div class="gag" id="ciak4-gag">RIPROVIAMO.</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#ciak4-top", { rotation: -24 }, { rotation: 0, duration: 0.14, ease: "power4.in" }, 0.06);
+    tl.fromTo("#ciak4-board", { y: 0 }, { y: 7, duration: 0.04, ease: "none", yoyo: true, repeat: 3 }, 0.2);
+    tl.fromTo("#ciak4-gag", { opacity: 0, scale: 1.14 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power3.out" }, 0.2);
+    tl.fromTo("#ciak4-num", { scale: 1 }, { scale: 1.06, duration: 0.6, ease: "none" }, 0.2);
+    window.__timelines["ciak4"] = tl;
+  </script>
+</template>
