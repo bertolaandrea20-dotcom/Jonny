@@ -1,6 +1,6 @@
 {
-  "run_at": "2026-10-28T20:14:36Z",
-  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
+  "run_at": "2026-10-29T14:10:15Z",
+  "decision": "Nessuna combinazione da 2-3 eventi arriva a quota ~2 con le regole: oggi non si gioca.",
   "sources": {
     "football-data.co.uk": "ok (2 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
@@ -25,11 +25,11 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.44,
-      "prob": 0.6373,
-      "model_prob": 0.6251,
+      "prob": 0.6327,
+      "model_prob": 0.6158,
       "market_prob": 0.6496,
       "xg": [
-        2.16,
+        2.11,
         1.07
       ],
       "basis": "modello+mercato",
@@ -44,11 +44,11 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.66,
-      "prob": 0.5894,
-      "model_prob": 0.6144,
+      "prob": 0.5845,
+      "model_prob": 0.6045,
       "market_prob": 0.5644,
       "xg": [
-        2.16,
+        2.11,
         1.07
       ],
       "basis": "modello+mercato",
@@ -63,12 +63,12 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.59,
-      "prob": 0.5667,
-      "model_prob": 0.5452,
+      "prob": 0.5623,
+      "model_prob": 0.5366,
       "market_prob": 0.5881,
       "xg": [
-        1.21,
-        1.65
+        1.19,
+        1.64
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -82,12 +82,12 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.27,
-      "prob": 0.4333,
-      "model_prob": 0.4548,
+      "prob": 0.4377,
+      "model_prob": 0.4634,
       "market_prob": 0.4119,
       "xg": [
-        1.21,
-        1.65
+        1.19,
+        1.64
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -101,12 +101,12 @@
       "pick": "2",
       "market": "1X2",
       "odds": 3.01,
-      "prob": 0.389,
-      "model_prob": 0.4667,
+      "prob": 0.3899,
+      "model_prob": 0.4685,
       "market_prob": 0.3113,
       "xg": [
-        1.21,
-        1.65
+        1.19,
+        1.64
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -120,11 +120,11 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.67,
-      "prob": 0.3627,
-      "model_prob": 0.3749,
+      "prob": 0.3673,
+      "model_prob": 0.3842,
       "market_prob": 0.3504,
       "xg": [
-        2.16,
+        2.11,
         1.07
       ],
       "basis": "modello+mercato",
@@ -139,12 +139,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.18,
-      "prob": 0.3509,
-      "model_prob": 0.272,
+      "prob": 0.3492,
+      "model_prob": 0.2685,
       "market_prob": 0.4298,
       "xg": [
-        1.21,
-        1.65
+        1.19,
+        1.64
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -158,12 +158,12 @@
       "pick": "X",
       "market": "1X2",
       "odds": 3.62,
-      "prob": 0.2601,
-      "model_prob": 0.2613,
+      "prob": 0.2609,
+      "model_prob": 0.263,
       "market_prob": 0.2589,
       "xg": [
-        1.21,
-        1.65
+        1.19,
+        1.64
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -177,11 +177,11 @@
       "pick": "X",
       "market": "1X2",
       "odds": 4.13,
-      "prob": 0.2207,
-      "model_prob": 0.2145,
+      "prob": 0.2229,
+      "model_prob": 0.2189,
       "market_prob": 0.2269,
       "xg": [
-        2.16,
+        2.11,
         1.07
       ],
       "basis": "modello+mercato",
@@ -196,11 +196,11 @@
       "pick": "2",
       "market": "1X2",
       "odds": 4.49,
-      "prob": 0.1899,
-      "model_prob": 0.1711,
+      "prob": 0.1927,
+      "model_prob": 0.1766,
       "market_prob": 0.2087,
       "xg": [
-        2.16,
+        2.11,
         1.07
       ],
       "basis": "modello+mercato",
@@ -210,19 +210,19 @@
   "n_candidates": 10,
   "n_eligible": 0,
   "stats": {
-    "slips_settled": 7,
-    "slips_won": 3,
-    "slips_pending": 2,
-    "win_rate": 0.42857142857142855,
-    "legs_won": 10,
-    "legs_settled": 14,
-    "profit": -5.26,
-    "roi": -0.15028571428571422,
+    "slips_settled": 8,
+    "slips_won": 4,
+    "slips_pending": 1,
+    "win_rate": 0.5,
+    "legs_won": 12,
+    "legs_settled": 16,
+    "profit": 0.65,
+    "roi": 0.016249999999999966,
     "streak": {
-      "kind": "lost",
+      "kind": "won",
       "length": 1
     },
-    "lives": 6
+    "lives": 9
   },
-  "equity": 44.74
+  "equity": 50.65
 }
