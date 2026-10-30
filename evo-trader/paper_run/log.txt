@@ -426,3 +426,6 @@ VENDE 0.00025151217 BTC/EUR per 18.19 € (sotto la media 50g)
 === 2026-10-30T00:10:40Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-29 20:00:00+00:00: valore del bot 181.94 € (capitale iniziale 200.00 €)
+=== 2026-10-30T04:10:07Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-10-30 00:00:00+00:00: valore del bot 181.69 € (capitale iniziale 200.00 €)
