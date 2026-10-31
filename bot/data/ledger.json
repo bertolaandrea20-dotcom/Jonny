@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 52.1,
+  "bankroll": 47.1,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -525,6 +525,55 @@
           "xg": [
             2.33,
             0.75
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "S0011",
+      "created_at": "2026-10-31T13:35:41Z",
+      "stake": 5.0,
+      "total_odds": 1.94,
+      "prob": 0.4919,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "T1|2026-11-01|Amedspor|Eyupspor",
+          "league": "T1",
+          "kickoff": "2026-11-01T10:30:00Z",
+          "home": "Amedspor",
+          "away": "Eyupspor",
+          "pick": "1",
+          "market": "1X2",
+          "odds": 1.26,
+          "prob": 0.7702,
+          "model_prob": 0.8102,
+          "market_prob": 0.7302,
+          "xg": [
+            2.87,
+            0.71
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "I2|2026-11-01|Palermo|Vicenza",
+          "league": "I2",
+          "kickoff": "2026-11-01T18:30:00Z",
+          "home": "Palermo",
+          "away": "Vicenza",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.54,
+          "prob": 0.6387,
+          "model_prob": 0.6754,
+          "market_prob": 0.6021,
+          "xg": [
+            2.43,
+            1.05
           ],
           "basis": "modello+mercato",
           "status": "pending"
