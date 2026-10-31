@@ -447,3 +447,7 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-10-31T04:10:18Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-10-31 00:00:00+00:00: valore del bot 180.44 € (capitale iniziale 200.00 €)
+=== 2026-10-31T08:10:03Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+VENDE 63.975988 TRX/EUR per 18.76 € (sotto la media 50g)
+2026-10-31 04:00:00+00:00: valore del bot 180.09 € (capitale iniziale 200.00 €)
