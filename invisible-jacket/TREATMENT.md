@@ -43,3 +43,8 @@ The page is one long picture drawn live. The camera moves along it, and page-lik
 
 ## Content note
 The jacket lets the boy watch someone without being seen. The film makes that a mistake he corrects: he takes the jacket off and leaves a kind note, so the story ends with openness, not spying.
+
+## Revision: the neighbour as a character
+- From 17.5 s, the neighbour is on the page: a grown-up in a violet dress, sitting alone by the pool with the animals around her. She looks worried, which gives the boy (and the viewer) a reason to care.
+- Narration line 5 is now: "A woman sat alone by the pool, with only the animals for company."
+- After the note (38.6 s) she looks surprised, then smiles and waves at 40.6 s. The boy waves back.
