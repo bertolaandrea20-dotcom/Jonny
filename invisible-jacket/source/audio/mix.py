@@ -202,7 +202,10 @@ mus *= (1 - duck * (1 - 10 ** (-11 / 20)))[:, None]
 buf *= (1 - duck * (1 - 10 ** (-5 / 20)))[:, None]
 mus *= (10 ** (np.interp(tt, [26.5, 27.3, 29.3, 29.6, 35.5, 36.0, 38.0, 48.8, 49.1, 51.2, 51.5, 53.6, 54.0], [0, 3, 3, 0, 0, 3, 0, 0, 3, 3, 0, 0, 3]) / 20))[:, None]
 
-mix = mus * 1.4 + buf * 1.0 + amb * 1.0 + vo * 1.35
+# the last line sits on the loudest music: clear a space for it (−10 dB more on the music, −6 dB on the splash foley)
+mus *= (10 ** (np.interp(tt, [50.9, 51.3, 53.6, 54.3], [0, -10, -10, 0]) / 20))[:, None]
+buf *= (10 ** (np.interp(tt, [50.9, 51.3, 53.6, 54.3], [0, -6, -6, 0]) / 20))[:, None]
+mix = mus * 1.4 + buf * 1.0 + amb * 1.0 + vo * 1.55
 for c in range(2): mix[:, c] = limit(mix[:, c], .95)
 sf.write(os.path.join(HERE, 'mix.wav'), mix.astype(np.float32), SR)
 def db(x): return 20 * np.log10(np.sqrt(np.mean(x ** 2)) + 1e-9)
@@ -212,4 +215,4 @@ for a, z in [(0, 8.2), (8.2, 9.5), (9.5, 10.9), (10.9, 19.1), (19.1, 27.3), (27.
 dur = json.load(open(os.path.join(HERE, 'voices', 'dur.json')))
 for e in [x for x in EV if x['type'] == 'voice']:
     s = int(e['t'] * SR); L = int(dur[e['id']] * SR); bed = mus[s:s + L] * 1.4 + buf[s:s + L] + amb[s:s + L]
-    print(f'  {e["id"]:4s} vo {db(vo[s:s+L]*1.35):6.1f}  bed {db(bed):6.1f}  diff {db(vo[s:s+L]*1.35) - db(bed):5.1f} dB')
+    print(f'  {e["id"]:4s} vo {db(vo[s:s+L]*1.55):6.1f}  bed {db(bed):6.1f}  diff {db(vo[s:s+L]*1.55) - db(bed):5.1f} dB')
