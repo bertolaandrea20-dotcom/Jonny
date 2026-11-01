@@ -1,31 +1,39 @@
 1
-00:00:00,800 --> 00:00:04,200
-Walking home from school, a boy kicked a stone.
+00:00:01,900 --> 00:00:05,150
+Every day, Leo walked home the same way.
 
 2
-00:00:10,800 --> 00:00:13,800
-Behind the hedge, he found a jacket.
+00:00:08,450 --> 00:00:10,250
+Clink?
 
 3
-00:00:15,100 --> 00:00:17,800
-It made him invisible.
+00:00:13,000 --> 00:00:16,040
+A jacket, as white as nothing at all.
 
 4
-00:00:18,100 --> 00:00:21,600
-So he peeked into the neighbour’s garden.
+00:00:16,900 --> 00:00:18,790
+And Leo was gone.
 
 5
-00:00:22,700 --> 00:00:27,600
-A woman sat alone by the pool, with only the animals for company.
+00:00:19,900 --> 00:00:22,640
+Invisible, he could go anywhere.
 
 6
-00:00:31,700 --> 00:00:35,600
-Then he realised: this is someone’s home.
+00:00:29,500 --> 00:00:32,900
+Next door, there was a pool that nobody ever swam in,
 
 7
-00:00:36,100 --> 00:00:39,700
-He hung the jacket back and left a note.
+00:00:33,000 --> 00:00:36,110
+and a lady who sat beside it, all alone.
 
 8
-00:00:40,500 --> 00:00:43,500
-Next morning, the neighbour waved.
+00:00:41,400 --> 00:00:43,980
+Leo didn’t want to hide any more.
+
+9
+00:00:45,200 --> 00:00:47,850
+“Fancy a swim?” she asked.
+
+10
+00:00:51,300 --> 00:00:54,160
+And the pool was never empty again.

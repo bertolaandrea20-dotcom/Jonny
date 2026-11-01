@@ -1,10 +1,25 @@
 Credits and third-party assets for "The Invisible Jacket"
 
-Picture: drawn in code with the Crayon Picture Book engine from Lemo-Opuscar (https://github.com/lemomo-ai/lemo-opuscar), styles/crayon-book/demo (library code, MIT; library content, CC BY 4.0).
-Fonts:
-- Gaegu (Regular, Bold): SIL Open Font License 1.1, Copyright 2018 The Gaegu Project Authors. Via @fontsource/gaegu 5.3.0.
-- Patrick Hand (Regular): SIL Open Font License 1.1. Via @fontsource/patrick-hand 5.3.0.
-Narration voice: Kokoro (af_heart), offline text-to-speech, Apache-2.0 model.
-Music: original composition, synthesised with the library's pluck (music box, kalimba) and harp presets. No samples.
-Foley: procedural sound effects from the library's sfx helpers (synthesised).
-Video encoding: ffmpeg 7.0.2 static build (LGPL/GPL) from the imageio-ffmpeg package.
+Picture
+- Drawn entirely in code. Crayon stroke engine, WebGL paper/wax/watercolour compositor and character rig helpers
+  from Lemo-Opuscar, styles/crayon-book/demo (https://github.com/lemomo-ai/lemo-opuscar; code MIT, content CC BY 4.0).
+- Characters (Leo, the lady next door, deckchair, rabbit, tortoise, rubber duck), the page and the timeline were written for this film.
+
+Fonts (SIL Open Font License 1.1)
+- Gaegu (Regular, Bold), Copyright 2018 The Gaegu Project Authors, via @fontsource/gaegu 5.3.0.
+- Patrick Hand (Regular), via @fontsource/patrick-hand 5.3.0.
+
+Narration
+- Kokoro text-to-speech, voice af_heart (Apache-2.0 model), offline.
+
+Music (original composition for this film)
+- Samples (CC0): FreePats project (freepats.zenvoid.org) — ukulele;
+  VS Chamber Orchestra: Community Edition (Versilian Studios) — recorder/flute/clarinet/bassoon family;
+  Versilian Community Sample Library (Versilian Studios) — glockenspiel, shaker.
+- Music box, kalimba and pizzicato bass: physical modelling (Lemo-Opuscar core/audio/pluck.py). Toy piano: synthesised.
+
+Sound effects
+- All synthesised procedurally for this film (crayon on paper, wet brush, cloth, zip, gate, water, birds, crickets).
+
+Tools
+- ffmpeg 7.0.2 static build (LGPL/GPL), from the imageio-ffmpeg package.
