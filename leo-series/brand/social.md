@@ -202,3 +202,27 @@ Episode 8 tomorrow.
 ```
 Leo's first real match… where did the ball go? ⚽💦 Ep.7 #theinvisiblejacket #football #animation #storytime #fyp
 ```
+
+---
+
+## Episode 8 · New Kid (Wednesday · friends)
+
+### Instagram
+
+```
+Episode 8 · New Kid 🤝
+
+Wednesday. A new kid on the street, all alone with a ball.
+Leo said hi. His name was Edo. ⚽
+Then… the hedge moved. 👀
+
+Who's your best friend? Tag them! 👇
+
+#theinvisiblejacket #leostory #bestfriends #friendship #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #dailystory
+```
+
+### TikTok
+
+```
+How Leo met his best friend Edo 🤝⚽ Ep.8 #theinvisiblejacket #bestfriends #animation #storytime #fyp
+```

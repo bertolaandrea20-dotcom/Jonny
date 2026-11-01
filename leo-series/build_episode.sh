@@ -2,7 +2,7 @@
 # Build one episode end to end:  sh films/leo-series/build_episode.sh 03
 # Needs: the Lemo-Opuscar library (setup.sh deps voice music; tools/fetch.sh instruments freepats vsco2ce vcsl) and ffmpeg 7+ on PATH.
 set -e
-EP=$(printf "%02d" "$1")
+N=$(echo "$1" | sed "s/^0*//"); EP=$(printf "%02d" "$N")
 SER="$(cd "$(dirname "$0")" && pwd)"; LIB="$(cd "$SER/../.." && pwd)"; cd "$LIB"
 D="$SER/ep$EP"; mkdir -p "$D/audio" "$D/out"
 PY=.venv/bin/python; Q="ep=$EP"; SZ=1080x1920

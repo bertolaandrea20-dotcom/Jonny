@@ -63,10 +63,11 @@ The jacket can make small cameos on the other days (a white sleeve peeking out o
 5. **Carrot Trap** — Leo hides behind the tree; the carrots vanish closer and closer; then one floats right behind him. ✅
 6. **The Name Tag** — a scrap of the jacket on the fence, a blank label; Leo paints over it and the wash reveals the name: LEO. ✅
 7. **The Big Kick** (Tue · football) — Edo passes, Leo kicks it really hard, the ball vanishes… splash and a duck squeak from next door. ✅
-8. **Night Watch** (Fri · mystery) — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
-9. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
-10. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
-11. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
+8. **New Kid** (Wed · friends) — how Leo met Edo: alone on the street with a ball; "Hi! I'm Leo!"; then two white ears in the hedge. ✅
+9. **Night Watch** (Fri · mystery) — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
+10. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
+11. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
+12. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
 
 
 Ideas kept for later: *The Duck Ride* (the duck sails by itself, a rabbit-shaped dent in the water), *Leo's Plan* (a crayon map in his notebook), *Bubbles* (soap bubbles pop on something invisible).
