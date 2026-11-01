@@ -69,3 +69,19 @@ export const HOPS = Array.from({ length: 7 }, (_, i) => [lerp(2668, 2990, i / 6)
 export function ripples(L, x, y, u, seed = 1900) {
   [0, 1, 2].forEach(k => { const v = clamp(u * 1.4 - k * 0.2); if (v <= 0 || v >= 1) return; const r = 20 + 150 * v; line(L, ellipse(x, y, r, r * 0.32, 40), { w: 4.5, col: K.ink, p: 0.6 * (1 - v), seed: seed + k, boil: 0.5 }); });
 }
+
+// —— episode 4+: bucket, thrown water, the wet (visible) rabbit ——
+export function bucket(C, x, y, tilt = 0, full = true, seed = 2200) {
+  const P = pts => xf(pts, { x, y, r: tilt });
+  part(C, P([[-30, -36], [30, -36], [24, 34], [-24, 34]]), { col: K.sky, p: 0.85, gap: 6, w: 8, ang: 1.2, seed }, { w: 5.5, seed: seed + 1 });
+  line(C.l, P([[-30, -36], [-20, -70], [20, -70], [30, -36]]), { w: 5, seed: seed + 2, p: 0.9 });
+  if (full) fill(C.f, P(ellipse(0, -36, 28, 8, 20)), { col: K.sky, p: 1, gap: 4, w: 6, seed: seed + 3, boil: 0 });
+}
+// water flying from (x0,y0) to (x1,y1), u 0..1: a ribbon of sky-blue crayon with drops
+export function waterArc(L, x0, y0, x1, y1, u, seed = 2250) {
+  if (u <= 0 || u >= 1.3) return;
+  const pts = []; const n = 14, head = Math.min(1, u), tail = Math.max(0, u - 0.45);
+  for (let i = 0; i <= n; i++) { const v = lerp(tail, head, i / n); pts.push([lerp(x0, x1, v), lerp(y0, y1, v) - 160 * Math.sin(v * Math.PI)]); }
+  line(L, pts, { w: 16, col: K.sky, p: 0.95, seed, boil: 0.6, taper: 0.4 });
+  for (let k = 0; k < 7; k++) { const v = clamp(head - k * 0.06); dab(L, lerp(x0, x1, v) + (k % 2 ? 14 : -12), lerp(y0, y1, v) - 160 * Math.sin(v * Math.PI) - 16 + k * 5, 6, { col: K.sky, p: 0.9, seed: seed + 5 + k, boil: 0.4 }); }
+}

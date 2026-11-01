@@ -61,3 +61,24 @@ export function cover(comp, n) {
   text(L.TOP, c.hook, 540, 1582, { size: 66, font: 'Patrick Hand', col: K.ink, stroke: 1.5, seed: 30 });
   composite(comp, { wash, vig: 0.2 });
 }
+
+// —— episodes 4+: the cover is a chosen frame of the episode itself, with the badge, title and question on top ——
+export const EPC = {
+  4: { t: 7.6, title: ['SPLASH!'], hook: 'What did the water find?' },
+  5: { t: 12.6, title: ['CRUNCH!'], hook: "Who's behind Leo?" },
+};
+export function overlay(n) {
+  const c = EPC[n];
+  const bx = 190, by = 330;
+  const toW = ([X, Y]) => [(X - 540) / CAM.s + CAM.x, (Y - 960) / CAM.s + CAM.y];
+  patch(L.TOPK, bx, by, 118, 118);
+  fill(L.TOP, ellipse(bx, by, 110, 110, 40).map(toW), { col: K.yellow, p: 0.95, gap: 8, w: 11, seed: 3, boil: 0, cross: true, crossP: 0.5 });
+  line(L.TOP, handCircle(bx, by, 112, 4).map(toW), { w: 8, col: K.orange, p: 0.95, seed: 5 });
+  text(L.TOP, 'EP.', bx, by - 12, { size: 52, font: 'Gaegu', weight: 700, col: K.ink });
+  text(L.TOP, String(n), bx, by + 66, { size: 96, font: 'Gaegu', weight: 700, col: K.red, stroke: 2 });
+  const big = c.title[0].length > 7 ? 128 : 190, ty0 = 560;
+  patch(L.TOPK, 600, ty0 - big * 0.35, 470, 60 + big * 0.55);
+  text(L.TOP, c.title[0], 600, ty0, { size: big, font: 'Gaegu', weight: 700, col: K.red, stroke: 3, seed: 20 });
+  patch(L.TOPK, 540, 1560, 470, 74);
+  text(L.TOP, c.hook, 540, 1582, { size: 66, font: 'Patrick Hand', col: K.ink, stroke: 1.5, seed: 30 });
+}

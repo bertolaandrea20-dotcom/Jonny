@@ -107,3 +107,50 @@ Episode 4 tomorrow.
 ```
 Invisible footprints in the flour 🐾👀 Ep.3 #theinvisiblejacket #animation #storytime #crayonart #fyp
 ```
+
+---
+
+## Episode 4 · Splash!
+
+### Instagram
+
+```
+Episode 4 · Splash! 💦
+
+Leo had a bucket. Splash!
+For one second… a rabbit! 🐰
+Then… nothing.
+
+Episode 5 tomorrow.
+
+#theinvisiblejacket #leostory #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #watercolor #dailystory #illustration
+```
+
+### TikTok
+
+```
+The water found something invisible 💦🐰 Ep.4 #theinvisiblejacket #animation #storytime #crayonart #fyp
+```
+
+---
+
+## Episode 5 · Carrot Trap
+
+### Instagram
+
+```
+Episode 5 · Carrot Trap 🥕
+
+Leo set a trap. Crunch. Crunch. Crunch.
+Then… it went quiet. Too quiet. 👀
+
+Episode 6 tomorrow.
+
+#theinvisiblejacket #leostory #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #funny #dailystory #illustration
+```
+
+### TikTok
+
+```
+Crunch… crunch… wait, where's the rabbit? 🥕👀 Ep.5 #theinvisiblejacket #animation #storytime #funny #fyp
+```

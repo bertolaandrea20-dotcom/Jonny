@@ -40,11 +40,13 @@ Rules that keep the series consistent:
 1. *The Invisible Jacket* — Leo finds the jacket, sneaks next door, says hello, cannonball. (first film, 16:9)
 2. **Gone** — the jacket is gone; drag marks lead to the burrow; a carrot floats: the rabbit has it. ✅
 3. **Footprints** — Leo sprinkles flour on the lawn; little invisible paw prints appear and hop away from him. ✅
-4. **The Duck Ride** — Leo watches the rubber duck sail across the pool by itself, with a rabbit-shaped dent in the water.
-5. **Leo's Plan** — Leo draws a plan on the back of his school notebook (a crayon map of the garden).
+4. **Splash!** — Leo throws a bucket of water where the footprints end; for one second the wash shows a rabbit. ✅
+5. **Carrot Trap** — Leo hides behind the tree; the carrots vanish closer and closer; then one floats right behind him. ✅
 6. **The Name Tag** — Leo finds the jacket's collar caught on the fence; a white-crayon tag, and the wash reveals a name.
 7. **Night Watch** — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
-8. **Carrot Trap** — Leo lays a trail of carrots to the shed; every carrot vanishes, bite by bite.
-9. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
-10. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
-11. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
+8. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
+9. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
+10. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
+
+
+Ideas kept for later: *The Duck Ride* (the duck sails by itself, a rabbit-shaped dent in the water), *Leo's Plan* (a crayon map in his notebook), *Bubbles* (soap bubbles pop on something invisible).
