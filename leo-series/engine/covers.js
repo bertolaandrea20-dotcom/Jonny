@@ -69,6 +69,7 @@ export const EPC = {
   6: { t: 11.2, title: ['LEO?!'], hook: 'Whose name is on the jacket?' },
   7: { t: 7.25, title: ['KICK!'], hook: 'Where did the ball go?' },
   8: { t: 4.0, title: ['NEW KID'], hook: 'Who is the new kid?' },
+  9: { t: 8.2, title: ['WHO?!'], hook: 'Who kicked the ball back?' },
 };
 export function overlay(n) {
   const c = EPC[n];

@@ -1,0 +1,15 @@
+1
+00:00:00,400 --> 00:00:02,800
+The ball had landed in the pool.
+
+2
+00:00:02,900 --> 00:00:05,404
+Leo and Edo went to get it.
+
+3
+00:00:09,700 --> 00:00:12,100
+Then it came back. All by itself.
+
+4
+00:00:12,200 --> 00:00:15,202
+Edo was amazed. Leo smiled.

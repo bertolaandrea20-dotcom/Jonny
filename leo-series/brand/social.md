@@ -226,3 +226,28 @@ Who's your best friend? Tag them! 👇
 ```
 How Leo met his best friend Edo 🤝⚽ Ep.8 #theinvisiblejacket #bestfriends #animation #storytime #fyp
 ```
+
+---
+
+## Episode 9 · Who Kicked It? (follows episode 7)
+
+### Instagram
+
+```
+Episode 9 · Who Kicked It? ⚽🐰
+
+The ball had landed in the pool next door.
+Leo and Edo went to get it…
+then it came back. All by itself. 👀
+Edo was amazed. Leo smiled.
+
+What do you think Leo knows? 👇
+
+#theinvisiblejacket #leostory #football #bestfriends #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #dailystory
+```
+
+### TikTok
+
+```
+The ball came back… all by itself ⚽👀 Ep.9 #theinvisiblejacket #football #animation #storytime #fyp
+```
