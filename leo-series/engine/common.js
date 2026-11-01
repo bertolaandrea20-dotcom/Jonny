@@ -49,7 +49,7 @@ function wrap(str) {
 export function buildSubs(LINES) {
   return LINES.map((Ln, i) => { const t0 = Ln.t - 0.1; let t1 = Math.max(t0 + 1.8, Ln.t + Ln.d + 0.7); const nx = LINES[i + 1]; if (nx) t1 = Math.min(t1, nx.t - 0.2); return { t0, t1, text: Ln.text }; });
 }
-function patch(Lyr, cx, cy, hw, hh) {
+export function patch(Lyr, cx, cy, hw, hh) {
   const g = Lyr.g; g.save(); g.fillStyle = '#000'; g.beginPath();
   for (let i = 0; i <= 60; i++) { const a = i / 60 * Math.PI * 2; const px = Math.cos(a), py = Math.sin(a); const sq = Math.pow(Math.abs(px), 0.3) * Math.sign(px); const n = 1 + 0.06 * Math.sin(a * 7 + 1.3) + 0.03 * Math.sin(a * 17); const X = cx + sq * hw * n, Y = cy + py * hh * n; i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
   g.closePath(); g.fill(); g.restore();

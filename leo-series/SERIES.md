@@ -23,7 +23,8 @@ films/leo-series/
    - the camera keys, the characters' states, the props that appear;
    - the mood cues: `walk`, `mystery`, `sneak`, `silence`, `crunch`, `theme`, `tutti`, `tbc` (always end on `tbc` + "To be continued…").
 3. **One check**: render about 8 stills (`still.mjs … --range 1:29:4`) and look at one contact sheet. Fix only what's broken.
-4. **Build**: `sh films/leo-series/build_episode.sh NN` (≈ 15–20 min of render time, no extra credits while it runs).
+4. **Cover**: add one line to `engine/covers.js` (camera, title, question, scene) and render it: `node core/render/still.mjs films/leo-series/engine 0 --size 1080x1920 --q 'cover=NN'`. Big Leo with a clear expression, a title of 1–2 words, a question as the hook; keep it all inside y 240–1680 (the profile-grid crop).
+5. **Build**: `sh films/leo-series/build_episode.sh NN` (≈ 15–20 min of render time, no extra credits while it runs).
 
 What keeps the credit cost low: no new characters or engine code per episode; reuse props; one review round; ~30 s length; music and mix are generated from the cues, not written by hand. Add a new prop or pose only when the story really needs it.
 
