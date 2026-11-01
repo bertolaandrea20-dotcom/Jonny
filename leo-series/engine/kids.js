@@ -60,7 +60,9 @@ const skinF = sd => ({ col: K.peach, p: 0.5, gap: 10, w: 12, ang: 0.5, seed: sd,
 export function leoHead(C, o) {
   const T = T0(o), P = pts => T(pts), sd = o.seed || 100, s = o.s || 1;
   const E = EXPR[o.expr || 'normal'] || EXPR.normal;
-  const hairF = { col: K.brown, p: 0.85, gap: 8, w: 10, ang: 1.2, seed: sd + 1, over: 2.5 };
+  const hairF = { col: o.hairCol || K.brown, p: o.hairCol ? 0.9 : 0.85, gap: 8, w: 10, ang: 1.2, seed: sd + 1, over: 2.5 };
+  const curly = o.hair === 'curly';
+  const curlCap = (a0, a1, cx, cy, r, n) => { const pts = []; for (let i = 0; i <= n * 4; i++) { const a = lerp(a0, a1, i / (n * 4)); const bump = 1 + 0.12 * Math.abs(Math.sin(i / 4 * Math.PI)); pts.push([cx + Math.cos(a) * r * bump, cy + Math.sin(a) * r * bump]); } return pts; };
   if ((o.view || 'side') === 'front') {
     [[-60, 6], [60, 6]].forEach(([x, y], i) => part(C, P(ellipse(x, y, 10, 14, 16)), skinF(sd + 3 + i), lo(sd + 5 + i, { w: 5 })));
     part(C, P(ellipse(0, 0, 58, 54, 44)), skinF(sd + 2), null);
@@ -69,10 +71,12 @@ export function leoHead(C, o) {
     for (let i = 0; i <= 10; i++) { const a = lerp(Math.PI * 1.06, Math.PI * 1.94, i / 10), rr = i % 2 ? 66 : 82; hair.push([Math.cos(a) * rr, Math.sin(a) * rr - 6]); }
     hair.push([64, -30], [60, -2]);
     for (let i = 0; i <= 8; i++) hair.push([lerp(52, -52, i / 8), i % 2 ? -36 : -20]);
-    part(C, P(hair), hairF, lo(sd + 8, { w: 6 }));
+    if (curly) { const cap = [[-62, 6], ...curlCap(Math.PI * 1.0, Math.PI * 2.0, 0, -8, 68, 9), [62, 6], [50, -18], [30, -26], [10, -22], [-10, -26], [-30, -22], [-50, -18]]; part(C, P(cap), hairF, lo(sd + 8, { w: 6 })); }
+    else part(C, P(hair), hairF, lo(sd + 8, { w: 6 }));
     eyeAt(C, P, -20, 8, E.eye, sd + 20, s, o.look); eyeAt(C, P, 20, 8, E.eye, sd + 22, s, o.look);
     browAt(C, P, -20, 8, E.brow, sd + 24, false); browAt(C, P, 20, 8, E.brow, sd + 25, true);
     [[-36, 24], [36, 24]].forEach(([x, y], i) => dab(C.f, ...P([[x, y]])[0], 9 * s, { col: K.pink, p: 0.75, seed: sd + 30 + i, sq: 0.75 }));
+    if (o.freckles) [[-40, 14], [-32, 20], [-44, 22], [40, 14], [32, 20], [44, 22]].forEach(([x, y], i) => dab(C.l, ...P([[x, y]])[0], 2.6 * s, { col: K.orange, p: 1, seed: sd + 90 + i, gap: 2, w: 3 }));
     mouthAt(C, P, 0, 30, E.mouth, sd + 40);
     return;
   }
@@ -83,12 +87,14 @@ export function leoHead(C, o) {
   const hair = [[-40, 40], [-58, 10], [-60, -24]];
   for (let i = 0; i <= 9; i++) { const a = lerp(Math.PI * 1.02, Math.PI * 1.8, i / 9), rr = i % 2 ? 64 : 80; hair.push([Math.cos(a) * rr - 4, Math.sin(a) * rr - 6]); }
   hair.push([48, -40], [40, -28], [30, -36], [20, -26], [8, -34], [-4, -22], [-16, -26], [-22, -6], [-30, 20], [-34, 38]);
-  part(C, P(hair), hairF, lo(sd + 8, { w: 6 }));
+  if (curly) { const cap = [[-42, 40], ...curlCap(Math.PI * 0.75, Math.PI * 1.85, -4, -6, 66, 9), [44, -36], [30, -26], [10, -30], [-8, -18], [-22, -4], [-32, 22]]; part(C, P(cap), hairF, lo(sd + 8, { w: 6 })); }
+  else part(C, P(hair), hairF, lo(sd + 8, { w: 6 }));
   part(C, P(ellipse(-14, 6, 11, 14, 16)), skinF(sd + 3), lo(sd + 5, { w: 5 }));
   line(C.l, P([[-16, 0], [-10, 6], [-16, 12]]), lo(sd + 6, { w: 3.5, p: 0.7 }));
   eyeAt(C, P, 34, 4, E.eye, sd + 20, s, o.look);
   browAt(C, P, 34, 4, E.brow, sd + 24, false);
   dab(C.f, ...P([[28, 24]])[0], 9 * s, { col: K.pink, p: 0.75, seed: sd + 30, sq: 0.75 });
+  if (o.freckles) [[24, 14], [32, 20], [20, 22]].forEach(([x, y], i) => dab(C.l, ...P([[x, y]])[0], 2.6 * s, { col: K.orange, p: 1, seed: sd + 90 + i, gap: 2, w: 3 }));
   mouthAt(C, P, 44, 30, E.mouth, sd + 40, 0.7);
 }
 
@@ -171,8 +177,8 @@ export function leo(C, o) {
   const T = T0(o), P = pts => T(pts), sd = o.seed || 200, s = o.s || 1;
   const pose = o.pose || 'stand';
   const front = pose.startsWith('front');
-  const shirtF = { col: K.orange, p: 0.72, gap: 10, w: 12, ang: 0.4, seed: sd + 1 };
-  const shortsF = { col: K.violet, p: 0.75, gap: 9, w: 11, ang: 1.2, seed: sd + 2 };
+  const shirtF = { col: o.shirt || K.orange, p: 0.72, gap: 10, w: 12, ang: 0.4, seed: sd + 1 };
+  const shortsF = { col: o.shorts || K.violet, p: 0.75, gap: 9, w: 11, ang: 1.2, seed: sd + 2 };
   const shoeF = { col: K.red, p: 0.85, gap: 6, w: 8, ang: 0.3, seed: sd + 3 };
   const packF = { col: K.yellow, p: 0.85, gap: 8, w: 10, ang: 0.8, seed: sd + 4, cross: true, crossP: 0.35 };
   const jackF = { col: K.white, p: 0.95, gap: 5, w: 7, ang: 0.4, seed: sd + 5, over: 1 };
@@ -184,7 +190,7 @@ export function leo(C, o) {
     const arms = ph ? [[[-30, -8], [-60, -36], [-80, -70]], [[30, -8], [58, -46], [64, -90]]] : [[[-30, -8], [-58, -46], [-64, -90]], [[30, -8], [60, -36], [80, -70]]];
     arms.forEach((a, i) => { limb(a, 15, skinF(sd + 60 + i), sd + 62 + i); hand(a[2], sd + 64 + i); });
     part(C, P(smooth([[-42, 0], [-36, -18], [0, -26], [36, -18], [42, 0]], 4)), shirtF, lo(sd + 66));
-    leoHead(C, { x: P([[0, -70]])[0][0], y: P([[0, -70]])[0][1], s, r: o.r || 0, flip: o.flip, view: 'front', expr: o.expr, seed: sd + 300 });
+    leoHead(C, { x: P([[0, -70]])[0][0], y: P([[0, -70]])[0][1], s, r: o.r || 0, flip: o.flip, view: 'front', expr: o.expr, seed: sd + 300, hair: o.hair, hairCol: o.hairCol, freckles: o.freckles });
     return;
   }
   if (front) {
@@ -208,7 +214,7 @@ export function leo(C, o) {
     if (o.jacket && o.zip !== undefined) line(C.l, P([[0, -174], [0, lerp(-174, -96, o.zip)]]), { w: 3, col: K.sky, p: 0.6, seed: sd + 70 });
     if (o.holding) jacketShape(C, P, 0, -140, sd + 72);
     const hd = P([[0, -234]])[0];
-    leoHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) + (o.headTilt || 0), flip: o.flip, view: 'front', expr: o.expr, look: o.look, seed: sd + 300 });
+    leoHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) + (o.headTilt || 0), flip: o.flip, view: 'front', expr: o.expr, look: o.look, seed: sd + 300, hair: o.hair, hairCol: o.hairCol, freckles: o.freckles });
     return;
   }
   const sk = SIDE[pose] || SIDE.stand;
@@ -243,7 +249,7 @@ export function leo(C, o) {
   if (o.jacket) part(C, P(tube(curve([nearArm[0], nearArm[1], lp2(nearArm[1], nearArm[2], 0.78)], 4), 22)), { ...jackF, seed: sd + 69 }, jackL(sd + 70));
   else part(C, P(tube([nearArm[0], lp2(nearArm[0], nearArm[1], 0.55)], 24)), { ...shirtF, seed: sd + 69 }, lo(sd + 70, { w: 6 }));
   const hd = P([sk.Hd])[0];
-  leoHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) * (o.flip ? -1 : 1) * 0 + (o.r || 0) + (o.headTilt || 0) * (o.flip ? -1 : 1), flip: o.flip, view: 'side', expr: o.expr, look: o.look, seed: sd + 300 });
+  leoHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) * (o.flip ? -1 : 1) * 0 + (o.r || 0) + (o.headTilt || 0) * (o.flip ? -1 : 1), flip: o.flip, view: 'side', expr: o.expr, look: o.look, seed: sd + 300, hair: o.hair, hairCol: o.hairCol, freckles: o.freckles });
 }
 
 // ————————————————————————— the lady —————————————————————————
@@ -287,7 +293,7 @@ export function lady(C, o) {
   void ph;
   arms.forEach((a, i) => { limb(a, 16, sd + 60 + i * 3); hand(a[2], sd + 66 + i); part(C, P(tube([a[0], lp2(a[0], a[1], 0.5)], 28)), { ...dressF, seed: sd + 68 + i }, lo(sd + 70 + i, { w: 6 })); });
   const hd = P([[0, -346]])[0];
-  ladyHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) + (o.headTilt || 0), flip: o.flip, view: 'front', expr: o.expr, look: o.look, seed: sd + 300 });
+  ladyHead(C, { x: hd[0], y: hd[1], s, r: (o.r || 0) + (o.headTilt || 0), flip: o.flip, view: 'front', expr: o.expr, look: o.look, seed: sd + 300, hair: o.hair, hairCol: o.hairCol, freckles: o.freckles });
 }
 
 // The deckchair: wooden frame + red-and-pink striped canvas (facing +x, origin on the ground at its middle)
@@ -347,3 +353,7 @@ export function duck(C, o) {
   eyeAt(C, P, 22, -54, 'dot', sd + 7, s * 0.6);
   line(C.l, P([[-16, -18], [0, -10], [12, -18]]), lo(sd + 8, { w: 4, col: K.orange, p: 0.8 }));
 }
+
+// Edo, Leo's best friend: dark curly hair, freckles, a sky-blue shirt with number 7, no backpack
+export const EDO = { hair: 'curly', hairCol: K.ink, freckles: true, shirt: K.sky, shorts: K.ink, pack: false, seed: 3400 };
+export function edo(C, o) { leo(C, { ...EDO, ...o }); }

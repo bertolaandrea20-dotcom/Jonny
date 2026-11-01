@@ -178,3 +178,27 @@ How can that be? Episode 7 tomorrow.
 ```
 The name on the invisible jacket is… LEO?! 😳 Ep.6 #theinvisiblejacket #animation #storytime #plottwist #fyp
 ```
+
+---
+
+## Episode 7 · The Big Kick (Tuesday · football)
+
+### Instagram
+
+```
+Episode 7 · The Big Kick ⚽
+
+Tuesday: Leo's first real match.
+Edo passed him the ball… and Leo kicked it. Really hard. 💥
+Then, from next door… splash! 🦆
+
+Episode 8 tomorrow.
+
+#theinvisiblejacket #leostory #football #soccer #kidsfootball #crayonart #picturebook #animation #animatedshort #storytime #handdrawn #dailystory
+```
+
+### TikTok
+
+```
+Leo's first real match… where did the ball go? ⚽💦 Ep.7 #theinvisiblejacket #football #animation #storytime #fyp
+```

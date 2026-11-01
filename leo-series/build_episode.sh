@@ -10,7 +10,7 @@ PY=.venv/bin/python; Q="ep=$EP"; SZ=1080x1920
 $PY - "$SER/episodes/ep$EP.js" "$D/audio/lines.json" <<'PYEOF'
 import json, re, sys
 s = open(sys.argv[1]).read()
-L = re.findall(r"\{ id: '(n\d+)', t: [\d.]+, d: [\d.]+, text: '((?:[^'\\]|\\.)*)' \}", s)
+L = [(i, a or c) for i, a, c in re.findall(r"\{ id: '(n\d+)', t: [\d.]+, d: [\d.]+, text: (?:'((?:[^'\\]|\\.)*)'|\"((?:[^\"\\]|\\.)*)\") \}", s)]
 json.dump([{"id": i, "text": t.replace("\\'", "'"), "voice": "af_heart", "speed": 0.9} for i, t in L], open(sys.argv[2], 'w'), indent=1)
 print('lines', len(L))
 PYEOF

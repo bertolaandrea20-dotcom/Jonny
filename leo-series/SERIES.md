@@ -35,6 +35,25 @@ Rules that keep the series consistent:
 - Invisible things are paper holes (knock-out); the one watercolour (ultramarine) is used once per episode at most.
 - Hold every subtitle ≥ 1.8 s; keep words out of the top 250 px and the bottom 450 px (Instagram's buttons and caption).
 
+## The weekly rhythm (from episode 7)
+
+| Day | Theme | Places |
+|---|---|---|
+| Monday | **School** | classroom, playground (to build) |
+| Tuesday | **Football** | the pitch (`engine/pitch.js`) |
+| Wednesday | **Friends** | Leo and Edo, anywhere |
+| Thursday | **Home** | kitchen, Leo's room (to build) |
+| Friday | **The jacket mystery** | the garden, the street, the hedge |
+
+The jacket can make small cameos on the other days (a white sleeve peeking out of the backpack).
+
+## Cast
+
+- **Leo** — the protagonist, always on screen. Orange T-shirt, violet shorts, spiky brown hair, yellow backpack.
+- **Edo** — Leo's best friend. Dark curly hair, freckles, sky-blue shirt. `edo(C, o)` in `engine/kids.js` (Leo's rig with `EDO` options).
+- **The lady next door**, **the rabbit** (invisible, wears the jacket), **the tortoise**, **the rubber duck**.
+- To add a kid: call `leo(C, { hair: 'curly' | default, hairCol, freckles, shirt, shorts, pack })`. Adults: `lady()`.
+
 ## Season 1 outline (one line per episode)
 
 1. *The Invisible Jacket* — Leo finds the jacket, sneaks next door, says hello, cannonball. (first film, 16:9)
@@ -43,10 +62,13 @@ Rules that keep the series consistent:
 4. **Splash!** — Leo throws a bucket of water where the footprints end; for one second the wash shows a rabbit. ✅
 5. **Carrot Trap** — Leo hides behind the tree; the carrots vanish closer and closer; then one floats right behind him. ✅
 6. **The Name Tag** — a scrap of the jacket on the fence, a blank label; Leo paints over it and the wash reveals the name: LEO. ✅
-7. **Night Watch** — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
-8. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
-9. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
-10. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
+7. **The Big Kick** (Tue · football) — Edo passes, Leo kicks it really hard, the ball vanishes… splash and a duck squeak from next door. ✅
+8. **Night Watch** (Fri · mystery) — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
+9. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
+10. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.
+11. **Who Else?** — Leo hangs the jacket back in the hedge… and the next morning, it's gone again. (season hook)
 
 
 Ideas kept for later: *The Duck Ride* (the duck sails by itself, a rabbit-shaped dent in the water), *Leo's Plan* (a crayon map in his notebook), *Bubbles* (soap bubbles pop on something invisible).
+
+Next ideas for the weekly days: *Late!* (Mon · school: the bell rings as Leo slides into his seat), *Show and Tell* (Mon · school: Leo shows the LEO label; the teacher goes pale), *The Goalkeeper* (Tue · Leo in goal, saves a penalty with his eyes shut), *New Kid* (Wed · how Leo met Edo), *Homework* (Thu · Leo's drawing comes alive on the notebook).

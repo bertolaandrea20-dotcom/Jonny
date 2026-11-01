@@ -85,3 +85,13 @@ export function waterArc(L, x0, y0, x1, y1, u, seed = 2250) {
   line(L, pts, { w: 16, col: K.sky, p: 0.95, seed, boil: 0.6, taper: 0.4 });
   for (let k = 0; k < 7; k++) { const v = clamp(head - k * 0.06); dab(L, lerp(x0, x1, v) + (k % 2 ? 14 : -12), lerp(y0, y1, v) - 160 * Math.sin(v * Math.PI) - 16 + k * 5, 6, { col: K.sky, p: 0.9, seed: seed + 5 + k, boil: 0.4 }); }
 }
+
+// —— football ——
+export function ball(C, x, y, r = 26, rot = 0, seed = 3100) {
+  const P = pts => xf(pts, { x, y, r: rot });
+  part(C, P(handCircle(0, 0, r, seed, 0, 28)), { col: K.white, p: 1, gap: 4, w: 6, seed }, { w: 5, seed: seed + 1 });
+  [[0, 0, 0.36], [-0.62, -0.5, 0.22], [0.66, -0.4, 0.22], [0.5, 0.62, 0.22], [-0.55, 0.6, 0.22]].forEach(([dx, dy, k], i) => {
+    const pts = []; for (let j = 0; j < 5; j++) { const a = -Math.PI / 2 + j * Math.PI * 2 / 5; pts.push([dx * r + Math.cos(a) * r * k, dy * r + Math.sin(a) * r * k]); }
+    fill(C.f, P(pts), { col: K.ink, p: 1, gap: 2, w: 3, seed: seed + 2 + i, boil: 0 });
+  });
+}
