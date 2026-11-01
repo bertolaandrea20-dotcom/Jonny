@@ -154,3 +154,27 @@ Episode 6 tomorrow.
 ```
 Crunch… crunch… wait, where's the rabbit? 🥕👀 Ep.5 #theinvisiblejacket #animation #storytime #funny #fyp
 ```
+
+---
+
+## Episode 6 · The Name Tag
+
+### Instagram
+
+```
+Episode 6 · The Name Tag 🏷️
+
+A piece of the jacket was stuck on the fence…
+with a label. Leo painted over it.
+It said… LEO. 😳
+
+How can that be? Episode 7 tomorrow.
+
+#theinvisiblejacket #leostory #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #mystery #plottwist #dailystory
+```
+
+### TikTok
+
+```
+The name on the invisible jacket is… LEO?! 😳 Ep.6 #theinvisiblejacket #animation #storytime #plottwist #fyp
+```

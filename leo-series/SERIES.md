@@ -42,7 +42,7 @@ Rules that keep the series consistent:
 3. **Footprints** — Leo sprinkles flour on the lawn; little invisible paw prints appear and hop away from him. ✅
 4. **Splash!** — Leo throws a bucket of water where the footprints end; for one second the wash shows a rabbit. ✅
 5. **Carrot Trap** — Leo hides behind the tree; the carrots vanish closer and closer; then one floats right behind him. ✅
-6. **The Name Tag** — Leo finds the jacket's collar caught on the fence; a white-crayon tag, and the wash reveals a name.
+6. **The Name Tag** — a scrap of the jacket on the fence, a blank label; Leo paints over it and the wash reveals the name: LEO. ✅
 7. **Night Watch** — Leo keeps watch with a torch; the beam finds a paper-white rabbit.
 8. **Rain** — rain falls (the wash); Leo spots a dry rabbit-shaped patch on the lawn.
 9. **Got You** — Leo catches the rabbit in a gentle hug; the jacket comes off; the rabbit wanted to be seen too.

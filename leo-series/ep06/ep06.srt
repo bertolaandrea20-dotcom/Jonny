@@ -1,0 +1,15 @@
+1
+00:00:00,400 --> 00:00:02,876
+Something was stuck on the fence.
+
+2
+00:00:04,200 --> 00:00:07,003
+A piece of the jacket, with a label.
+
+3
+00:00:08,200 --> 00:00:10,000
+Leo painted over it…
+
+4
+00:00:10,100 --> 00:00:11,900
+It said… LEO.

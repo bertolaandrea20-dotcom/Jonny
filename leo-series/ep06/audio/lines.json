@@ -1,0 +1,26 @@
+[
+ {
+  "id": "n1",
+  "text": "Something was stuck on the fence.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n2",
+  "text": "A piece of the jacket, with a label.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n3",
+  "text": "Leo painted over it\u2026",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n4",
+  "text": "It said\u2026 LEO.",
+  "voice": "af_heart",
+  "speed": 0.9
+ }
+]
