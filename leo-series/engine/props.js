@@ -48,3 +48,24 @@ export function carrot(C, o) {
   [[18, 24], [42, 30], [64, 34]].forEach(([y, w], i) => line(C.l, P([[-w * 0.35, y * 0.4 + 6], [w * 0.35, y * 0.4 + 10]]), { w: 3, col: K.brown, p: 0.6, seed: sd + 2 + i }));
   [[-12, -44], [0, -54], [12, -44]].forEach(([dx, dy], k) => line(C.l, P([[0, -2], [dx * 0.5, dy * 0.5], [dx, dy]]), { w: 6, col: K.green, p: 0.95, seed: sd + 6 + k }));
 }
+
+// —— episode 3+: flour, paw prints, ripples ——
+// flour sprinkled on the lawn: white crayon (shows on top of the green); prog 0..1 reveals it left to right
+const FLOUR = (() => { const out = []; let s = 77; const R = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 46; i++) { const u = i / 45; out.push([lerp(2630, 3020, u) + (R() - 0.5) * 60, lerp(1050, 950, u) + (R() - 0.5) * 70, 12 + R() * 14, i]); } return out; })();
+export function flour(F, prog) { FLOUR.forEach(([x, y, r, i]) => { if (i / FLOUR.length < prog) dab(F, x, y, r, { col: K.white, p: 0.95, seed: 1800 + i, boil: 0, gap: 4, w: 6 }); }); }
+// the paper bag of flour
+export function flourBag(C, x, y, tilt = 0, seed = 1850) {
+  const P = pts => xf(pts, { x, y, r: tilt });
+  part(C, P([[-26, -34], [26, -34], [30, 36], [-30, 36]]), { col: K.ochre, p: 0.85, gap: 6, w: 8, ang: 1.2, seed }, { w: 5, seed: seed + 1 });
+  line(C.l, P([[-26, -24], [26, -24]]), { w: 3.5, seed: seed + 2, p: 0.7 });
+  dab(C.f, ...P([[0, 6]])[0], 9, { col: K.white, p: 1, seed: seed + 3 });
+}
+// a rabbit paw print in the flour (the lawn shows through): two long hind prints + two small front ones
+export function pawPrint(F, x, y, seed) {
+  [[-10, 0, 7, 15], [10, 2, 7, 15], [-6, -26, 5, 6], [6, -24, 5, 6]].forEach(([dx, dy, rx, ry], k) => fill(F, ellipse(x + dx, y + dy, rx, ry, 14), { col: K.green, p: 1, gap: 3, w: 5, seed: seed + k, boil: 0, over: 0.5 }));
+}
+export const HOPS = Array.from({ length: 7 }, (_, i) => [lerp(2668, 2990, i / 6) + (i % 2 ? 8 : -8), lerp(1042, 930, i / 6)]);
+export function ripples(L, x, y, u, seed = 1900) {
+  [0, 1, 2].forEach(k => { const v = clamp(u * 1.4 - k * 0.2); if (v <= 0 || v >= 1) return; const r = 20 + 150 * v; line(L, ellipse(x, y, r, r * 0.32, 40), { w: 4.5, col: K.ink, p: 0.6 * (1 - v), seed: seed + k, boil: 0.5 }); });
+}

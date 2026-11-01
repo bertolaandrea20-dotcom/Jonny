@@ -165,6 +165,7 @@ for e in EV:
     elif ty == 'hopsoft': put(felt(0.45), t, 1.0, pan)
     elif ty == 'plop': put(plop(0.8), t, 1.0, -0.3)
     elif ty == 'sting': put(sting(0.8), t, 1.0, 0.0)
+    elif ty == 'puff': n = nz(0.3); put(lp(n, 900) * np.sin(np.linspace(0, np.pi, len(n))) ** 2 * 0.25, t, 1.0, pan)
 
 # ——— ambience: street birds, the hush of the hedge, the garden (starts early under the gate: J-cut) ———
 CUES = sorted([(e['t'], e['id']) for e in EV if e['type'] == 'cue'])

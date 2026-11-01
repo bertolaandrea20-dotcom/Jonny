@@ -84,3 +84,26 @@ The jacket is gone… and a carrot is floating 🥕👀 Ep.2 #theinvisiblejacket
 - **TikTok reach:** #fyp #animationtok #booktok
 
 Note: Episode 1 is horizontal (16:9). In vertical feeds it shows with bands above and below. It works as the "pilot", or I can make a vertical re-cut so the whole series is in the same format.
+
+---
+
+## Episode 3 · Footprints
+
+### Instagram
+
+```
+Episode 3 · Footprints 🐾
+
+Leo had a plan: flour, all over the lawn.
+Then little footprints appeared… all by themselves. 👀
+
+Episode 4 tomorrow.
+
+#theinvisiblejacket #leostory #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #mystery #dailystory #illustration
+```
+
+### TikTok
+
+```
+Invisible footprints in the flour 🐾👀 Ep.3 #theinvisiblejacket #animation #storytime #crayonart #fyp
+```

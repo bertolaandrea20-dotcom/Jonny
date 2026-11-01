@@ -38,7 +38,7 @@ Rules that keep the series consistent:
 
 1. *The Invisible Jacket* — Leo finds the jacket, sneaks next door, says hello, cannonball. (first film, 16:9)
 2. **Gone** — the jacket is gone; drag marks lead to the burrow; a carrot floats: the rabbit has it. ✅
-3. **Footprints** — Leo sprinkles flour on the lawn; little invisible paw prints appear and hop away from him.
+3. **Footprints** — Leo sprinkles flour on the lawn; little invisible paw prints appear and hop away from him. ✅
 4. **The Duck Ride** — Leo watches the rubber duck sail across the pool by itself, with a rabbit-shaped dent in the water.
 5. **Leo's Plan** — Leo draws a plan on the back of his school notebook (a crayon map of the garden).
 6. **The Name Tag** — Leo finds the jacket's collar caught on the fence; a white-crayon tag, and the wash reveals a name.
