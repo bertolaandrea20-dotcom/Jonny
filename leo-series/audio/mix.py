@@ -117,6 +117,12 @@ def crunch(v=1.0):            # a bite of carrot: dense crackle with a woody bod
     cr = (rng.random(len(n)) < 0.04) * rng.standard_normal(len(n)) * 3
     x = bp(cr + n * 0.2, 1500, 7000) * np.exp(-t / 0.08) + np.sin(2 * np.pi * 160 * t) * np.exp(-t / 0.03) * 0.3
     return fade(x * 0.35 * v, .001, .05)
+def bell(d=1.4, v=1.0):       # a school bell: a struck metal dome hammered ~22 times a second
+    t = T(d); x = sum(a * np.sin(2 * np.pi * f * t) for f, a in [(1180, 1), (2350, .5), (3420, .3), (4870, .15)])
+    ham = 0.55 + 0.45 * np.abs(np.sin(np.pi * 22 * t))
+    return fade(x * ham * envelope(d, [(0, 0), (.02, 1), (.85, .8), (1, 0)]) * 0.12 * v, .005, .15)
+def clap(v=1.0):              # a high five: a short bright slap
+    return fade(bp(nz(0.12), 900, 4200, 2) * envelope(0.12, [(0, 0), (.03, 1), (.3, .35), (1, 0)]) * 0.5 * v, .001, .03)
 def sting(v=1.0):             # a little "uh-oh": two falling notes, synthesised
     out = np.zeros(int(0.9 * SR))
     for k, f in enumerate([660, 520]):
@@ -165,6 +171,8 @@ for e in EV:
     elif ty == 'hopsoft': put(felt(0.45), t, 1.0, pan)
     elif ty == 'plop': put(plop(0.8), t, 1.0, -0.3)
     elif ty == 'sting': put(sting(0.8), t, 1.0, 0.0)
+    elif ty == 'clap': put(clap(), t, 1.0, pan)
+    elif ty == 'bell': put(bell(e.get('dur', 1.4)), t, 1.0, pan)
     elif ty == 'puff': n = nz(0.3); put(lp(n, 900) * np.sin(np.linspace(0, np.pi, len(n))) ** 2 * 0.25, t, 1.0, pan)
 
 # ——— ambience: street birds, the hush of the hedge, the garden (starts early under the gate: J-cut) ———

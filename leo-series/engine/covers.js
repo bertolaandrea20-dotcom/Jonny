@@ -70,6 +70,11 @@ export const EPC = {
   7: { t: 7.25, title: ['KICK!'], hook: 'Where did the ball go?' },
   8: { t: 4.0, title: ['NEW KID'], hook: 'Who is the new kid?' },
   9: { t: 8.2, title: ['WHO?!'], hook: 'Who kicked the ball back?' },
+  10: { t: 9.55, ty: 480, title: ['ALIVE?!'], hook: 'Can a drawing hop away?' },
+  11: { t: 10.0, title: ['THERE!'], hook: 'What did the torch find?' },
+  12: { t: 7.3, title: ['LATE!'], hook: 'Will Leo make it in time?' },
+  13: { t: 7.9, ty: 1420, title: ['EYES SHUT!'], hook: 'Can Leo save the penalty?' },
+  14: { t: 12.9, title: ['SECRET'], hook: 'Who else is listening?' },
 };
 export function overlay(n) {
   const c = EPC[n];
@@ -80,7 +85,7 @@ export function overlay(n) {
   line(L.TOP, handCircle(bx, by, 112, 4).map(toW), { w: 8, col: K.orange, p: 0.95, seed: 5 });
   text(L.TOP, 'EP.', bx, by - 12, { size: 52, font: 'Gaegu', weight: 700, col: K.ink });
   text(L.TOP, String(n), bx, by + 66, { size: 96, font: 'Gaegu', weight: 700, col: K.red, stroke: 2 });
-  const big = c.title[0].length > 7 ? 128 : 190, ty0 = 560;
+  const big = c.title[0].length > 7 ? 128 : 190, ty0 = c.ty || 560;
   patch(L.TOPK, 600, ty0 - big * 0.35, 470, 60 + big * 0.55);
   text(L.TOP, c.title[0], 600, ty0, { size: big, font: 'Gaegu', weight: 700, col: K.red, stroke: 3, seed: 20 });
   patch(L.TOPK, 540, 1560, 470, 74);

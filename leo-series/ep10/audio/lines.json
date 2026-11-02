@@ -1,0 +1,26 @@
+[
+ {
+  "id": "n1",
+  "text": "Thursday. Homework time.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n2",
+  "text": "Leo was supposed to do maths\u2026",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n3",
+  "text": "\u2026but he drew a rabbit instead.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n4",
+  "text": "Then it hopped away.",
+  "voice": "af_heart",
+  "speed": 0.9
+ }
+]

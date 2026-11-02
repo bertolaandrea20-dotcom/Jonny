@@ -251,3 +251,127 @@ What do you think Leo knows? 👇
 ```
 The ball came back… all by itself ⚽👀 Ep.9 #theinvisiblejacket #football #animation #storytime #fyp
 ```
+
+---
+
+## Episode 10 · Homework (Thursday · home)
+
+### Instagram
+
+```
+Episode 10 · Homework ✏️🐰
+
+Thursday night. Leo was supposed to do maths…
+but he drew a rabbit instead.
+Then it hopped off the page. 👀
+
+What did you draw instead of doing homework? 👇
+
+#theinvisiblejacket #leostory #homework #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #drawing #dailystory
+```
+
+### TikTok
+
+```
+Leo drew a rabbit instead of doing maths… then it hopped away ✏️🐰 Ep.10 #theinvisiblejacket #animation #storytime #crayonart #fyp
+```
+
+---
+
+## Episode 11 · Night Watch (Friday · mystery)
+
+### Instagram
+
+```
+Episode 11 · Night Watch 🔦
+
+Friday night. Leo kept watch with a torch.
+Crunch… crunch…
+There! 🐰
+…almost.
+
+Episode 12 on Monday.
+
+#theinvisiblejacket #leostory #mystery #nighttime #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #dailystory
+```
+
+### TikTok
+
+```
+The torch found something invisible 🔦🐰 Ep.11 #theinvisiblejacket #mystery #animation #storytime #fyp
+```
+
+---
+
+## Episode 12 · Late! (Monday · school)
+
+### Instagram
+
+```
+Episode 12 · Late! ⏰
+
+Monday. 7:59. Leo was late…
+Just in time! 🔔
+Then he read the board: SHOW AND TELL.
+He knew exactly what to bring. 👀🧥
+
+What would YOU bring to show and tell? 👇
+
+#theinvisiblejacket #leostory #school #backtoschool #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #handdrawn #dailystory
+```
+
+### TikTok
+
+```
+Late for school… and tomorrow is show and tell 👀🧥 Ep.12 #theinvisiblejacket #school #animation #storytime #fyp
+```
+
+---
+
+## Episode 13 · The Goalkeeper (Tuesday · football)
+
+### Instagram
+
+```
+Episode 13 · The Goalkeeper 🧤⚽
+
+Tuesday. Leo had to play in goal.
+A penalty. Leo closed his eyes…
+…and saved it! 🎉
+(Someone in the trees was watching 👀)
+
+Tag a friend who plays in goal 👇
+
+#theinvisiblejacket #leostory #football #soccer #goalkeeper #kidsfootball #crayonart #picturebook #animation #animatedshort #storytime #dailystory
+```
+
+### TikTok
+
+```
+He closed his eyes… and saved it! 🧤⚽ Ep.13 #theinvisiblejacket #football #goalkeeper #animation #fyp
+```
+
+---
+
+## Episode 14 · The Secret (Wednesday · friends)
+
+### Instagram
+
+```
+Episode 14 · The Secret 🤫
+
+Leo told Edo everything:
+a jacket… and an invisible rabbit.
+Edo didn't laugh.
+"Let's catch it," he said. ✋
+
+That's what best friends do. Tag yours 👇
+
+#theinvisiblejacket #leostory #bestfriends #friendship #secret #crayonart #picturebook #animation #animatedshort #storytime #kidsstories #dailystory
+```
+
+### TikTok
+
+```
+He told his best friend his secret… and he didn't laugh 🤫✋ Ep.14 #theinvisiblejacket #bestfriends #animation #storytime #fyp
+```
