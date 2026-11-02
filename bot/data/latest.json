@@ -1,8 +1,8 @@
 {
-  "run_at": "2026-11-01T19:37:01Z",
-  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
+  "run_at": "2026-11-02T16:59:50Z",
+  "decision": "Nessuna combinazione da 2-3 eventi arriva a quota ~2 con le regole: oggi non si gioca.",
   "sources": {
-    "football-data.co.uk": "ok (6 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (4 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
@@ -11,72 +11,11 @@
   "proposals": [
     {
       "date": "2026-11-02",
-      "matches": 6,
-      "tier": "proposta",
-      "total_odds": 2.279,
-      "prob": 0.3584,
-      "legs": [
-        {
-          "match_id": "I1|2026-11-02|Atalanta|Parma",
-          "league": "I1",
-          "kickoff": "2026-11-02T19:45:00Z",
-          "home": "Atalanta",
-          "away": "Parma",
-          "pick": "1",
-          "market": "1X2",
-          "odds": 1.48,
-          "prob": 0.6037,
-          "model_prob": 0.5716,
-          "market_prob": 0.6358,
-          "xg": [
-            1.62,
-            0.76
-          ],
-          "basis": "modello+mercato",
-          "eligible": false
-        },
-        {
-          "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-          "league": "I1",
-          "kickoff": "2026-11-02T17:30:00Z",
-          "home": "Sassuolo",
-          "away": "Fiorentina",
-          "pick": "O25",
-          "market": "OU25",
-          "odds": 1.54,
-          "prob": 0.5936,
-          "model_prob": 0.5831,
-          "market_prob": 0.6041,
-          "xg": [
-            1.55,
-            1.48
-          ],
-          "basis": "modello+mercato",
-          "eligible": false
-        }
-      ]
+      "matches": 4,
+      "tier": null
     }
   ],
   "candidates": [
-    {
-      "match_id": "T1|2026-11-02|Genclerbirligi|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-11-02T17:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Alanyaspor",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.73,
-      "prob": 0.5783,
-      "model_prob": 0.6191,
-      "market_prob": 0.5374,
-      "xg": [
-        1.1,
-        1.11
-      ],
-      "basis": "modello+mercato",
-      "eligible": true
-    },
     {
       "match_id": "I1|2026-11-02|Atalanta|Parma",
       "league": "I1",
@@ -86,31 +25,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.48,
-      "prob": 0.6037,
-      "model_prob": 0.5716,
+      "prob": 0.6064,
+      "model_prob": 0.5771,
       "market_prob": 0.6358,
       "xg": [
-        1.62,
-        0.76
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-      "league": "I1",
-      "kickoff": "2026-11-02T17:30:00Z",
-      "home": "Sassuolo",
-      "away": "Fiorentina",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 1.54,
-      "prob": 0.5936,
-      "model_prob": 0.5831,
-      "market_prob": 0.6041,
-      "xg": [
-        1.55,
-        1.48
+        1.63,
+        0.75
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -125,7 +45,7 @@
       "market": "OU25",
       "odds": 1.63,
       "prob": 0.5452,
-      "model_prob": 0.5172,
+      "model_prob": 0.517,
       "market_prob": 0.5733,
       "xg": [
         1.65,
@@ -143,11 +63,11 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.67,
-      "prob": 0.5316,
-      "model_prob": 0.5039,
+      "prob": 0.533,
+      "model_prob": 0.5067,
       "market_prob": 0.5594,
       "xg": [
-        1.5,
+        1.51,
         1.19
       ],
       "basis": "modello+mercato",
@@ -162,12 +82,12 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.76,
-      "prob": 0.52,
-      "model_prob": 0.5093,
+      "prob": 0.5221,
+      "model_prob": 0.5135,
       "market_prob": 0.5307,
       "xg": [
-        1.53,
-        1.1
+        1.55,
+        1.07
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -181,12 +101,12 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.62,
-      "prob": 0.5026,
-      "model_prob": 0.4259,
+      "prob": 0.5024,
+      "model_prob": 0.4255,
       "market_prob": 0.5792,
       "xg": [
-        1.62,
-        0.76
+        1.63,
+        0.75
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -200,12 +120,12 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.23,
-      "prob": 0.4974,
-      "model_prob": 0.5741,
+      "prob": 0.4976,
+      "model_prob": 0.5745,
       "market_prob": 0.4208,
       "xg": [
-        1.62,
-        0.76
+        1.63,
+        0.75
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -219,8 +139,8 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.13,
-      "prob": 0.4818,
-      "model_prob": 0.5259,
+      "prob": 0.4817,
+      "model_prob": 0.5256,
       "market_prob": 0.4378,
       "xg": [
         1.65,
@@ -238,12 +158,12 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.99,
-      "prob": 0.48,
-      "model_prob": 0.4907,
+      "prob": 0.4779,
+      "model_prob": 0.4865,
       "market_prob": 0.4693,
       "xg": [
-        1.53,
-        1.1
+        1.55,
+        1.07
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -257,11 +177,11 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 2.12,
-      "prob": 0.4684,
-      "model_prob": 0.4961,
+      "prob": 0.467,
+      "model_prob": 0.4933,
       "market_prob": 0.4406,
       "xg": [
-        1.5,
+        1.51,
         1.19
       ],
       "basis": "modello+mercato",
@@ -277,7 +197,7 @@
       "market": "OU25",
       "odds": 2.19,
       "prob": 0.4548,
-      "model_prob": 0.4828,
+      "model_prob": 0.483,
       "market_prob": 0.4267,
       "xg": [
         1.65,
@@ -295,31 +215,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.44,
-      "prob": 0.4228,
-      "model_prob": 0.4629,
+      "prob": 0.4287,
+      "model_prob": 0.4748,
       "market_prob": 0.3827,
       "xg": [
-        1.53,
-        1.1
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-11-02|Genclerbirligi|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-11-02T17:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Alanyaspor",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 2.01,
-      "prob": 0.4217,
-      "model_prob": 0.3809,
-      "market_prob": 0.4626,
-      "xg": [
-        1.1,
-        1.11
+        1.55,
+        1.07
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -333,107 +234,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 2.28,
-      "prob": 0.4215,
-      "model_prob": 0.4322,
+      "prob": 0.4243,
+      "model_prob": 0.4378,
       "market_prob": 0.4107,
       "xg": [
-        1.5,
+        1.51,
         1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-      "league": "I1",
-      "kickoff": "2026-11-02T17:30:00Z",
-      "home": "Sassuolo",
-      "away": "Fiorentina",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 2.35,
-      "prob": 0.4064,
-      "model_prob": 0.4169,
-      "market_prob": 0.3959,
-      "xg": [
-        1.55,
-        1.48
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-      "league": "I1",
-      "kickoff": "2026-11-02T17:30:00Z",
-      "home": "Sassuolo",
-      "away": "Fiorentina",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.31,
-      "prob": 0.38,
-      "model_prob": 0.3547,
-      "market_prob": 0.4053,
-      "xg": [
-        1.55,
-        1.48
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-      "league": "I1",
-      "kickoff": "2026-11-02T17:30:00Z",
-      "home": "Sassuolo",
-      "away": "Fiorentina",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.78,
-      "prob": 0.3614,
-      "model_prob": 0.386,
-      "market_prob": 0.3368,
-      "xg": [
-        1.55,
-        1.48
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-11-02|Genclerbirligi|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-11-02T17:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Alanyaspor",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 2.54,
-      "prob": 0.3551,
-      "model_prob": 0.3481,
-      "market_prob": 0.3621,
-      "xg": [
-        1.1,
-        1.11
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-11-02|Genclerbirligi|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-11-02T17:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Alanyaspor",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 2.61,
-      "prob": 0.3463,
-      "model_prob": 0.3403,
-      "market_prob": 0.3523,
-      "xg": [
-        1.1,
-        1.11
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -447,31 +253,12 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.89,
-      "prob": 0.3085,
-      "model_prob": 0.2931,
+      "prob": 0.3064,
+      "model_prob": 0.2887,
       "market_prob": 0.324,
       "xg": [
-        1.5,
+        1.51,
         1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "T1|2026-11-02|Genclerbirligi|Alanyaspor",
-      "league": "T1",
-      "kickoff": "2026-11-02T17:00:00Z",
-      "home": "Genclerbirligi",
-      "away": "Alanyaspor",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.22,
-      "prob": 0.2986,
-      "model_prob": 0.3117,
-      "market_prob": 0.2856,
-      "xg": [
-        1.1,
-        1.11
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -485,12 +272,12 @@
       "pick": "2",
       "market": "1X2",
       "odds": 2.83,
-      "prob": 0.2965,
-      "model_prob": 0.2631,
+      "prob": 0.291,
+      "model_prob": 0.2521,
       "market_prob": 0.33,
       "xg": [
-        1.53,
-        1.1
+        1.55,
+        1.07
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -504,12 +291,12 @@
       "pick": "X",
       "market": "1X2",
       "odds": 3.25,
-      "prob": 0.2807,
-      "model_prob": 0.274,
+      "prob": 0.2802,
+      "model_prob": 0.2731,
       "market_prob": 0.2873,
       "xg": [
-        1.53,
-        1.1
+        1.55,
+        1.07
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -523,7 +310,7 @@
       "pick": "X",
       "market": "1X2",
       "odds": 3.22,
-      "prob": 0.2768,
+      "prob": 0.2769,
       "model_prob": 0.2641,
       "market_prob": 0.2896,
       "xg": [
@@ -542,31 +329,12 @@
       "pick": "X",
       "market": "1X2",
       "odds": 3.53,
-      "prob": 0.27,
-      "model_prob": 0.2747,
+      "prob": 0.2694,
+      "model_prob": 0.2735,
       "market_prob": 0.2653,
       "xg": [
-        1.5,
+        1.51,
         1.19
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I1|2026-11-02|Sassuolo|Fiorentina",
-      "league": "I1",
-      "kickoff": "2026-11-02T17:30:00Z",
-      "home": "Sassuolo",
-      "away": "Fiorentina",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.63,
-      "prob": 0.2586,
-      "model_prob": 0.2593,
-      "market_prob": 0.2579,
-      "xg": [
-        1.55,
-        1.48
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -580,8 +348,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 3.42,
-      "prob": 0.2413,
-      "model_prob": 0.21,
+      "prob": 0.2414,
+      "model_prob": 0.2102,
       "market_prob": 0.2726,
       "xg": [
         1.65,
@@ -599,12 +367,12 @@
       "pick": "X",
       "market": "1X2",
       "odds": 4.47,
-      "prob": 0.2374,
-      "model_prob": 0.2644,
+      "prob": 0.2366,
+      "model_prob": 0.2628,
       "market_prob": 0.2105,
       "xg": [
-        1.62,
-        0.76
+        1.63,
+        0.75
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -618,33 +386,33 @@
       "pick": "2",
       "market": "1X2",
       "odds": 6.12,
-      "prob": 0.1589,
-      "model_prob": 0.1641,
+      "prob": 0.1569,
+      "model_prob": 0.1601,
       "market_prob": 0.1537,
       "xg": [
-        1.62,
-        0.76
+        1.63,
+        0.75
       ],
       "basis": "modello+mercato",
       "eligible": false
     }
   ],
-  "n_candidates": 30,
-  "n_eligible": 1,
+  "n_candidates": 20,
+  "n_eligible": 0,
   "stats": {
-    "slips_settled": 9,
-    "slips_won": 5,
-    "slips_pending": 3,
-    "win_rate": 0.5555555555555556,
-    "legs_won": 14,
-    "legs_settled": 18,
-    "profit": 7.1,
-    "roi": 0.15777777777777782,
+    "slips_settled": 12,
+    "slips_won": 8,
+    "slips_pending": 0,
+    "win_rate": 0.6666666666666666,
+    "legs_won": 20,
+    "legs_settled": 24,
+    "profit": 21.13,
+    "roi": 0.3521666666666666,
     "streak": {
       "kind": "won",
-      "length": 2
+      "length": 5
     },
-    "lives": 8
+    "lives": 14
   },
-  "equity": 57.1
+  "equity": 71.13
 }
