@@ -1,0 +1,26 @@
+[
+ {
+  "id": "n1",
+  "text": "Monday. Leo was late.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n2",
+  "text": "Just in time!",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n3",
+  "text": "Then he read the board\u2026",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n4",
+  "text": "He knew exactly what to bring.",
+  "voice": "af_heart",
+  "speed": 0.9
+ }
+]
