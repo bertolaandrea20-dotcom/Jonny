@@ -18,6 +18,7 @@ if (Q.get('cover')) {
   const ep = (Q.get('ep') || '02').padStart(2, '0');
   const M = await import(`../episodes/ep${ep}.js`);
   window.DUR = M.DUR; window.EV = M.EV; window.SUBS = M.SUBS; window.TEXTS = M.TEXTS;
-  window.render = t => { BOIL.step = Math.floor(t * 12 + 1e-6); M.frame(comp, t); };
+  const clean = Q.get('clean') ? { cover: () => {} } : undefined;   // ?clean=1: no subtitles or cards (for hook covers)
+  window.render = t => { BOIL.step = Math.floor(t * 12 + 1e-6); M.frame(comp, t, clean); };
 }
 window.READY = true;
