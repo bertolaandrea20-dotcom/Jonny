@@ -1,0 +1,38 @@
+[
+ {
+  "id": "n1",
+  "text": "Just a normal afternoon.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n2",
+  "text": "Then the sky went dark.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n3",
+  "text": "An alien. A really, REALLY big one.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n4",
+  "text": "Luckily, Leo and Edo had laser guns.",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n5",
+  "text": "Pew! Pew!",
+  "voice": "af_heart",
+  "speed": 0.9
+ },
+ {
+  "id": "n6",
+  "text": "Problem solved.",
+  "voice": "af_heart",
+  "speed": 0.9
+ }
+]

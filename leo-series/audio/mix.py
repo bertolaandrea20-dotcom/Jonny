@@ -123,6 +123,23 @@ def bell(d=1.4, v=1.0):       # a school bell: a struck metal dome hammered ~22 
     return fade(x * ham * envelope(d, [(0, 0), (.02, 1), (.85, .8), (1, 0)]) * 0.12 * v, .005, .15)
 def clap(v=1.0):              # a high five: a short bright slap
     return fade(bp(nz(0.12), 900, 4200, 2) * envelope(0.12, [(0, 0), (.03, 1), (.3, .35), (1, 0)]) * 0.5 * v, .001, .03)
+def boom(v=1.0):              # a giant footstep: a deep thud with a rumbling tail
+    d = 2.2; t = T(d); f = 38 + 30 * np.exp(-t * 6)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 2.2) + lp(nz(d), 180, 2) * np.exp(-t * 3) * 0.8 + bp(nz(d), 300, 1500, 2) * np.exp(-t * 18) * 0.5
+    return fade(x * 0.9 * v, .002, .3)
+def laser(v=1.0):             # pew: a fast falling square-ish chirp
+    d = 0.32; t = T(d); f = 2400 * np.exp(-t * 9) + 300
+    x = np.tanh(3 * np.sin(2 * np.pi * np.cumsum(f) / SR)) * np.exp(-t * 7)
+    return fade(x * 0.11 * v, .002, .05)
+def blorp(v=1.0):             # the alien says hello: a huge wobbling low horn
+    d = 1.6; t = T(d); f = 70 + 25 * np.sin(2 * np.pi * 5 * t) - 20 * t
+    x = sum(a * np.sin(2 * np.pi * k * np.cumsum(f) / SR) for k, a in [(1, 1), (2, .6), (3, .4), (5, .2)])
+    return fade(x * envelope(d, [(0, 0), (.08, 1), (.75, .8), (1, 0)]) * 0.28 * v, .02, .2)
+def pop(v=1.0):               # the alien shrinks away: a rising squeak and a pop
+    d = 0.9; t = T(d); f = 200 * np.exp(t * 3.5)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * envelope(d, [(0, 0), (.1, .6), (.85, 1), (.88, 0), (1, 0)]) * 0.18
+    x[int(.86 * len(x)):int(.86 * len(x)) + int(.03 * SR)] += bp(nz(.03), 500, 5000, 2) * 0.9
+    return fade(x * v, .005, .02)
 def sting(v=1.0):             # a little "uh-oh": two falling notes, synthesised
     out = np.zeros(int(0.9 * SR))
     for k, f in enumerate([660, 520]):
@@ -172,6 +189,10 @@ for e in EV:
     elif ty == 'plop': put(plop(0.8), t, 1.0, -0.3)
     elif ty == 'sting': put(sting(0.8), t, 1.0, 0.0)
     elif ty == 'clap': put(clap(), t, 1.0, pan)
+    elif ty == 'boom': put(boom(e.get('v', 1.0)), t, 1.0, pan)
+    elif ty == 'laser': put(laser(), t, 1.0, pan)
+    elif ty == 'blorp': put(blorp(), t, 1.0, 0.0)
+    elif ty == 'pop': put(pop(), t, 1.0, pan)
     elif ty == 'bell': put(bell(e.get('dur', 1.4)), t, 1.0, pan)
     elif ty == 'puff': n = nz(0.3); put(lp(n, 900) * np.sin(np.linspace(0, np.pi, len(n))) ** 2 * 0.25, t, 1.0, pan)
 
