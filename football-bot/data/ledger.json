@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 71.13,
+  "bankroll": 66.13,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -640,6 +640,55 @@
       ],
       "payout": 9.82,
       "settled_at": "2026-11-02T16:59:50Z"
+    },
+    {
+      "id": "S0013",
+      "created_at": "2026-11-06T14:57:39Z",
+      "stake": 5.0,
+      "total_odds": 1.98,
+      "prob": 0.5071,
+      "tier": "proposta",
+      "status": "pending",
+      "legs": [
+        {
+          "match_id": "D1|2026-11-07|Mainz|Bayern Munich",
+          "league": "D1",
+          "kickoff": "2026-11-07T14:30:00Z",
+          "home": "Mainz",
+          "away": "Bayern Munich",
+          "pick": "O25",
+          "market": "OU25",
+          "odds": 1.2,
+          "prob": 0.7916,
+          "model_prob": 0.8022,
+          "market_prob": 0.781,
+          "xg": [
+            1.35,
+            2.95
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        },
+        {
+          "match_id": "T1|2026-11-07|Eyupspor|Kocaelispor",
+          "league": "T1",
+          "kickoff": "2026-11-07T10:30:00Z",
+          "home": "Eyupspor",
+          "away": "Kocaelispor",
+          "pick": "U25",
+          "market": "OU25",
+          "odds": 1.65,
+          "prob": 0.6406,
+          "model_prob": 0.7176,
+          "market_prob": 0.5635,
+          "xg": [
+            0.78,
+            1.07
+          ],
+          "basis": "modello+mercato",
+          "status": "pending"
+        }
+      ]
     }
   ],
   "history": [
