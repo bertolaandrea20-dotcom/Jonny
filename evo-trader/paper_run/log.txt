@@ -606,3 +606,6 @@ Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 === 2026-11-09T00:10:38Z
 Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
 2026-11-08 20:00:00+00:00: valore del bot 180.09 € (capitale iniziale 200.00 €)
+=== 2026-11-09T04:09:59Z
+Bot trend avviato: simulazione, 10 strumenti, capitale 200 €
+2026-11-09 00:00:00+00:00: valore del bot 180.09 € (capitale iniziale 200.00 €)
