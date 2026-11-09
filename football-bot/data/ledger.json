@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 56.13,
+  "bankroll": 75.59,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -648,7 +648,7 @@
       "total_odds": 1.98,
       "prob": 0.5071,
       "tier": "proposta",
-      "status": "pending",
+      "status": "won",
       "legs": [
         {
           "match_id": "D1|2026-11-07|Mainz|Bayern Munich",
@@ -667,7 +667,8 @@
             2.95
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "1-2"
         },
         {
           "match_id": "T1|2026-11-07|Eyupspor|Kocaelispor",
@@ -686,9 +687,12 @@
             1.07
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "0-2"
         }
-      ]
+      ],
+      "payout": 9.9,
+      "settled_at": "2026-11-09T17:24:37Z"
     },
     {
       "id": "S0014",
@@ -697,7 +701,7 @@
       "total_odds": 1.925,
       "prob": 0.5258,
       "tier": "proposta",
-      "status": "pending",
+      "status": "lost",
       "legs": [
         {
           "match_id": "N1|2026-11-08|Cambuur|PSV Eindhoven",
@@ -716,7 +720,8 @@
             3.03
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "2-5"
         },
         {
           "match_id": "I1|2026-11-08|Monza|Atalanta",
@@ -735,9 +740,12 @@
             2.23
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "lost",
+          "score": "0-1"
         }
-      ]
+      ],
+      "payout": 0.0,
+      "settled_at": "2026-11-09T17:24:37Z"
     },
     {
       "id": "S0015",
@@ -746,7 +754,7 @@
       "total_odds": 1.913,
       "prob": 0.4498,
       "tier": "proposta",
-      "status": "pending",
+      "status": "won",
       "legs": [
         {
           "match_id": "SP1|2026-11-08|Ath Madrid|Barcelona",
@@ -765,7 +773,8 @@
             1.82
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "1-2"
         },
         {
           "match_id": "F1|2026-11-08|Lens|Marseille",
@@ -784,9 +793,12 @@
             1.47
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "1-2"
         }
-      ]
+      ],
+      "payout": 9.56,
+      "settled_at": "2026-11-09T17:24:37Z"
     }
   ],
   "history": [
@@ -854,6 +866,21 @@
       "t": "2026-11-02T16:59:50Z",
       "bankroll": 71.13,
       "event": "S0012 vinta"
+    },
+    {
+      "t": "2026-11-09T17:24:37Z",
+      "bankroll": 76.03,
+      "event": "S0013 vinta"
+    },
+    {
+      "t": "2026-11-09T17:24:37Z",
+      "bankroll": 71.03,
+      "event": "S0014 persa"
+    },
+    {
+      "t": "2026-11-09T17:24:37Z",
+      "bankroll": 75.59,
+      "event": "S0015 vinta"
     }
   ]
 }
