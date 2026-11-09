@@ -1,6 +1,6 @@
 {
-  "run_at": "2026-11-08T19:37:56Z",
-  "decision": "Limite di 1 schedina/e al giorno già raggiunto.",
+  "run_at": "2026-11-09T17:24:37Z",
+  "decision": "Nessuna partita dei campionati seguiti nelle prossime ore: oggi non si gioca.",
   "sources": {
     "football-data.co.uk": "ok (0 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
@@ -13,19 +13,19 @@
   "n_candidates": 0,
   "n_eligible": 0,
   "stats": {
-    "slips_settled": 12,
-    "slips_won": 8,
-    "slips_pending": 3,
+    "slips_settled": 15,
+    "slips_won": 10,
+    "slips_pending": 0,
     "win_rate": 0.6666666666666666,
-    "legs_won": 20,
-    "legs_settled": 24,
-    "profit": 21.13,
-    "roi": 0.3521666666666666,
+    "legs_won": 25,
+    "legs_settled": 30,
+    "profit": 25.59,
+    "roi": 0.34120000000000006,
     "streak": {
       "kind": "won",
-      "length": 5
+      "length": 1
     },
-    "lives": 11
+    "lives": 15
   },
-  "equity": 71.13
+  "equity": 75.59
 }
