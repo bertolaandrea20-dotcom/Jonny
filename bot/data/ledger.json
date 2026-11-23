@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 60.59,
+  "bankroll": 70.18,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -807,7 +807,7 @@
       "total_odds": 1.915,
       "prob": 0.519,
       "tier": "proposta",
-      "status": "pending",
+      "status": "lost",
       "legs": [
         {
           "match_id": "T1|2026-11-21|Galatasaray|Samsunspor",
@@ -826,7 +826,8 @@
             0.93
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "2-1"
         },
         {
           "match_id": "B1|2026-11-20|Cercle Brugge|Westerlo",
@@ -845,9 +846,12 @@
             1.82
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "lost",
+          "score": "1-0"
         }
-      ]
+      ],
+      "payout": 0.0,
+      "settled_at": "2026-11-23T19:10:55Z"
     },
     {
       "id": "S0017",
@@ -856,7 +860,7 @@
       "total_odds": 1.918,
       "prob": 0.5251,
       "tier": "proposta",
-      "status": "pending",
+      "status": "won",
       "legs": [
         {
           "match_id": "N1|2026-11-21|Utrecht|Cambuur",
@@ -875,7 +879,8 @@
             2.06
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "2-3"
         },
         {
           "match_id": "B1|2026-11-22|Kortrijk|St. Gilloise",
@@ -894,9 +899,12 @@
             2.17
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "0-1"
         }
-      ]
+      ],
+      "payout": 9.59,
+      "settled_at": "2026-11-23T19:10:55Z"
     },
     {
       "id": "S0018",
@@ -924,7 +932,8 @@
             1.57
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "5-1"
         },
         {
           "match_id": "T1|2026-11-23|Buyuksehyr|Corum",
@@ -1028,6 +1037,16 @@
       "t": "2026-11-09T17:24:37Z",
       "bankroll": 75.59,
       "event": "S0015 vinta"
+    },
+    {
+      "t": "2026-11-23T19:10:55Z",
+      "bankroll": 70.59,
+      "event": "S0016 persa"
+    },
+    {
+      "t": "2026-11-23T19:10:55Z",
+      "bankroll": 75.18,
+      "event": "S0017 vinta"
     }
   ]
 }
