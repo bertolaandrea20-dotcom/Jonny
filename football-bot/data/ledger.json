@@ -1,7 +1,7 @@
 {
   "start": 50.0,
   "stake": 5.0,
-  "bankroll": 70.18,
+  "bankroll": 80.57,
   "status": "attivo",
   "created_at": "2026-10-12T19:56:35Z",
   "slips": [
@@ -913,7 +913,7 @@
       "total_odds": 2.077,
       "prob": 0.4491,
       "tier": "proposta",
-      "status": "pending",
+      "status": "won",
       "legs": [
         {
           "match_id": "I1|2026-11-22|Milan|Frosinone",
@@ -952,9 +952,12 @@
             1.4
           ],
           "basis": "modello+mercato",
-          "status": "pending"
+          "status": "won",
+          "score": "4-2"
         }
-      ]
+      ],
+      "payout": 10.39,
+      "settled_at": "2026-11-24T02:10:02Z"
     }
   ],
   "history": [
@@ -1047,6 +1050,11 @@
       "t": "2026-11-23T19:10:55Z",
       "bankroll": 75.18,
       "event": "S0017 vinta"
+    },
+    {
+      "t": "2026-11-24T02:10:02Z",
+      "bankroll": 80.57,
+      "event": "S0018 vinta"
     }
   ]
 }

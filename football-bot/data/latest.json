@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-23T19:10:55Z",
+  "run_at": "2026-11-24T02:10:02Z",
   "decision": "Nessuna partita dei campionati seguiti nelle prossime ore: oggi non si gioca.",
   "sources": {
     "football-data.co.uk": "ok (0 partite nei prossimi giorni)",
@@ -13,19 +13,19 @@
   "n_candidates": 0,
   "n_eligible": 0,
   "stats": {
-    "slips_settled": 17,
-    "slips_won": 11,
-    "slips_pending": 1,
-    "win_rate": 0.6470588235294118,
-    "legs_won": 29,
-    "legs_settled": 35,
-    "profit": 25.18,
-    "roi": 0.29623529411764715,
+    "slips_settled": 18,
+    "slips_won": 12,
+    "slips_pending": 0,
+    "win_rate": 0.6666666666666666,
+    "legs_won": 30,
+    "legs_settled": 36,
+    "profit": 30.57,
+    "roi": 0.3396666666666666,
     "streak": {
       "kind": "won",
-      "length": 1
+      "length": 2
     },
-    "lives": 14
+    "lives": 16
   },
-  "equity": 75.18
+  "equity": 80.57
 }
