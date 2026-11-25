@@ -1,8 +1,8 @@
 {
-  "run_at": "2026-11-24T23:51:48Z",
+  "run_at": "2026-11-25T17:55:34Z",
   "decision": "Nessuna combinazione da 2-3 eventi arriva a quota ~2 con le regole: oggi non si gioca.",
   "sources": {
-    "football-data.co.uk": "ok (4 partite nei prossimi giorni)",
+    "football-data.co.uk": "ok (3 partite nei prossimi giorni)",
     "the-odds-api UCL": "ODDS_API_KEY mancante",
     "the-odds-api UEL": "ODDS_API_KEY mancante",
     "the-odds-api UECL": "ODDS_API_KEY mancante",
@@ -11,7 +11,7 @@
   "proposals": [
     {
       "date": "2026-11-25",
-      "matches": 4,
+      "matches": 3,
       "tier": null
     }
   ],
@@ -44,31 +44,12 @@
       "pick": "1",
       "market": "1X2",
       "odds": 1.65,
-      "prob": 0.5671,
-      "model_prob": 0.5782,
+      "prob": 0.567,
+      "model_prob": 0.5781,
       "market_prob": 0.5559,
       "xg": [
         1.82,
         0.91
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-11-25|Cremonese|Avellino",
-      "league": "I2",
-      "kickoff": "2026-11-25T18:00:00Z",
-      "home": "Cremonese",
-      "away": "Avellino",
-      "pick": "U25",
-      "market": "OU25",
-      "odds": 1.7,
-      "prob": 0.556,
-      "model_prob": 0.5666,
-      "market_prob": 0.5455,
-      "xg": [
-        1.35,
-        1.06
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -101,7 +82,7 @@
       "pick": "O25",
       "market": "OU25",
       "odds": 1.76,
-      "prob": 0.5205,
+      "prob": 0.5204,
       "model_prob": 0.514,
       "market_prob": 0.5269,
       "xg": [
@@ -120,7 +101,7 @@
       "pick": "U25",
       "market": "OU25",
       "odds": 1.96,
-      "prob": 0.4795,
+      "prob": 0.4796,
       "model_prob": 0.486,
       "market_prob": 0.4731,
       "xg": [
@@ -145,44 +126,6 @@
       "xg": [
         1.44,
         1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-11-25|Cremonese|Avellino",
-      "league": "I2",
-      "kickoff": "2026-11-25T18:00:00Z",
-      "home": "Cremonese",
-      "away": "Avellino",
-      "pick": "1",
-      "market": "1X2",
-      "odds": 1.95,
-      "prob": 0.4463,
-      "model_prob": 0.4216,
-      "market_prob": 0.471,
-      "xg": [
-        1.35,
-        1.06
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-11-25|Cremonese|Avellino",
-      "league": "I2",
-      "kickoff": "2026-11-25T18:00:00Z",
-      "home": "Cremonese",
-      "away": "Avellino",
-      "pick": "O25",
-      "market": "OU25",
-      "odds": 2.04,
-      "prob": 0.444,
-      "model_prob": 0.4334,
-      "market_prob": 0.4545,
-      "xg": [
-        1.35,
-        1.06
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -291,31 +234,12 @@
       "pick": "X",
       "market": "1X2",
       "odds": 3.08,
-      "prob": 0.3028,
+      "prob": 0.3027,
       "model_prob": 0.3071,
       "market_prob": 0.2984,
       "xg": [
         1.27,
         0.91
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-11-25|Cremonese|Avellino",
-      "league": "I2",
-      "kickoff": "2026-11-25T18:00:00Z",
-      "home": "Cremonese",
-      "away": "Avellino",
-      "pick": "X",
-      "market": "1X2",
-      "odds": 3.17,
-      "prob": 0.2914,
-      "model_prob": 0.293,
-      "market_prob": 0.2898,
-      "xg": [
-        1.35,
-        1.06
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -335,25 +259,6 @@
       "xg": [
         1.44,
         1.32
-      ],
-      "basis": "modello+mercato",
-      "eligible": false
-    },
-    {
-      "match_id": "I2|2026-11-25|Cremonese|Avellino",
-      "league": "I2",
-      "kickoff": "2026-11-25T18:00:00Z",
-      "home": "Cremonese",
-      "away": "Avellino",
-      "pick": "2",
-      "market": "1X2",
-      "odds": 3.84,
-      "prob": 0.2623,
-      "model_prob": 0.2854,
-      "market_prob": 0.2392,
-      "xg": [
-        1.35,
-        1.06
       ],
       "basis": "modello+mercato",
       "eligible": false
@@ -386,8 +291,8 @@
       "pick": "2",
       "market": "1X2",
       "odds": 4.63,
-      "prob": 0.1876,
-      "model_prob": 0.1771,
+      "prob": 0.1877,
+      "model_prob": 0.1772,
       "market_prob": 0.1981,
       "xg": [
         1.82,
@@ -397,7 +302,7 @@
       "eligible": false
     }
   ],
-  "n_candidates": 20,
+  "n_candidates": 15,
   "n_eligible": 0,
   "stats": {
     "slips_settled": 18,
